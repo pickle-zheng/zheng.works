@@ -1,11 +1,11 @@
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { GUI } from "dat.gui";
 import * as CANNON from "cannon-es";
 import CannonDebugRenderer from "./cannonDebugRenderer";
 import { RefObject } from "react";
+import background from "../assets/info.jpeg";
 
 export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   if (!canvasRef.current) {
@@ -14,17 +14,24 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const scene = new THREE.Scene();
 
   const light = new THREE.DirectionalLight();
-  light.position.set(25, 50, 25);
+  light.position.set(50, 100, 25);
   light.castShadow = true;
   light.shadow.mapSize.width = 16384;
   light.shadow.mapSize.height = 16384;
-  light.shadow.camera.near = 0.5;
-  light.shadow.camera.far = 100;
-  light.shadow.camera.top = 100;
-  light.shadow.camera.bottom = -100;
-  light.shadow.camera.left = -100;
-  light.shadow.camera.right = 100;
+  light.shadow.camera.near = 1;
+  let d = 120;
+  light.shadow.camera.left = -d;
+  light.shadow.camera.right = d;
+  light.shadow.camera.top = d;
+  light.shadow.camera.bottom = -d;
+  light.shadow.camera.far = d;
+
+  scene.fog = new THREE.FogExp2(0xdaa520, 0.03);
+
   scene.add(light);
+
+  const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.1);
+  scene.add(HemisphereLight);
 
   const helper = new THREE.CameraHelper(light.shadow.camera);
   scene.add(helper);
@@ -36,15 +43,15 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
     1000
   );
   const chaseCam = new THREE.Object3D();
-  chaseCam.position.set(0, 0, 0);
+  chaseCam.position.set(0, 10, 1);
   const chaseCamPivot = new THREE.Object3D();
-  chaseCamPivot.position.set(0, 2, 4);
+  chaseCamPivot.position.set(0, 10, 1);
   chaseCam.add(chaseCamPivot);
   scene.add(chaseCam);
 
   const renderer = new THREE.WebGLRenderer({
     canvas: canvasRef.current,
-    antialias: false
+    antialias: true
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
@@ -53,30 +60,61 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
 
   const phongMaterial = new THREE.MeshPhongMaterial();
 
-  const lamberMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
-
   const world = new CANNON.World();
-  world.gravity.set(0, -20, 0);
+  world.gravity.set(0, -15, 0);
 
   const groundMaterial = new CANNON.Material("groundMaterial");
-  groundMaterial.friction = 0.2;
+  groundMaterial.friction = 0.25;
   groundMaterial.restitution = 0.25;
 
   const wheelMaterial = new CANNON.Material("wheelMaterial");
-  wheelMaterial.friction = 0.2;
+  wheelMaterial.friction = 0.25;
   wheelMaterial.restitution = 0.25;
 
   //ground
-  const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(200, 200);
-  const groundMesh: THREE.Mesh = new THREE.Mesh(groundGeometry, phongMaterial);
+  const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(
+    2000,
+    2000
+  );
+  const getImage = (): THREE.MeshBasicMaterial => {
+    var loader = new THREE.TextureLoader();
+    var texture = loader.load(background);
+    var material = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide,
+      opacity: 1
+    });
+    return material;
+  };
+  const imageMaterial = getImage();
+  const shadowMaterial = new THREE.ShadowMaterial();
+  shadowMaterial.opacity = 0.5;
+  const groundMesh: THREE.Mesh = new THREE.Mesh(groundGeometry, shadowMaterial);
   groundMesh.rotateX(-Math.PI / 2);
+  groundMesh.position.x = 0;
+  groundMesh.position.y = 0.1;
+  groundMesh.position.z = 0;
   groundMesh.receiveShadow = true;
   scene.add(groundMesh);
-  const groundShape = new CANNON.Box(new CANNON.Vec3(50, 1, 50));
+  const groundShape = new CANNON.Box(new CANNON.Vec3(2000, 1, 2000));
   const groundBody = new CANNON.Body({ mass: 0, material: groundMaterial });
   groundBody.addShape(groundShape);
   groundBody.position.set(0, -1, 0);
   world.addBody(groundBody);
+
+  const groundGeometry2: THREE.PlaneGeometry = new THREE.PlaneGeometry(
+    2000,
+    2000
+  );
+  const groundMesh2: THREE.Mesh = new THREE.Mesh(
+    groundGeometry2,
+    imageMaterial
+  );
+  groundMesh2.rotateX(-Math.PI / 2);
+  groundMesh2.position.x = 0;
+  groundMesh2.position.y = 0;
+  groundMesh2.position.z = 0;
+  scene.add(groundMesh2);
 
   //jumps
   for (let i = 0; i < 100; i++) {
@@ -99,21 +137,25 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   }
 
   const car = new THREE.Group();
-  const carBodyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 1, 2);
+  const carBodyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 0.5, 2);
   const carBodyMesh: THREE.Mesh = new THREE.Mesh(
     carBodyGeometry,
-    lamberMaterial
+    new THREE.MeshLambertMaterial({ color: 0xff0000 })
   );
-  carBodyMesh.position.y = 3;
+  carBodyMesh.position.y = -0.25;
   carBodyMesh.castShadow = true;
   car.add(carBodyMesh);
 
   const carCabinMesh: THREE.Mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 0.5, 1),
-    lamberMaterial
+    new THREE.BoxGeometry(0.9, 0.4, 1),
+    new THREE.MeshLambertMaterial({ color: 0xffffff })
   );
-  carCabinMesh.position.y = 3;
+  carCabinMesh.position.y = 0.05;
+  carCabinMesh.position.z = 0.4;
   carCabinMesh.castShadow = true;
+
+  car.position.y = 4;
+
   car.add(carCabinMesh);
 
   scene.add(car);
@@ -122,25 +164,28 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const carBodyShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 1));
   const carBody = new CANNON.Body({ mass: 10 });
   carBody.addShape(carBodyShape);
-  carBody.position.x = carBodyMesh.position.x;
-  carBody.position.y = carBodyMesh.position.y;
-  carBody.position.z = carBodyMesh.position.z;
+  carBody.position.x = car.position.x;
+  carBody.position.y = car.position.y;
+  carBody.position.z = car.position.z;
   world.addBody(carBody);
 
   //front left wheel
+  const wheelMeshMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
+
   const wheelLFGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
     0.22,
     0.22,
-    0.15
+    0.15,
+    20
   );
   wheelLFGeometry.rotateZ(Math.PI / 2);
   const wheelLFMesh: THREE.Mesh = new THREE.Mesh(
     wheelLFGeometry,
-    phongMaterial
+    wheelMeshMaterial
   );
-  wheelLFMesh.position.x = -1;
-  wheelLFMesh.position.y = 3;
-  wheelLFMesh.position.z = -1;
+  wheelLFMesh.position.x = -3;
+  wheelLFMesh.position.y = 1;
+  wheelLFMesh.position.z = -0.5;
   wheelLFMesh.castShadow = true;
   scene.add(wheelLFMesh);
   const wheelLFShape = new CANNON.Sphere(0.22);
@@ -155,16 +200,17 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const wheelRFGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
     0.22,
     0.22,
-    0.15
+    0.15,
+    20
   );
   wheelRFGeometry.rotateZ(Math.PI / 2);
   const wheelRFMesh: THREE.Mesh = new THREE.Mesh(
     wheelRFGeometry,
-    phongMaterial
+    wheelMeshMaterial
   );
   wheelRFMesh.position.y = 3;
-  wheelRFMesh.position.x = 1;
-  wheelRFMesh.position.z = -1;
+  wheelRFMesh.position.x = 0.5;
+  wheelRFMesh.position.z = -0.5;
   wheelRFMesh.castShadow = true;
   scene.add(wheelRFMesh);
   const wheelRFShape = new CANNON.Sphere(0.22);
@@ -179,16 +225,17 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const wheelLBGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
     0.22,
     0.22,
-    0.2
+    0.2,
+    20
   );
   wheelLBGeometry.rotateZ(Math.PI / 2);
   const wheelLBMesh: THREE.Mesh = new THREE.Mesh(
     wheelLBGeometry,
-    phongMaterial
+    wheelMeshMaterial
   );
   wheelLBMesh.position.y = 3;
-  wheelLBMesh.position.x = -1;
-  wheelLBMesh.position.z = 1;
+  wheelLBMesh.position.x = -0.5;
+  wheelLBMesh.position.z = 0.5;
   wheelLBMesh.castShadow = true;
   scene.add(wheelLBMesh);
   const wheelLBShape = new CANNON.Sphere(0.22);
@@ -203,16 +250,17 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const wheelRBGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
     0.22,
     0.22,
-    0.2
+    0.2,
+    20
   );
   wheelRBGeometry.rotateZ(Math.PI / 2);
   const wheelRBMesh: THREE.Mesh = new THREE.Mesh(
     wheelRBGeometry,
-    phongMaterial
+    wheelMeshMaterial
   );
   wheelRBMesh.position.y = 3;
-  wheelRBMesh.position.x = 1;
-  wheelRBMesh.position.z = 1;
+  wheelRBMesh.position.x = 0.5;
+  wheelRBMesh.position.z = 0.5;
   wheelRBMesh.castShadow = true;
   scene.add(wheelRBMesh);
   const wheelRBShape = new CANNON.Sphere(0.22);
@@ -229,25 +277,25 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const rightBackAxis = new CANNON.Vec3(1, 0, 0);
 
   const constraintLF = new CANNON.HingeConstraint(carBody, wheelLFBody, {
-    pivotA: new CANNON.Vec3(-1, -0.5, -1),
+    pivotA: new CANNON.Vec3(-0.5, -0.5, -0.7),
     axisA: leftFrontAxis,
     maxForce: 1e6
   });
   world.addConstraint(constraintLF);
   const constraintRF = new CANNON.HingeConstraint(carBody, wheelRFBody, {
-    pivotA: new CANNON.Vec3(1, -0.5, -1),
+    pivotA: new CANNON.Vec3(0.5, -0.5, -0.7),
     axisA: rightFrontAxis,
     maxForce: 1e6
   });
   world.addConstraint(constraintRF);
   const constraintLB = new CANNON.HingeConstraint(carBody, wheelLBBody, {
-    pivotA: new CANNON.Vec3(-1, -0.5, 1),
+    pivotA: new CANNON.Vec3(-0.5, -0.5, 0.7),
     axisA: leftBackAxis,
     maxForce: 1e6
   });
   world.addConstraint(constraintLB);
   const constraintRB = new CANNON.HingeConstraint(carBody, wheelRBBody, {
-    pivotA: new CANNON.Vec3(1, -0.5, 1),
+    pivotA: new CANNON.Vec3(0.5, -0.5, 0.7),
     axisA: rightBackAxis,
     maxForce: 1e6
   });
@@ -289,7 +337,7 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const clock = new THREE.Clock();
   let delta;
 
-  const cannonDebugRenderer = new CannonDebugRenderer(scene, world);
+  // const cannonDebugRenderer = new CannonDebugRenderer(scene, world);
 
   const v = new THREE.Vector3();
   let thrusting = false;
@@ -303,15 +351,15 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
     delta = Math.min(clock.getDelta(), 0.1);
     world.step(delta);
 
-    cannonDebugRenderer.update();
+    // cannonDebugRenderer.update();
 
     // Copy coordinates from Cannon to Three.js
-    carBodyMesh.position.set(
+    car.position.set(
       carBody.position.x,
       carBody.position.y,
       carBody.position.z
     );
-    carBodyMesh.quaternion.set(
+    car.quaternion.set(
       carBody.quaternion.x,
       carBody.quaternion.y,
       carBody.quaternion.z,
@@ -403,7 +451,13 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
       }
     }
     if (!turning) {
-      rightVelocity = 0;
+      if (rightVelocity > 0.2) {
+        rightVelocity -= 0.1;
+      } else if (rightVelocity < -0.2) {
+        rightVelocity += 0.1;
+      } else {
+        rightVelocity = 0;
+      }
     }
 
     constraintLB.setMotorSpeed(forwardVelocity);
@@ -411,12 +465,12 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
     constraintLF.axisA.z = rightVelocity;
     constraintRF.axisA.z = rightVelocity;
 
-    camera.lookAt(carBodyMesh.position);
+    camera.lookAt(car.position);
 
     chaseCamPivot.getWorldPosition(v);
-    if (v.y < 1) {
-      v.y = 1;
-    }
+    // if (v.y < 1) {
+    //   v.y = 1;
+    // }
     camera.position.lerpVectors(camera.position, v, 0.05);
 
     render();

@@ -11,6 +11,7 @@ specifiers:
   react: ^17.0.2
   react-dom: ^17.0.2
   three: ^0.138.3
+  three-outlinepass: ^1.2.0
   typescript: ^4.5.4
   vite: ^2.8.0
 
@@ -20,6 +21,7 @@ dependencies:
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   three: 0.138.3
+  three-outlinepass: 1.2.0
 
 devDependencies:
   '@types/dat.gui': 0.7.7
@@ -849,6 +851,10 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
     dev: true
+
+  /three-outlinepass/1.2.0:
+    resolution: {integrity: sha512-xCEmmf4IZsixXi5Hl14qULk2D9CMEbPg6ZjGBWr5oAk+6K3ZILBNRKXEEcOcdPvZgRtHz/fw1MUFgxbwPAnVQA==}
+    dev: false
 
   /three/0.138.3:
     resolution: {integrity: sha512-4t1cKC8gimNyJChJbaklg8W/qj3PpsLJUIFm5LIuAy/hVxxNm1ru2FGTSfbTSsuHmC/7ipsyuGKqrSAKLNtkzg==}
