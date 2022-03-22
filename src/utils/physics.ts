@@ -18,13 +18,13 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   light.castShadow = true;
   light.shadow.mapSize.width = 16384;
   light.shadow.mapSize.height = 16384;
-  light.shadow.camera.near = 1;
+  light.shadow.camera.near = 0.5;
+  light.shadow.camera.far = 500;
   let d = 120;
   light.shadow.camera.left = -d;
   light.shadow.camera.right = d;
   light.shadow.camera.top = d;
   light.shadow.camera.bottom = -d;
-  light.shadow.camera.far = d;
 
   scene.fog = new THREE.FogExp2(0xdaa520, 0.03);
 
@@ -33,8 +33,8 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.1);
   scene.add(HemisphereLight);
 
-  const helper = new THREE.CameraHelper(light.shadow.camera);
-  scene.add(helper);
+  // const helper = new THREE.CameraHelper(light.shadow.camera);
+  // scene.add(helper);
 
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -43,7 +43,7 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
     1000
   );
   const chaseCam = new THREE.Object3D();
-  chaseCam.position.set(0, 10, 1);
+  chaseCam.position.set(0, 15, 1);
   const chaseCamPivot = new THREE.Object3D();
   chaseCamPivot.position.set(0, 10, 1);
   chaseCam.add(chaseCamPivot);
@@ -61,7 +61,7 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const phongMaterial = new THREE.MeshPhongMaterial();
 
   const world = new CANNON.World();
-  world.gravity.set(0, -15, 0);
+  world.gravity.set(0, -20, 0);
 
   const groundMaterial = new CANNON.Material("groundMaterial");
   groundMaterial.friction = 0.25;
@@ -346,7 +346,7 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   function animate() {
     requestAnimationFrame(animate);
 
-    helper.update();
+    // helper.update();
 
     delta = Math.min(clock.getDelta(), 0.1);
     world.step(delta);
@@ -417,7 +417,7 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
     thrusting = false;
     turning = false;
     if (keyMap["w"] || keyMap["ArrowUp"]) {
-      if (forwardVelocity < 15.0) forwardVelocity += 0.5;
+      if (forwardVelocity < 50.0) forwardVelocity += 0.5;
       thrusting = true;
     }
     if (keyMap["s"] || keyMap["ArrowDown"]) {
