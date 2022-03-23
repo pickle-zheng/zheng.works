@@ -78,8 +78,8 @@ export class CarPool {
 
     //ground
     const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(
-      2000,
-      2000
+      500,
+      500
     );
     const getImage = (): THREE.MeshBasicMaterial => {
       var loader = new THREE.TextureLoader();
@@ -104,15 +104,15 @@ export class CarPool {
     groundMesh.position.z = 0;
     groundMesh.receiveShadow = true;
     this.scene.add(groundMesh);
-    const groundShape = new CANNON.Box(new CANNON.Vec3(2000, 1, 2000));
+    const groundShape = new CANNON.Box(new CANNON.Vec3(500, 1, 500));
     const groundBody = new CANNON.Body({ mass: 0, material: groundMaterial });
     groundBody.addShape(groundShape);
     groundBody.position.set(0, -1, 0);
     this.world.addBody(groundBody);
 
     const groundGeometry2: THREE.PlaneGeometry = new THREE.PlaneGeometry(
-      2000,
-      2000
+      500,
+      500
     );
     const groundMesh2: THREE.Mesh = new THREE.Mesh(
       groundGeometry2,
