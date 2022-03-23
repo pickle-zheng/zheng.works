@@ -19,6 +19,8 @@ const SocketHandler = (req: any, res: any) => {
     res.socket.server.io = io;
 
     io.on("connection", (socket) => {
+      console.log("car connected", socket.id);
+      socket.broadcast.emit("car-connected", socket.id);
       socket.on("car-position-change", (msg) => {
         const carIndex = cars.findIndex((car) => car.id === msg.id);
         if (carIndex === -1) {
@@ -27,13 +29,13 @@ const SocketHandler = (req: any, res: any) => {
           cars[carIndex] = msg;
         }
         socket.broadcast.emit("cars-position", cars);
-        // console.log(cars);
       });
+
       socket.on("disconnect", () => {
-        console.log("car disconnected", socket.id);
+        console.log("car disconnect", socket.id);
         const carIndex = cars.findIndex((car) => car.id === socket.id);
-        if (carIndex !== -1) {
-        }
+        cars.splice(carIndex, 1);
+        socket.broadcast.emit("car-disconnect", socket.id);
       });
     });
   }
