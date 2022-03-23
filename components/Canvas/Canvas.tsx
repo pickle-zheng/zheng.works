@@ -33,7 +33,7 @@ const Canvas = () => {
       carpool.removeCar(id);
     });
 
-    socket.on("cars-position", (cars: any) => {
+    socket.on("cars-position", (cars: remoteCarInfo[]) => {
       carpool.updateCarsPosition(cars);
     });
   };
