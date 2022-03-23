@@ -1,13 +1,18 @@
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
 
-import { GUI } from "dat.gui";
+// import { GUI } from "dat.gui";
 import * as CANNON from "cannon-es";
 import CannonDebugRenderer from "./cannonDebugRenderer";
 import { RefObject } from "react";
-import background from "../assets/info.jpeg";
+import background from "../public/info.jpeg";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
-export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
+export const physics = (
+  canvasRef: RefObject<HTMLCanvasElement>,
+  socket: any
+) => {
   if (!canvasRef.current) {
     throw Error("Canvas ref is not defined");
   }
@@ -78,7 +83,7 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   );
   const getImage = (): THREE.MeshBasicMaterial => {
     var loader = new THREE.TextureLoader();
-    var texture = loader.load(background);
+    var texture = loader.load("info.jpeg");
     var material = new THREE.MeshBasicMaterial({
       map: texture,
       side: THREE.DoubleSide,
@@ -327,12 +332,12 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const stats = Stats();
   document.body.appendChild(stats.dom);
 
-  const gui = new GUI();
-  const physicsFolder = gui.addFolder("Physics");
-  physicsFolder.add(world.gravity, "x", -10.0, 10.0, 0.1);
-  physicsFolder.add(world.gravity, "y", -20.0, 10.0, 0.1);
-  physicsFolder.add(world.gravity, "z", -10.0, 10.0, 0.1);
-  physicsFolder.open();
+  // const gui = new GUI();
+  // const physicsFolder = gui.addFolder("Physics");
+  // physicsFolder.add(world.gravity, "x", -10.0, 10.0, 0.1);
+  // physicsFolder.add(world.gravity, "y", -20.0, 10.0, 0.1);
+  // physicsFolder.add(world.gravity, "z", -10.0, 10.0, 0.1);
+  // physicsFolder.open();
 
   const clock = new THREE.Clock();
   let delta;
@@ -359,6 +364,49 @@ export const physics = (canvasRef: RefObject<HTMLCanvasElement>) => {
       carBody.position.y,
       carBody.position.z
     );
+
+    socket.emit("car-position-change", {
+      id: socket.id,
+      position: car.position,
+      wheelAngle: rightVelocity,
+      forwardVelocity: forwardVelocity
+    });
+    socket.on("cars-position", (msg: any) => {
+      const otherCars = msg.filter(
+        (car: { id: string }) => car.id !== socket.id
+      );
+      otherCars.forEach((car: { id: string; position: any }) => {
+        const otherCar = new THREE.Group();
+        const carBodyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(
+          1,
+          0.5,
+          2
+        );
+        const carBodyMesh: THREE.Mesh = new THREE.Mesh(
+          carBodyGeometry,
+          new THREE.MeshLambertMaterial({ color: 0xff0000 })
+        );
+        carBodyMesh.position.y = -0.25;
+        carBodyMesh.castShadow = true;
+        otherCar.add(carBodyMesh);
+
+        const carCabinMesh: THREE.Mesh = new THREE.Mesh(
+          new THREE.BoxGeometry(0.9, 0.4, 1),
+          new THREE.MeshLambertMaterial({ color: 0xffffff })
+        );
+        carCabinMesh.position.y = 0.05;
+        carCabinMesh.position.z = 0.4;
+        carCabinMesh.castShadow = true;
+
+        otherCar.position.y = car.position.y;
+        otherCar.position.x = car.position.x;
+        otherCar.position.z = car.position.z;
+
+        otherCar.add(carCabinMesh);
+
+        scene.add(otherCar);
+      });
+    });
     car.quaternion.set(
       carBody.quaternion.x,
       carBody.quaternion.y,
