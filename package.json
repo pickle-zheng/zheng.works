@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "git push heroku main"
+  },
+  "engines": {
+    "node": "17.x"
   },
   "dependencies": {
     "cannon-es": "^0.19.0",
