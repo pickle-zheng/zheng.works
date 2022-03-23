@@ -11,6 +11,7 @@ const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   let carpool: CarPool;
+  // @ts-ignore
   useEffect(() => socketInitializer(canvasRef), [canvasRef]);
 
   const socketInitializer = async (canvasRef: any): Promise<void> => {
