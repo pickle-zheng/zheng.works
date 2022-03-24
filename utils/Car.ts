@@ -223,7 +223,6 @@ export class Car {
     }
   ) {
     if (carPosition && carRotation && wheelPosition && wheelRotation) {
-      console.log("updatign remote car position");
       this.car.position.set(carPosition.x, carPosition.y, carPosition.z);
       this.car.quaternion.set(
         carRotation.x,
@@ -301,6 +300,13 @@ export class Car {
         this.carBody.quaternion.w
       );
 
+      this.car.quaternion.set(
+        this.carBody.quaternion.x,
+        this.carBody.quaternion.y,
+        this.carBody.quaternion.z,
+        this.carBody.quaternion.w
+      );
+
       this.wheelLFMesh.position.set(
         this.wheelLFBody.position.x,
         this.wheelLFBody.position.y,
@@ -350,6 +356,7 @@ export class Car {
       );
     }
   }
+
   removeCar() {
     this.scene.remove(this.car);
     this.scene.remove(this.wheelLBMesh);

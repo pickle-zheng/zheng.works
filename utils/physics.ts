@@ -32,7 +32,7 @@ export class CarPool {
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    this.scene.fog = new THREE.FogExp2(0xdaa520, 0.03);
+    this.scene.fog = new THREE.FogExp2(0xdaa520, 0.008);
 
     this.scene.add(light);
 
@@ -40,18 +40,20 @@ export class CarPool {
     this.scene.add(HemisphereLight);
 
     // const helper = new THREE.CameraHelper(light.shadow.camera);
-    // scene.add(helper);
+    // this.scene.add(helper);
 
     const camera = new THREE.PerspectiveCamera(
-      75,
+      30,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
     const chaseCam = new THREE.Object3D();
-    chaseCam.position.set(0, 15, 1);
+    chaseCam.position.set(0, 100, 0);
+    chaseCam.name = "chaseCam";
     const chaseCamPivot = new THREE.Object3D();
-    chaseCamPivot.position.set(0, 10, 1);
+    chaseCamPivot.position.set(0, 0, 0);
+    chaseCamPivot.name = "chaseCamPivot";
     chaseCam.add(chaseCamPivot);
     this.scene.add(chaseCam);
 
@@ -72,8 +74,8 @@ export class CarPool {
     groundMaterial.restitution = 0.25;
 
     const wheelMaterial = new CANNON.Material("wheelMaterial");
-    wheelMaterial.friction = 0.25;
-    wheelMaterial.restitution = 0.25;
+    wheelMaterial.friction = 0.35;
+    wheelMaterial.restitution = 0.35;
 
     //ground
     const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(
@@ -178,7 +180,7 @@ export class CarPool {
     const clock = new THREE.Clock();
     let delta;
 
-    const cannonDebugRenderer = new CannonDebugRenderer(this.scene, this.world);
+    // const cannonDebugRenderer = new CannonDebugRenderer(this.scene, this.world);
 
     const v = new THREE.Vector3();
     let thrusting = false;
@@ -192,7 +194,7 @@ export class CarPool {
       delta = Math.min(clock.getDelta(), 0.1);
       this.world.step(delta);
 
-      cannonDebugRenderer.update();
+      // cannonDebugRenderer.update();
 
       // Copy coordinates from Cannon to Three.js
       hostCar.updateCarPosition();
@@ -219,7 +221,7 @@ export class CarPool {
       thrusting = false;
       turning = false;
       if (keyMap["w"] || keyMap["ArrowUp"]) {
-        if (forwardVelocity < 50.0) forwardVelocity += 0.5;
+        if (forwardVelocity < 80.0) forwardVelocity += 0.5;
         thrusting = true;
       }
       if (keyMap["s"] || keyMap["ArrowDown"]) {
@@ -254,9 +256,9 @@ export class CarPool {
       }
       if (!turning) {
         if (rightVelocity > 0.2) {
-          rightVelocity -= 0.1;
+          rightVelocity -= 0.05;
         } else if (rightVelocity < -0.2) {
-          rightVelocity += 0.1;
+          rightVelocity += 0.05;
         } else {
           rightVelocity = 0;
         }
@@ -275,12 +277,14 @@ export class CarPool {
       }
 
       camera.lookAt(hostCar.car.position);
+      camera.up.set(0, 0, 1);
 
       chaseCamPivot.getWorldPosition(v);
-      if (v.y < 1) {
-        v.y = 1;
+      if (v.y < 40) {
+        v.y = 40;
       }
-      camera.position.lerpVectors(camera.position, v, 0.05);
+      // camera.position.set(v.x, v.y, v.z);
+      camera.position.lerpVectors(camera.position, v, 0.01);
 
       render();
 
