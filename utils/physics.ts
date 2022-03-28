@@ -221,7 +221,7 @@ export class CarPool {
       thrusting = false;
       turning = false;
       if (keyMap["w"] || keyMap["ArrowUp"]) {
-        if (forwardVelocity < 80.0) forwardVelocity += 0.5;
+        if (forwardVelocity < 60.0) forwardVelocity += 0.5;
         thrusting = true;
       }
       if (keyMap["s"] || keyMap["ArrowDown"]) {
