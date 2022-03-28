@@ -223,151 +223,137 @@ export class Car {
     }
   ) {
     if (carPosition && carRotation && wheelPosition && wheelRotation) {
-      if (this.car.position !== carPosition) {
-        this.car.position.set(carPosition.x, carPosition.y, carPosition.z);
-        this.car.quaternion.set(
-          carRotation.x,
-          carRotation.y,
-          carRotation.z,
-          carRotation.w
-        );
-        this.carBody.position.set(carPosition.x, carPosition.y, carPosition.z);
-        this.carBody.quaternion.set(
-          carRotation.x,
-          carRotation.y,
-          carRotation.z,
-          carRotation.w
-        );
-        this.wheelLFMesh.position.set(
-          wheelPosition.LF.x,
-          wheelPosition.LF.y,
-          wheelPosition.LF.z
-        );
-        this.wheelLFMesh.quaternion.set(
-          wheelRotation.LF.x,
-          wheelRotation.LF.y,
-          wheelRotation.LF.z,
-          wheelRotation.LF.w
-        );
-        this.wheelRFMesh.position.set(
-          wheelPosition.RF.x,
-          wheelPosition.RF.y,
-          wheelPosition.RF.z
-        );
-        this.wheelRFMesh.quaternion.set(
-          wheelRotation.RF.x,
-          wheelRotation.RF.y,
-          wheelRotation.RF.z,
-          wheelRotation.RF.w
-        );
-        this.wheelLBMesh.position.set(
-          wheelPosition.LB.x,
-          wheelPosition.LB.y,
-          wheelPosition.LB.z
-        );
-        this.wheelLBMesh.quaternion.set(
-          wheelRotation.LB.x,
-          wheelRotation.LB.y,
-          wheelRotation.LB.z,
-          wheelRotation.LB.w
-        );
-        this.wheelRBMesh.position.set(
-          wheelPosition.RB.x,
-          wheelPosition.RB.y,
-          wheelPosition.RB.z
-        );
-        this.wheelRBMesh.quaternion.set(
-          wheelRotation.RB.x,
-          wheelRotation.RB.y,
-          wheelRotation.RB.z,
-          wheelRotation.RB.w
-        );
-        return true;
-      } else {
-        return false;
-      }
+      this.car.position.set(carPosition.x, carPosition.y, carPosition.z);
+      this.car.quaternion.set(
+        carRotation.x,
+        carRotation.y,
+        carRotation.z,
+        carRotation.w
+      );
+      this.carBody.position.set(carPosition.x, carPosition.y, carPosition.z);
+      this.carBody.quaternion.set(
+        carRotation.x,
+        carRotation.y,
+        carRotation.z,
+        carRotation.w
+      );
+      this.wheelLFMesh.position.set(
+        wheelPosition.LF.x,
+        wheelPosition.LF.y,
+        wheelPosition.LF.z
+      );
+      this.wheelLFMesh.quaternion.set(
+        wheelRotation.LF.x,
+        wheelRotation.LF.y,
+        wheelRotation.LF.z,
+        wheelRotation.LF.w
+      );
+      this.wheelRFMesh.position.set(
+        wheelPosition.RF.x,
+        wheelPosition.RF.y,
+        wheelPosition.RF.z
+      );
+      this.wheelRFMesh.quaternion.set(
+        wheelRotation.RF.x,
+        wheelRotation.RF.y,
+        wheelRotation.RF.z,
+        wheelRotation.RF.w
+      );
+      this.wheelLBMesh.position.set(
+        wheelPosition.LB.x,
+        wheelPosition.LB.y,
+        wheelPosition.LB.z
+      );
+      this.wheelLBMesh.quaternion.set(
+        wheelRotation.LB.x,
+        wheelRotation.LB.y,
+        wheelRotation.LB.z,
+        wheelRotation.LB.w
+      );
+      this.wheelRBMesh.position.set(
+        wheelPosition.RB.x,
+        wheelPosition.RB.y,
+        wheelPosition.RB.z
+      );
+      this.wheelRBMesh.quaternion.set(
+        wheelRotation.RB.x,
+        wheelRotation.RB.y,
+        wheelRotation.RB.z,
+        wheelRotation.RB.w
+      );
     } else if (
       this.wheelLFBody &&
       this.wheelRFBody &&
       this.wheelLBBody &&
       this.wheelRBBody
     ) {
-      if (
-        this.car.position.x !== this.carBody.position.x &&
-        this.car.position.y !== this.carBody.position.y &&
-        this.car.position.z !== this.carBody.position.z
-      ) {
-        this.car.position.set(
-          this.carBody.position.x,
-          this.carBody.position.y,
-          this.carBody.position.z
-        );
+      this.car.position.set(
+        this.carBody.position.x,
+        this.carBody.position.y,
+        this.carBody.position.z
+      );
 
-        this.car.quaternion.set(
-          this.carBody.quaternion.x,
-          this.carBody.quaternion.y,
-          this.carBody.quaternion.z,
-          this.carBody.quaternion.w
-        );
+      this.car.quaternion.set(
+        this.carBody.quaternion.x,
+        this.carBody.quaternion.y,
+        this.carBody.quaternion.z,
+        this.carBody.quaternion.w
+      );
 
-        this.car.quaternion.set(
-          this.carBody.quaternion.x,
-          this.carBody.quaternion.y,
-          this.carBody.quaternion.z,
-          this.carBody.quaternion.w
-        );
+      this.car.quaternion.set(
+        this.carBody.quaternion.x,
+        this.carBody.quaternion.y,
+        this.carBody.quaternion.z,
+        this.carBody.quaternion.w
+      );
 
-        this.wheelLFMesh.position.set(
-          this.wheelLFBody.position.x,
-          this.wheelLFBody.position.y,
-          this.wheelLFBody.position.z
-        );
-        this.wheelLFMesh.quaternion.set(
-          this.wheelLFBody.quaternion.x,
-          this.wheelLFBody.quaternion.y,
-          this.wheelLFBody.quaternion.z,
-          this.wheelLFBody.quaternion.w
-        );
+      this.wheelLFMesh.position.set(
+        this.wheelLFBody.position.x,
+        this.wheelLFBody.position.y,
+        this.wheelLFBody.position.z
+      );
+      this.wheelLFMesh.quaternion.set(
+        this.wheelLFBody.quaternion.x,
+        this.wheelLFBody.quaternion.y,
+        this.wheelLFBody.quaternion.z,
+        this.wheelLFBody.quaternion.w
+      );
 
-        this.wheelRFMesh.position.set(
-          this.wheelRFBody.position.x,
-          this.wheelRFBody.position.y,
-          this.wheelRFBody.position.z
-        );
-        this.wheelRFMesh.quaternion.set(
-          this.wheelRFBody.quaternion.x,
-          this.wheelRFBody.quaternion.y,
-          this.wheelRFBody.quaternion.z,
-          this.wheelRFBody.quaternion.w
-        );
+      this.wheelRFMesh.position.set(
+        this.wheelRFBody.position.x,
+        this.wheelRFBody.position.y,
+        this.wheelRFBody.position.z
+      );
+      this.wheelRFMesh.quaternion.set(
+        this.wheelRFBody.quaternion.x,
+        this.wheelRFBody.quaternion.y,
+        this.wheelRFBody.quaternion.z,
+        this.wheelRFBody.quaternion.w
+      );
 
-        this.wheelLBMesh.position.set(
-          this.wheelLBBody.position.x,
-          this.wheelLBBody.position.y,
-          this.wheelLBBody.position.z
-        );
-        this.wheelLBMesh.quaternion.set(
-          this.wheelLBBody.quaternion.x,
-          this.wheelLBBody.quaternion.y,
-          this.wheelLBBody.quaternion.z,
-          this.wheelLBBody.quaternion.w
-        );
+      this.wheelLBMesh.position.set(
+        this.wheelLBBody.position.x,
+        this.wheelLBBody.position.y,
+        this.wheelLBBody.position.z
+      );
+      this.wheelLBMesh.quaternion.set(
+        this.wheelLBBody.quaternion.x,
+        this.wheelLBBody.quaternion.y,
+        this.wheelLBBody.quaternion.z,
+        this.wheelLBBody.quaternion.w
+      );
 
-        this.wheelRBMesh.position.set(
-          this.wheelRBBody.position.x,
-          this.wheelRBBody.position.y,
-          this.wheelRBBody.position.z
-        );
-        this.wheelRBMesh.quaternion.set(
-          this.wheelRBBody.quaternion.x,
-          this.wheelRBBody.quaternion.y,
-          this.wheelRBBody.quaternion.z,
-          this.wheelRBBody.quaternion.w
-        );
-        return true;
-      } else {
-        return false;
-      }
+      this.wheelRBMesh.position.set(
+        this.wheelRBBody.position.x,
+        this.wheelRBBody.position.y,
+        this.wheelRBBody.position.z
+      );
+      this.wheelRBMesh.quaternion.set(
+        this.wheelRBBody.quaternion.x,
+        this.wheelRBBody.quaternion.y,
+        this.wheelRBBody.quaternion.z,
+        this.wheelRBBody.quaternion.w
+      );
     }
   }
 
