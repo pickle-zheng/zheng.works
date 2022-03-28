@@ -70,7 +70,7 @@ export class CarPool {
     this.world.gravity.set(0, -60, 0);
 
     const groundMaterial = new CANNON.Material("groundMaterial");
-    groundMaterial.friction = 0.25;
+    groundMaterial.friction = 0.35;
     groundMaterial.restitution = 0.25;
 
     const wheelMaterial = new CANNON.Material("wheelMaterial");
