@@ -197,26 +197,28 @@ export class CarPool {
       // cannonDebugRenderer.update();
 
       // Copy coordinates from Cannon to Three.js
-      hostCar.updateCarPosition();
+      const positionChanged = hostCar.updateCarPosition();
 
-      socket.emit("car-position-change", {
-        id: socket.id,
-        position: hostCar.carBody.position,
-        quaternion: hostCar.carBody.quaternion,
-        wheelPosition: {
-          LF: hostCar.wheelLFMesh.position,
-          RF: hostCar.wheelRFMesh.position,
-          LB: hostCar.wheelLBMesh.position,
-          RB: hostCar.wheelRBMesh.position
-        },
-        wheelRotation: {
-          LF: hostCar.wheelLFMesh.quaternion,
-          RF: hostCar.wheelRFMesh.quaternion,
-          LB: hostCar.wheelLBMesh.quaternion,
-          RB: hostCar.wheelRBMesh.quaternion
-        },
-        forwardVelocity: forwardVelocity
-      });
+      if (positionChanged) {
+        socket.emit("car-position-change", {
+          id: socket.id,
+          position: hostCar.carBody.position,
+          quaternion: hostCar.carBody.quaternion,
+          wheelPosition: {
+            LF: hostCar.wheelLFMesh.position,
+            RF: hostCar.wheelRFMesh.position,
+            LB: hostCar.wheelLBMesh.position,
+            RB: hostCar.wheelRBMesh.position
+          },
+          wheelRotation: {
+            LF: hostCar.wheelLFMesh.quaternion,
+            RF: hostCar.wheelRFMesh.quaternion,
+            LB: hostCar.wheelLBMesh.quaternion,
+            RB: hostCar.wheelRBMesh.quaternion
+          },
+          forwardVelocity: forwardVelocity
+        });
+      }
 
       thrusting = false;
       turning = false;
