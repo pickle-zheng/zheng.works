@@ -248,7 +248,7 @@ export class CarPool {
       if (!thrusting) {
         //not going forward or backwards so gradually slow down
         if (forwardVelocity > 0) {
-          forwardVelocity -= 0.25;
+          forwardVelocity -= 0.5;
         }
         if (forwardVelocity < 0) {
           forwardVelocity += 0.25;
