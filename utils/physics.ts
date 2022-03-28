@@ -167,8 +167,8 @@ export class CarPool {
       render();
     }
 
-    const stats = Stats();
-    document.body.appendChild(stats.dom);
+    // const stats = Stats();
+    // document.body.appendChild(stats.dom);
 
     // const gui = new GUI();
     // const physicsFolder = gui.addFolder("Physics");
@@ -288,7 +288,7 @@ export class CarPool {
 
       render();
 
-      stats.update();
+      // stats.update();
     };
 
     const render = () => {
