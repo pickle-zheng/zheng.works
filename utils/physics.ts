@@ -6,6 +6,7 @@ import * as CANNON from "cannon-es";
 import CannonDebugRenderer from "./cannonDebugRenderer";
 import { RefObject } from "react";
 import { Car } from "./Car";
+import { Tree } from "./Tree";
 
 export class CarPool {
   scene: THREE.Scene;
@@ -93,6 +94,7 @@ export class CarPool {
       return material;
     };
     const imageMaterial = getImage();
+
     const shadowMaterial = new THREE.ShadowMaterial();
     shadowMaterial.opacity = 0.5;
     const groundMesh: THREE.Mesh = new THREE.Mesh(
@@ -147,6 +149,27 @@ export class CarPool {
 
     const hostCar = new Car(this.scene, this.world, "host");
     hostCar.addChaseCam(chaseCam);
+
+    const treePositions = [
+      { x: 2, z: 8 },
+      { x: 12, z: 6 },
+      { x: -6, z: 5.2 },
+      { x: -4, z: -2 },
+      { x: -6, z: 5.2 },
+      { x: -13, z: -4.78 },
+      { x: -24, z: 5.2 },
+      { x: 19, z: 15.2 },
+      { x: -24, z: -12 },
+      { x: 19, z: -15.2 }
+    ];
+    const trees = treePositions.map(
+      (treePosition) =>
+        new Tree(this.scene, this.world, "normal", {
+          x: treePosition.x,
+          z: treePosition.z
+        })
+    );
+    console.log(trees);
 
     const keyMap: { [id: string]: boolean } = {};
     const onDocumentKey = (e: KeyboardEvent) => {
