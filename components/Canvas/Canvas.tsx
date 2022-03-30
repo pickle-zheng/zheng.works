@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CarPool } from "../../utils/physics";
+import { CarPool } from "../../utils/Carpool";
 import io from "socket.io-client";
 
 import styles from "./Canvas.module.css";

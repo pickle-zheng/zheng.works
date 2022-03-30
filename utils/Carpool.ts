@@ -290,7 +290,7 @@ export class CarPool {
       if (keyMap["r"]) {
         hostCar.removeCar();
         hostCar = new Car(this.scene, this.world, "host");
-        camera.position.lerpVectors(camera.position, v, 0.01);
+        camera.position.lerpVectors(new THREE.Vector3(0, 100, 0), v, 0.01);
       }
 
       if (!thrusting) {
@@ -328,8 +328,9 @@ export class CarPool {
       camera.up.set(0, 0, 1);
 
       chaseCamPivot.getWorldPosition(v);
-      if (v.y < 80) {
-        v.y = 80;
+      console.log(camera.position);
+      if (v.y < 100) {
+        v.y = 100;
       }
       camera.position.lerpVectors(camera.position, v, 0.01);
 

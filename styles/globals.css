@@ -40,7 +40,7 @@ canvas {
   height: 16px;
   box-sizing: content-box;
   padding: 16px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #18181a;
   border-radius: 48px;
   transform: scale(0);
   transition: transform 0.3s cubic-bezier(0.31, -0.34, 0.48, 1.37);

@@ -61,7 +61,7 @@ export class Ramp {
     this.ramp.position.x = position.x;
     this.ramp.position.y = 3;
     this.ramp.position.z = position.z;
-    this.ramp.rotateX(-Math.PI / 6);
+    this.ramp.rotateX(-Math.PI / 5);
 
     this.scene.add(this.ramp);
 
