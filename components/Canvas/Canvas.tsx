@@ -13,7 +13,7 @@ const Canvas = () => {
 
   const [typingMessage, setTyping] = useState(false);
 
-  let carpool: CarPool;
+  const [carpool, setCarpool] = useState<CarPool>();
 
   const socketInitializer = async (canvasRef: any): Promise<void> => {
     await fetch("/api/socket");
@@ -21,32 +21,32 @@ const Canvas = () => {
 
     socket.on("connect", () => {
       console.log("connected", socket.id);
-      carpool = new CarPool(canvasRef, socket);
+      setCarpool(new CarPool(canvasRef, socket));
     });
 
     socket.on("car-connected", (id: any) => {
       console.log("connected", id);
-      carpool.addCar(id);
+      if (carpool) carpool.addCar(id);
     });
 
     socket.on("car-disconnect", (id: any) => {
       console.log("disconnect", id);
-      carpool.removeCar(id);
+      if (carpool) carpool.removeCar(id);
     });
 
     socket.on("cars-position", (cars: remoteCarInfo[]) => {
-      carpool.updateCarsPosition(cars);
+      if (carpool) carpool.updateCarsPosition(cars);
     });
 
     socket.on("new-message", (message: any) => {
       console.log("new-message", message);
-      carpool.addMessage(message);
+      if (carpool) carpool.addMessage(message);
     });
   };
 
   useEffect(() => {
     socketInitializer(canvasRef);
-  }, [canvasRef]);
+  }, []);
 
   useEffect(() => {
     if (carpool) carpool.updateTypingStatus(typingMessage);
@@ -63,7 +63,7 @@ const Canvas = () => {
 
     window.addEventListener("keyup", keyboardHandler);
     return () => window.removeEventListener("keyup", keyboardHandler);
-  }, [typingMessage]);
+  }, [typingMessage, carpool]);
 
   return (
     <div>

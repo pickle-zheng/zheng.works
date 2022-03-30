@@ -348,7 +348,6 @@ export class CarPool {
   }
 
   updateTypingStatus(typingStatus: boolean) {
-    console.log(this.typingStatus, typingStatus);
     this.typingStatus = typingStatus;
   }
 

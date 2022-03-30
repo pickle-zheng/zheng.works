@@ -77,14 +77,15 @@ export class Tree {
     this.tree.add(treeTrunkGeometryMesh);
 
     this.tree.position.x = position.x;
-    this.tree.position.y = 2.1;
+    this.tree.position.y = 1.6;
     this.tree.position.z = position.z;
 
     this.scene.add(this.tree);
 
-    const treeBodyShape = new CANNON.Cylinder(0.2, 0.2, 3);
+    const treeBodyShape = new CANNON.Cylinder(0.2, 0.4, 3);
     this.treeBody = new CANNON.Body({ mass: 600 });
     this.treeBody.addShape(treeBodyShape);
+    this.treeBody.fixedRotation = true;
     this.treeBody.linearDamping = 0;
     this.treeBody.position.x = this.tree.position.x;
     this.treeBody.position.y = this.tree.position.y;
