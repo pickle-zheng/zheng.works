@@ -14,10 +14,6 @@ const Canvas = () => {
   const [typingMessage, setTyping] = useState(false);
 
   let carpool: CarPool;
-  // @ts-ignore
-  useEffect(() => {
-    socketInitializer(canvasRef);
-  }, [canvasRef]);
 
   const socketInitializer = async (canvasRef: any): Promise<void> => {
     await fetch("/api/socket");
@@ -49,8 +45,10 @@ const Canvas = () => {
   };
 
   useEffect(() => {
-    console.log("inside", typingMessage);
+    socketInitializer(canvasRef);
+  }, [canvasRef, socketInitializer]);
 
+  useEffect(() => {
     const keyboardHandler = (event: KeyboardEvent) => {
       if (event.keyCode === 13 || event.key === "Enter") {
         if (typingMessage === false) {
@@ -65,8 +63,6 @@ const Canvas = () => {
     window.addEventListener("keyup", keyboardHandler);
     return () => window.removeEventListener("keyup", keyboardHandler);
   }, [typingMessage]);
-
-  console.log("outside", typingMessage);
 
   return (
     <div>
