@@ -46,7 +46,7 @@ const Canvas = () => {
 
   useEffect(() => {
     socketInitializer(canvasRef);
-  }, [canvasRef, socketInitializer]);
+  }, [canvasRef]);
 
   useEffect(() => {
     if (carpool) carpool.updateTypingStatus(typingMessage);
