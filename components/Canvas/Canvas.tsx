@@ -49,6 +49,7 @@ const Canvas = () => {
   }, [canvasRef, socketInitializer]);
 
   useEffect(() => {
+    if (carpool) carpool.updateTypingStatus(typingMessage);
     const keyboardHandler = (event: KeyboardEvent) => {
       if (event.keyCode === 13 || event.key === "Enter") {
         if (typingMessage === false) {

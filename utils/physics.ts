@@ -15,6 +15,7 @@ export class CarPool {
   socketId: string | undefined;
   world: CANNON.World;
   hostCar: Car;
+  typingStatus: boolean = false;
   constructor(canvasRef: RefObject<HTMLCanvasElement>, socket: any) {
     this.socketId = socket.id;
     if (!canvasRef.current) {
@@ -186,7 +187,7 @@ export class CarPool {
 
     const keyMap: { [id: string]: boolean } = {};
     const onDocumentKey = (e: KeyboardEvent) => {
-      keyMap[e.key] = e.type === "keydown";
+      if (this.typingStatus !== true) keyMap[e.key] = e.type === "keydown";
     };
 
     let forwardVelocity = 0;
@@ -289,6 +290,7 @@ export class CarPool {
       if (keyMap["r"]) {
         hostCar.removeCar();
         hostCar = new Car(this.scene, this.world, "host");
+        camera.position.lerpVectors(camera.position, v, 0.01);
       }
 
       if (!thrusting) {
@@ -326,10 +328,9 @@ export class CarPool {
       camera.up.set(0, 0, 1);
 
       chaseCamPivot.getWorldPosition(v);
-      if (v.y < 40) {
-        v.y = 40;
+      if (v.y < 80) {
+        v.y = 80;
       }
-      // camera.position.set(v.x, v.y, v.z);
       camera.position.lerpVectors(camera.position, v, 0.01);
 
       render();
@@ -339,10 +340,16 @@ export class CarPool {
 
     const render = () => {
       renderer.render(this.scene, camera);
+      ``;
       labelRenderer.render(this.scene, camera);
     };
 
     animate();
+  }
+
+  updateTypingStatus(typingStatus: boolean) {
+    console.log(this.typingStatus, typingStatus);
+    this.typingStatus = typingStatus;
   }
 
   addCar(id: string) {
