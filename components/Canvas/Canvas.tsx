@@ -23,30 +23,41 @@ const Canvas = () => {
       console.log("connected", socket.id);
       setCarpool(new CarPool(canvasRef, socket));
     });
-
-    socket.on("car-connected", (id: any) => {
-      console.log("connected", id);
-      if (carpool) carpool.addCar(id);
-    });
-
-    socket.on("car-disconnect", (id: any) => {
-      console.log("disconnect", id);
-      if (carpool) carpool.removeCar(id);
-    });
-
-    socket.on("cars-position", (cars: remoteCarInfo[]) => {
-      if (carpool) carpool.updateCarsPosition(cars);
-    });
-
-    socket.on("new-message", (message: any) => {
-      console.log("new-message", message);
-      if (carpool) carpool.addMessage(message);
-    });
   };
 
   useEffect(() => {
     socketInitializer(canvasRef);
   }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("car-connected", (id: any) => {
+        console.log("connected", id);
+        if (carpool) carpool.addCar(id);
+      });
+
+      socket.on("car-disconnect", (id: any) => {
+        console.log("disconnect", id);
+        console.log(carpool);
+        if (carpool) carpool.removeCar(id);
+      });
+
+      socket.on("cars-position", (cars: remoteCarInfo[]) => {
+        if (carpool) carpool.updateCarsPosition(cars);
+      });
+
+      socket.on("new-message", (message: any) => {
+        console.log("new-message", message);
+        if (carpool) carpool.addMessage(message);
+      });
+    }
+    return () => {
+      socket.off("car-connected");
+      socket.off("car-disconnect");
+      socket.off("cars-position");
+      socket.off("new-message");
+    };
+  }, [carpool, socket]);
 
   useEffect(() => {
     if (carpool) carpool.updateTypingStatus(typingMessage);
