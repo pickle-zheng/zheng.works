@@ -83,9 +83,9 @@ export class Tree {
     this.scene.add(this.tree);
 
     const treeBodyShape = new CANNON.Cylinder(0.2, 0.2, 3);
-    this.treeBody = new CANNON.Body({ mass: 500 });
+    this.treeBody = new CANNON.Body({ mass: 600 });
     this.treeBody.addShape(treeBodyShape);
-    this.treeBody.linearDamping = 0.05;
+    this.treeBody.linearDamping = 0;
     this.treeBody.position.x = this.tree.position.x;
     this.treeBody.position.y = this.tree.position.y;
     this.treeBody.position.z = this.tree.position.z;

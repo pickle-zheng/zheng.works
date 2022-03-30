@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 
 export class Car {
   car: THREE.Group;
@@ -19,12 +20,17 @@ export class Car {
   constraintRF: CANNON.HingeConstraint | undefined;
   constraintLB: CANNON.HingeConstraint | undefined;
   constraintRB: CANNON.HingeConstraint | undefined;
+  labelBox: HTMLDivElement;
+  label: HTMLDivElement;
+  messageTimeout: NodeJS.Timeout | null | undefined;
 
   constructor(scene: THREE.Scene, world: CANNON.World, type: string) {
     this.car = new THREE.Group();
     this.scene = scene;
     this.world = world;
     this.type = type;
+    this.labelBox = document.createElement("div");
+    this.label = document.createElement("div");
     const carBodyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 0.5, 2);
     const carBodyMesh: THREE.Mesh = new THREE.Mesh(
       carBodyGeometry,
@@ -32,6 +38,7 @@ export class Car {
     );
     carBodyMesh.position.y = -0.25;
     carBodyMesh.castShadow = true;
+    carBodyMesh.receiveShadow = true;
     this.car.add(carBodyMesh);
     const carCabinMesh: THREE.Mesh = new THREE.Mesh(
       new THREE.BoxGeometry(0.9, 0.4, 1),
@@ -40,15 +47,27 @@ export class Car {
     carCabinMesh.position.y = 0.05;
     carCabinMesh.position.z = 0.4;
     carCabinMesh.castShadow = true;
+    carBodyMesh.layers.enableAll();
+    this.labelBox.className = "labelBox";
+    this.labelBox.appendChild(this.label);
+    this.label.textContent = "";
+    this.label.className = "label";
 
-    this.car.position.y = 4;
+    const earthLabel = new CSS2DObject(this.labelBox);
+    earthLabel.position.set(0, 0, 0);
+    carBodyMesh.add(earthLabel);
+    earthLabel.layers.set(0);
+
+    this.car.position.y = 1.5;
+    // this.car.position.x = Math.floor(Math.random() * 50) - 25;
+    // this.car.position.z = Math.floor(Math.random() * 50) - 25;
     this.car.add(carCabinMesh);
     this.scene.add(this.car);
 
     const carBodyShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 1));
-    this.carBody = new CANNON.Body({ mass: 50 });
+    this.carBody = new CANNON.Body({ mass: 25 });
     this.carBody.addShape(carBodyShape);
-    this.carBody.linearDamping = 0.05;
+    this.carBody.linearDamping = 0;
     this.carBody.position.x = this.car.position.x;
     this.carBody.position.y = this.car.position.y;
     this.carBody.position.z = this.car.position.z;
@@ -56,8 +75,8 @@ export class Car {
 
     //attach wheels
     const wheelMaterial = new CANNON.Material("wheelMaterial");
-    wheelMaterial.friction = 0.25;
-    wheelMaterial.restitution = 0.25;
+    wheelMaterial.friction = 0.3;
+    wheelMaterial.restitution = 0.3;
     const wheelMeshMaterial = new THREE.MeshLambertMaterial({
       color: 0x000000
     });
@@ -120,7 +139,7 @@ export class Car {
     // wheel bodies
     if (this.type === "host") {
       const wheelLFShape = new CANNON.Sphere(0.22);
-      this.wheelLFBody = new CANNON.Body({ mass: 1, material: wheelMaterial });
+      this.wheelLFBody = new CANNON.Body({ mass: 8, material: wheelMaterial });
       this.wheelLFBody.addShape(wheelLFShape);
       this.wheelLFBody.position.x = this.wheelLFMesh.position.x;
       this.wheelLFBody.position.y = this.wheelLFMesh.position.y;
@@ -128,7 +147,7 @@ export class Car {
       this.world.addBody(this.wheelLFBody);
 
       const wheelRFShape = new CANNON.Sphere(0.22);
-      this.wheelRFBody = new CANNON.Body({ mass: 1, material: wheelMaterial });
+      this.wheelRFBody = new CANNON.Body({ mass: 8, material: wheelMaterial });
       this.wheelRFBody.addShape(wheelRFShape);
       this.wheelRFBody.position.x = this.wheelRFMesh.position.x;
       this.wheelRFBody.position.y = this.wheelRFMesh.position.y;
@@ -136,7 +155,7 @@ export class Car {
       this.world.addBody(this.wheelRFBody);
 
       const wheelLBShape = new CANNON.Sphere(0.22);
-      this.wheelLBBody = new CANNON.Body({ mass: 1, material: wheelMaterial });
+      this.wheelLBBody = new CANNON.Body({ mass: 14, material: wheelMaterial });
       this.wheelLBBody.addShape(wheelLBShape);
       this.wheelLBBody.position.x = this.wheelLBMesh.position.x;
       this.wheelLBBody.position.y = this.wheelLBMesh.position.y;
@@ -144,7 +163,7 @@ export class Car {
       this.world.addBody(this.wheelLBBody);
 
       const wheelRBShape = new CANNON.Sphere(0.22);
-      this.wheelRBBody = new CANNON.Body({ mass: 1, material: wheelMaterial });
+      this.wheelRBBody = new CANNON.Body({ mass: 14, material: wheelMaterial });
       this.wheelRBBody.addShape(wheelRBShape);
       this.wheelRBBody.position.x = this.wheelRBMesh.position.x;
       this.wheelRBBody.position.y = this.wheelRBMesh.position.y;
@@ -204,6 +223,19 @@ export class Car {
 
   addChaseCam(chaseCam: THREE.Object3D) {
     this.car.add(chaseCam);
+  }
+
+  addMessage(msg: string) {
+    this.label.textContent = msg;
+    this.labelBox.classList.add("show");
+    if (this.messageTimeout) clearTimeout(this.messageTimeout);
+    this.messageTimeout = setTimeout(
+      () => {
+        this.label.textContent = "";
+        this.labelBox.classList.remove("show");
+      },
+      msg.length < 5 ? 5000 : msg.length * 1000
+    );
   }
 
   updateCarPosition(
@@ -291,13 +323,6 @@ export class Car {
         this.carBody.position.x,
         this.carBody.position.y,
         this.carBody.position.z
-      );
-
-      this.car.quaternion.set(
-        this.carBody.quaternion.x,
-        this.carBody.quaternion.y,
-        this.carBody.quaternion.z,
-        this.carBody.quaternion.w
       );
 
       this.car.quaternion.set(

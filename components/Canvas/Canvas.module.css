@@ -1,0 +1,25 @@
+.form {
+  z-index: 99;
+  position: absolute;
+  display: flex;
+  bottom: 10vh;
+  width: 100%;
+  transform: translateY(100vh);
+  transition: transform 0.3s cubic-bezier(0.31, -0.34, 0.48, 1.37);
+  justify-content: center;
+}
+
+.formTyping {
+  transform: translateY(0);
+}
+
+.form input {
+  appearance: none;
+  outline: none;
+  padding: 16px;
+  border-radius: 48px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  width: 50%;
+  color: #fff;
+}

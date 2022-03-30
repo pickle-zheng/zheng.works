@@ -1,18 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CarPool } from "../../utils/physics";
 import io from "socket.io-client";
-import uniqid from "uniqid";
-import { Socket } from "socket.io";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
+
+import styles from "./Canvas.module.css";
 
 let socket: any;
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [typingMessage, setTyping] = useState(false);
+
   let carpool: CarPool;
   // @ts-ignore
-  useEffect(() => socketInitializer(canvasRef), [canvasRef]);
+  useEffect(() => {
+    socketInitializer(canvasRef);
+  }, [canvasRef]);
 
   const socketInitializer = async (canvasRef: any): Promise<void> => {
     await fetch("/api/socket");
@@ -36,10 +41,52 @@ const Canvas = () => {
     socket.on("cars-position", (cars: remoteCarInfo[]) => {
       carpool.updateCarsPosition(cars);
     });
+
+    socket.on("new-message", (message: any) => {
+      console.log("new-message", message);
+      carpool.addMessage(message);
+    });
   };
+
+  useEffect(() => {
+    console.log("inside", typingMessage);
+
+    const keyboardHandler = (event: KeyboardEvent) => {
+      if (event.keyCode === 13 || event.key === "Enter") {
+        if (typingMessage === false) {
+          setTyping(true);
+          inputRef.current?.focus({ preventScroll: true });
+        } else {
+          setTyping(false);
+        }
+      }
+    };
+
+    window.addEventListener("keyup", keyboardHandler);
+    return () => window.removeEventListener("keyup", keyboardHandler);
+  }, [typingMessage]);
+
+  console.log("outside", typingMessage);
+
   return (
     <div>
       <canvas ref={canvasRef} />
+      <form
+        className={`${styles.form} ${typingMessage && styles.formTyping}`}
+        onSubmit={(e: React.SyntheticEvent) => {
+          e.preventDefault();
+          const target = e.target as typeof e.target & {
+            message: { value: string };
+          };
+          const message = target.message.value;
+          if (message.length > 0)
+            socket.emit("message", { message: message, id: socket.id });
+          target.message.value = "";
+          inputRef.current?.blur();
+        }}
+      >
+        <input type='text' id='message' name='message' ref={inputRef} />
+      </form>
     </div>
   );
 };

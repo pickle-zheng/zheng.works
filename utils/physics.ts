@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import Stats from "three/examples/jsm/libs/stats.module";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 
 // import { GUI } from "dat.gui";
 import * as CANNON from "cannon-es";
@@ -7,12 +7,14 @@ import CannonDebugRenderer from "./cannonDebugRenderer";
 import { RefObject } from "react";
 import { Car } from "./Car";
 import { Tree } from "./Tree";
+import { Ramp } from "./Ramp";
 
 export class CarPool {
   scene: THREE.Scene;
   activeCars: { id: any; carObj: Car; body: CANNON.Body }[] = [];
   socketId: string | undefined;
   world: CANNON.World;
+  hostCar: Car;
   constructor(canvasRef: RefObject<HTMLCanvasElement>, socket: any) {
     this.socketId = socket.id;
     if (!canvasRef.current) {
@@ -67,16 +69,22 @@ export class CarPool {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.domElement.style.position = "absolute";
+    labelRenderer.domElement.style.top = "0px";
+    document.body.appendChild(labelRenderer.domElement);
+
     this.world = new CANNON.World();
-    this.world.gravity.set(0, -60, 0);
+    this.world.gravity.set(0, -50, 0);
 
     const groundMaterial = new CANNON.Material("groundMaterial");
-    groundMaterial.friction = 0.35;
+    groundMaterial.friction = 0.25;
     groundMaterial.restitution = 0.25;
 
     const wheelMaterial = new CANNON.Material("wheelMaterial");
-    wheelMaterial.friction = 0.35;
-    wheelMaterial.restitution = 0.35;
+    wheelMaterial.friction = 0.5;
+    wheelMaterial.restitution = 0.5;
 
     //ground
     const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(
@@ -147,8 +155,9 @@ export class CarPool {
     //   this.world.addBody(cylinderBody);
     // }
 
-    const hostCar = new Car(this.scene, this.world, "host");
+    let hostCar = new Car(this.scene, this.world, "host");
     hostCar.addChaseCam(chaseCam);
+    this.hostCar = hostCar;
 
     const treePositions = [
       { x: 2, z: 8 },
@@ -169,7 +178,11 @@ export class CarPool {
           z: treePosition.z
         })
     );
-    console.log(trees);
+
+    const ramp = new Ramp(this.scene, this.world, "normal", {
+      x: 15,
+      z: 15
+    });
 
     const keyMap: { [id: string]: boolean } = {};
     const onDocumentKey = (e: KeyboardEvent) => {
@@ -187,6 +200,7 @@ export class CarPool {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      labelRenderer.setSize(window.innerWidth, window.innerHeight);
       render();
     }
 
@@ -221,6 +235,7 @@ export class CarPool {
 
       // Copy coordinates from Cannon to Three.js
       hostCar.updateCarPosition();
+      ramp.updateRampPosition();
 
       socket.emit("car-position-change", {
         id: socket.id,
@@ -244,19 +259,23 @@ export class CarPool {
       thrusting = false;
       turning = false;
       if (keyMap["w"] || keyMap["ArrowUp"]) {
-        if (forwardVelocity < 60.0) forwardVelocity += 0.5;
+        if (forwardVelocity < 0) forwardVelocity = 0;
+        if (forwardVelocity < 70.0 && forwardVelocity >= 0)
+          forwardVelocity += 0.5;
         thrusting = true;
       }
       if (keyMap["s"] || keyMap["ArrowDown"]) {
-        if (forwardVelocity > -15.0) forwardVelocity -= 0.5;
+        if (forwardVelocity > 0) forwardVelocity = 0;
+        if (forwardVelocity > -30.0 && forwardVelocity <= 0)
+          forwardVelocity -= 0.5;
         thrusting = true;
       }
       if (keyMap["a"] || keyMap["ArrowLeft"]) {
-        if (rightVelocity > -1.0) rightVelocity -= 0.1;
+        if (rightVelocity > -0.3) rightVelocity -= 0.1;
         turning = true;
       }
       if (keyMap["d"] || keyMap["ArrowRight"]) {
-        if (rightVelocity < 1.0) rightVelocity += 0.1;
+        if (rightVelocity < 0.3) rightVelocity += 0.1;
         turning = true;
       }
       if (keyMap[" "]) {
@@ -266,6 +285,10 @@ export class CarPool {
         if (forwardVelocity < 0) {
           forwardVelocity += 1;
         }
+      }
+      if (keyMap["r"]) {
+        hostCar.removeCar();
+        hostCar = new Car(this.scene, this.world, "host");
       }
 
       if (!thrusting) {
@@ -316,6 +339,7 @@ export class CarPool {
 
     const render = () => {
       renderer.render(this.scene, camera);
+      labelRenderer.render(this.scene, camera);
     };
 
     animate();
@@ -339,6 +363,19 @@ export class CarPool {
         this.activeCars.splice(index, 1);
       }
     });
+  }
+
+  addMessage(msg: { message: string; id: string }) {
+    if (msg.id === this.socketId) {
+      this.hostCar.addMessage(msg.message);
+    } else {
+      const activeCarIndex = this.activeCars.findIndex(
+        (activeCar) => activeCar.id === msg.id
+      );
+      if (activeCarIndex !== -1) {
+        this.activeCars[activeCarIndex].carObj.addMessage(msg.message);
+      }
+    }
   }
 
   updateCarsPosition(cars: remoteCarInfo[]) {

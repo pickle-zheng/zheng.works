@@ -31,6 +31,11 @@ const SocketHandler = (req: any, res: any) => {
         socket.broadcast.emit("cars-position", cars);
       });
 
+      socket.on("message", (msg) => {
+        console.log("message", msg);
+        io.emit("new-message", msg);
+      });
+
       socket.on("disconnect", () => {
         console.log("car disconnect", socket.id);
         const carIndex = cars.findIndex((car) => car.id === socket.id);
