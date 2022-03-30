@@ -77,7 +77,7 @@ export class Tree {
     this.tree.add(treeTrunkGeometryMesh);
 
     this.tree.position.x = position.x;
-    this.tree.position.y = 2;
+    this.tree.position.y = 2.1;
     this.tree.position.z = position.z;
 
     this.scene.add(this.tree);
