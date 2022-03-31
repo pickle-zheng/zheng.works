@@ -8,6 +8,7 @@ import { RefObject } from "react";
 import { Car } from "./Car";
 import { Tree } from "./Tree";
 import { Ramp } from "./Ramp";
+import { SpeedNet } from "./SpeedNet";
 
 export class CarPool {
   scene: THREE.Scene;
@@ -16,6 +17,8 @@ export class CarPool {
   world: CANNON.World;
   hostCar: Car;
   typingStatus: boolean = false;
+  speedNetPosition: { x: number; z: number; width: number };
+
   constructor(canvasRef: RefObject<HTMLCanvasElement>, socket: any) {
     this.socketId = socket.id;
     if (!canvasRef.current) {
@@ -36,7 +39,7 @@ export class CarPool {
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    this.scene.fog = new THREE.FogExp2(0xdaa520, 0.008);
+    this.scene.fog = new THREE.FogExp2(0xdaa520, 0.01);
 
     this.scene.add(light);
 
@@ -52,14 +55,15 @@ export class CarPool {
       0.1,
       1000
     );
-    const chaseCam = new THREE.Object3D();
-    chaseCam.position.set(0, 100, 0);
-    chaseCam.name = "chaseCam";
-    const chaseCamPivot = new THREE.Object3D();
-    chaseCamPivot.position.set(0, 0, 0);
-    chaseCamPivot.name = "chaseCamPivot";
-    chaseCam.add(chaseCamPivot);
-    this.scene.add(chaseCam);
+    camera.position.set(0, 200, 0);
+    // const chaseCam = new THREE.Object3D();
+    // chaseCam.position.set(0, 100, 0);
+    // chaseCam.name = "chaseCam";
+    // const chaseCamPivot = new THREE.Object3D();
+    // chaseCamPivot.position.set(0, 0, 0);
+    // chaseCamPivot.name = "chaseCamPivot";
+    // chaseCam.add(chaseCamPivot);
+    // this.scene.add(chaseCam);
 
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
@@ -157,7 +161,7 @@ export class CarPool {
     // }
 
     let hostCar = new Car(this.scene, this.world, "host");
-    hostCar.addChaseCam(chaseCam);
+    // hostCar.addChaseCam(chaseCam);
     this.hostCar = hostCar;
 
     const treePositions = [
@@ -184,6 +188,13 @@ export class CarPool {
       x: 15,
       z: 15
     });
+
+    const speedNet = new SpeedNet(this.scene);
+    this.speedNetPosition = {
+      x: speedNet.netGroup.position.x,
+      z: speedNet.netGroup.position.z,
+      width: 5
+    };
 
     const keyMap: { [id: string]: boolean } = {};
     const onDocumentKey = (e: KeyboardEvent) => {
@@ -236,6 +247,9 @@ export class CarPool {
 
       // Copy coordinates from Cannon to Three.js
       hostCar.updateCarPosition();
+
+      const hostCarPosition = hostCar.carBody.position;
+
       ramp.updateRampPosition();
 
       socket.emit("car-position-change", {
@@ -290,7 +304,7 @@ export class CarPool {
       if (keyMap["r"]) {
         hostCar.removeCar();
         hostCar = new Car(this.scene, this.world, "host");
-        camera.position.lerpVectors(new THREE.Vector3(0, 100, 0), v, 0.01);
+        camera.position.lerpVectors(new THREE.Vector3(0, 100, 0), v, 0.1);
       }
 
       if (!thrusting) {
@@ -327,11 +341,9 @@ export class CarPool {
       camera.lookAt(hostCar.car.position);
       camera.up.set(0, 0, 1);
 
-      chaseCamPivot.getWorldPosition(v);
-      if (v.y < 100) {
-        v.y = 100;
-      }
-      camera.position.lerpVectors(camera.position, v, 0.01);
+      hostCar.car.getWorldPosition(v);
+      v.y = 100;
+      camera.position.lerpVectors(camera.position, v, 0.1);
 
       render();
 
@@ -351,8 +363,8 @@ export class CarPool {
     this.typingStatus = typingStatus;
   }
 
-  addCar(id: string) {
-    const newRemoteCar = new Car(this.scene, this.world, "remote");
+  addCar(id: string, carPosition: THREE.Vector3) {
+    const newRemoteCar = new Car(this.scene, this.world, "remote", carPosition);
     this.activeCars.push({
       id: id,
       carObj: newRemoteCar,
@@ -400,7 +412,7 @@ export class CarPool {
           car.wheelRotation
         );
       } else {
-        const newCar = this.addCar(car.id);
+        const newCar = this.addCar(car.id, car.position);
         newCar.remoteCarObj.updateCarPosition(
           new THREE.Vector3(car.position.x, car.position.y, car.position.z),
           new THREE.Quaternion(

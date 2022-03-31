@@ -24,7 +24,12 @@ export class Car {
   label: HTMLDivElement;
   messageTimeout: NodeJS.Timeout | null | undefined;
 
-  constructor(scene: THREE.Scene, world: CANNON.World, type: string) {
+  constructor(
+    scene: THREE.Scene,
+    world: CANNON.World,
+    type: string,
+    carPosition?: THREE.Vector3
+  ) {
     this.car = new THREE.Group();
     this.scene = scene;
     this.world = world;
@@ -58,9 +63,14 @@ export class Car {
     carBodyMesh.add(label);
     label.layers.set(0);
 
-    this.car.position.y = 1.5;
-    // this.car.position.x = Math.floor(Math.random() * 50) - 25;
-    // this.car.position.z = Math.floor(Math.random() * 50) - 25;
+    if (carPosition) {
+      this.car.position.copy(carPosition);
+    } else {
+      this.car.position.y = 1.2;
+      this.car.position.x = Math.floor(Math.random() * 50) - 25;
+      this.car.position.z = Math.floor(Math.random() * 50) - 25;
+    }
+
     this.car.add(carCabinMesh);
     this.scene.add(this.car);
 
@@ -88,9 +98,15 @@ export class Car {
     );
     wheelLFGeometry.rotateZ(Math.PI / 2);
     this.wheelLFMesh = new THREE.Mesh(wheelLFGeometry, wheelMeshMaterial);
-    this.wheelLFMesh.position.x = -3;
-    this.wheelLFMesh.position.y = 1;
-    this.wheelLFMesh.position.z = -0.5;
+    if (type === "remote") {
+      this.wheelLFMesh.position.x = -0.5;
+      this.wheelLFMesh.position.y = -0.3;
+      this.wheelLFMesh.position.z = -0.6;
+    } else {
+      this.wheelLFMesh.position.x = this.car.position.x - 0.5;
+      this.wheelLFMesh.position.y = 0.6;
+      this.wheelLFMesh.position.z = this.car.position.z - 0.5;
+    }
     this.wheelLFMesh.castShadow = true;
     // wheel geometries
     const wheelRFGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
@@ -101,9 +117,15 @@ export class Car {
     );
     wheelRFGeometry.rotateZ(Math.PI / 2);
     this.wheelRFMesh = new THREE.Mesh(wheelRFGeometry, wheelMeshMaterial);
-    this.wheelRFMesh.position.y = 3;
-    this.wheelRFMesh.position.x = 0.5;
-    this.wheelRFMesh.position.z = -0.5;
+    if (type === "remote") {
+      this.wheelRFMesh.position.x = 0.5;
+      this.wheelRFMesh.position.y = -0.3;
+      this.wheelRFMesh.position.z = -0.6;
+    } else {
+      this.wheelRFMesh.position.x = this.car.position.x + 0.5;
+      this.wheelRFMesh.position.y = 0.6;
+      this.wheelRFMesh.position.z = this.car.position.z - 0.5;
+    }
     this.wheelRFMesh.castShadow = true;
     const wheelLBGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
       0.22,
@@ -113,9 +135,15 @@ export class Car {
     );
     wheelLBGeometry.rotateZ(Math.PI / 2);
     this.wheelLBMesh = new THREE.Mesh(wheelLBGeometry, wheelMeshMaterial);
-    this.wheelLBMesh.position.y = 3;
-    this.wheelLBMesh.position.x = -0.5;
-    this.wheelLBMesh.position.z = 0.5;
+    if (type === "remote") {
+      this.wheelLBMesh.position.x = -0.5;
+      this.wheelLBMesh.position.y = -0.3;
+      this.wheelLBMesh.position.z = 0.6;
+    } else {
+      this.wheelLBMesh.position.x = this.car.position.x - 0.5;
+      this.wheelLBMesh.position.y = 0.6;
+      this.wheelLBMesh.position.z = this.car.position.z + 0.5;
+    }
     this.wheelLBMesh.castShadow = true;
     const wheelRBGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
       0.22,
@@ -125,12 +153,18 @@ export class Car {
     );
     wheelRBGeometry.rotateZ(Math.PI / 2);
     this.wheelRBMesh = new THREE.Mesh(wheelRBGeometry, wheelMeshMaterial);
-    this.wheelRBMesh.position.y = 3;
-    this.wheelRBMesh.position.x = 0.5;
-    this.wheelRBMesh.position.z = 0.5;
+    if (type === "remote") {
+      this.wheelRBMesh.position.x = 0.5;
+      this.wheelRBMesh.position.y = -0.3;
+      this.wheelRBMesh.position.z = 0.6;
+    } else {
+      this.wheelRBMesh.position.x = this.car.position.x + 0.5;
+      this.wheelRBMesh.position.y = 0.6;
+      this.wheelRBMesh.position.z = this.car.position.z + 0.5;
+    }
     this.wheelRBMesh.castShadow = true;
 
-    if (this.type === "host") {
+    if (type === "host") {
       this.scene.add(this.wheelRFMesh);
       this.scene.add(this.wheelLFMesh);
       this.scene.add(this.wheelRBMesh);
@@ -143,7 +177,7 @@ export class Car {
     }
 
     // wheel bodies
-    if (this.type === "host") {
+    if (type === "host") {
       const wheelLFShape = new CANNON.Sphere(0.22);
       this.wheelLFBody = new CANNON.Body({ mass: 8, material: wheelMaterial });
       this.wheelLFBody.addShape(wheelLFShape);
@@ -161,7 +195,7 @@ export class Car {
       this.world.addBody(this.wheelRFBody);
 
       const wheelLBShape = new CANNON.Sphere(0.22);
-      this.wheelLBBody = new CANNON.Body({ mass: 14, material: wheelMaterial });
+      this.wheelLBBody = new CANNON.Body({ mass: 24, material: wheelMaterial });
       this.wheelLBBody.addShape(wheelLBShape);
       this.wheelLBBody.position.x = this.wheelLBMesh.position.x;
       this.wheelLBBody.position.y = this.wheelLBMesh.position.y;
@@ -169,7 +203,7 @@ export class Car {
       this.world.addBody(this.wheelLBBody);
 
       const wheelRBShape = new CANNON.Sphere(0.22);
-      this.wheelRBBody = new CANNON.Body({ mass: 14, material: wheelMaterial });
+      this.wheelRBBody = new CANNON.Body({ mass: 24, material: wheelMaterial });
       this.wheelRBBody.addShape(wheelRBShape);
       this.wheelRBBody.position.x = this.wheelRBMesh.position.x;
       this.wheelRBBody.position.y = this.wheelRBMesh.position.y;
@@ -261,6 +295,7 @@ export class Car {
     }
   ) {
     if (carPosition && carRotation && wheelPosition && wheelRotation) {
+      this.car.position.lerpVectors(this.car.position, carPosition, 0.1);
       this.car.position.set(carPosition.x, carPosition.y, carPosition.z);
       this.car.quaternion.set(
         carRotation.x,
@@ -275,50 +310,50 @@ export class Car {
         carRotation.z,
         carRotation.w
       );
-      this.wheelLFMesh.position.set(
-        wheelPosition.LF.x,
-        wheelPosition.LF.y,
-        wheelPosition.LF.z
-      );
-      this.wheelLFMesh.quaternion.set(
-        wheelRotation.LF.x,
-        wheelRotation.LF.y,
-        wheelRotation.LF.z,
-        wheelRotation.LF.w
-      );
-      this.wheelRFMesh.position.set(
-        wheelPosition.RF.x,
-        wheelPosition.RF.y,
-        wheelPosition.RF.z
-      );
-      this.wheelRFMesh.quaternion.set(
-        wheelRotation.RF.x,
-        wheelRotation.RF.y,
-        wheelRotation.RF.z,
-        wheelRotation.RF.w
-      );
-      this.wheelLBMesh.position.set(
-        wheelPosition.LB.x,
-        wheelPosition.LB.y,
-        wheelPosition.LB.z
-      );
-      this.wheelLBMesh.quaternion.set(
-        wheelRotation.LB.x,
-        wheelRotation.LB.y,
-        wheelRotation.LB.z,
-        wheelRotation.LB.w
-      );
-      this.wheelRBMesh.position.set(
-        wheelPosition.RB.x,
-        wheelPosition.RB.y,
-        wheelPosition.RB.z
-      );
-      this.wheelRBMesh.quaternion.set(
-        wheelRotation.RB.x,
-        wheelRotation.RB.y,
-        wheelRotation.RB.z,
-        wheelRotation.RB.w
-      );
+      // this.wheelLFMesh.position.set(
+      //   wheelPosition.LF.x,
+      //   wheelPosition.LF.y,
+      //   wheelPosition.LF.z
+      // );
+      // this.wheelLFMesh.quaternion.set(
+      //   wheelRotation.LF.x,
+      //   wheelRotation.LF.y,
+      //   wheelRotation.LF.z,
+      //   wheelRotation.LF.w
+      // );
+      // this.wheelRFMesh.position.set(
+      //   wheelPosition.RF.x,
+      //   wheelPosition.RF.y,
+      //   wheelPosition.RF.z
+      // );
+      // this.wheelRFMesh.quaternion.set(
+      //   wheelRotation.RF.x,
+      //   wheelRotation.RF.y,
+      //   wheelRotation.RF.z,
+      //   wheelRotation.RF.w
+      // );
+      // this.wheelLBMesh.position.set(
+      //   wheelPosition.LB.x,
+      //   wheelPosition.LB.y,
+      //   wheelPosition.LB.z
+      // );
+      // this.wheelLBMesh.quaternion.set(
+      //   wheelRotation.LB.x,
+      //   wheelRotation.LB.y,
+      //   wheelRotation.LB.z,
+      //   wheelRotation.LB.w
+      // );
+      // this.wheelRBMesh.position.set(
+      //   wheelPosition.RB.x,
+      //   wheelPosition.RB.y,
+      //   wheelPosition.RB.z
+      // );
+      // this.wheelRBMesh.quaternion.set(
+      //   wheelRotation.RB.x,
+      //   wheelRotation.RB.y,
+      //   wheelRotation.RB.z,
+      //   wheelRotation.RB.w
+      // );
     } else if (
       this.wheelLFBody &&
       this.wheelRFBody &&
