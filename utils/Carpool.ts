@@ -220,7 +220,7 @@ export class CarPool {
     // document.body.appendChild(stats.dom);
 
     // const gui = new GUI();
-    // const physicsFolder = gui.addFolder("Physics");
+    // const physicsFolder = gui.addFolder("addCarPhysics");
     // physicsFolder.add(world.gravity, "x", -10.0, 10.0, 0.1);
     // physicsFolder.add(world.gravity, "y", -20.0, 10.0, 0.1);
     // physicsFolder.add(world.gravity, "z", -10.0, 10.0, 0.1);
@@ -363,8 +363,8 @@ export class CarPool {
     this.typingStatus = typingStatus;
   }
 
-  addCar(id: string, carPosition: THREE.Vector3) {
-    const newRemoteCar = new Car(this.scene, this.world, "remote", carPosition);
+  addCar(id: string) {
+    const newRemoteCar = new Car(this.scene, this.world, "remote");
     this.activeCars.push({
       id: id,
       carObj: newRemoteCar,
@@ -412,7 +412,7 @@ export class CarPool {
           car.wheelRotation
         );
       } else {
-        const newCar = this.addCar(car.id, car.position);
+        const newCar = this.addCar(car.id);
         newCar.remoteCarObj.updateCarPosition(
           new THREE.Vector3(car.position.x, car.position.y, car.position.z),
           new THREE.Quaternion(
