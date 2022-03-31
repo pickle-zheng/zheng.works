@@ -53,10 +53,10 @@ export class Car {
     this.label.textContent = "";
     this.label.className = "label";
 
-    const earthLabel = new CSS2DObject(this.labelBox);
-    earthLabel.position.set(0, 0, 0);
-    carBodyMesh.add(earthLabel);
-    earthLabel.layers.set(0);
+    const label = new CSS2DObject(this.labelBox);
+    label.position.set(0, 0, 0);
+    carBodyMesh.add(label);
+    label.layers.set(0);
 
     this.car.position.y = 1.5;
     // this.car.position.x = Math.floor(Math.random() * 50) - 25;
@@ -80,7 +80,6 @@ export class Car {
     const wheelMeshMaterial = new THREE.MeshLambertMaterial({
       color: 0x000000
     });
-
     const wheelLFGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
       0.22,
       0.22,
@@ -93,8 +92,6 @@ export class Car {
     this.wheelLFMesh.position.y = 1;
     this.wheelLFMesh.position.z = -0.5;
     this.wheelLFMesh.castShadow = true;
-    this.scene.add(this.wheelLFMesh);
-
     // wheel geometries
     const wheelRFGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
       0.22,
@@ -108,7 +105,6 @@ export class Car {
     this.wheelRFMesh.position.x = 0.5;
     this.wheelRFMesh.position.z = -0.5;
     this.wheelRFMesh.castShadow = true;
-    this.scene.add(this.wheelRFMesh);
     const wheelLBGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
       0.22,
       0.22,
@@ -121,7 +117,6 @@ export class Car {
     this.wheelLBMesh.position.x = -0.5;
     this.wheelLBMesh.position.z = 0.5;
     this.wheelLBMesh.castShadow = true;
-    this.scene.add(this.wheelLBMesh);
     const wheelRBGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
       0.22,
       0.22,
@@ -134,7 +129,18 @@ export class Car {
     this.wheelRBMesh.position.x = 0.5;
     this.wheelRBMesh.position.z = 0.5;
     this.wheelRBMesh.castShadow = true;
-    this.scene.add(this.wheelRBMesh);
+
+    if (this.type === "host") {
+      this.scene.add(this.wheelRFMesh);
+      this.scene.add(this.wheelLFMesh);
+      this.scene.add(this.wheelRBMesh);
+      this.scene.add(this.wheelLBMesh);
+    } else {
+      this.car.add(this.wheelRFMesh);
+      this.car.add(this.wheelLFMesh);
+      this.car.add(this.wheelRBMesh);
+      this.car.add(this.wheelLBMesh);
+    }
 
     // wheel bodies
     if (this.type === "host") {

@@ -328,7 +328,6 @@ export class CarPool {
       camera.up.set(0, 0, 1);
 
       chaseCamPivot.getWorldPosition(v);
-      console.log(camera.position);
       if (v.y < 100) {
         v.y = 100;
       }

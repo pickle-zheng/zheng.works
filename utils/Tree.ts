@@ -5,7 +5,7 @@ export class Tree {
   scene: THREE.Scene;
   world: CANNON.World;
   type: string;
-  treeBody: CANNON.Body;
+  // treeBody: CANNON.Body;
   constructor(
     scene: THREE.Scene,
     world: CANNON.World,
@@ -82,14 +82,14 @@ export class Tree {
 
     this.scene.add(this.tree);
 
-    const treeBodyShape = new CANNON.Cylinder(0.2, 0.4, 3);
-    this.treeBody = new CANNON.Body({ mass: 600 });
-    this.treeBody.addShape(treeBodyShape);
-    this.treeBody.fixedRotation = true;
-    this.treeBody.linearDamping = 0;
-    this.treeBody.position.x = this.tree.position.x;
-    this.treeBody.position.y = this.tree.position.y;
-    this.treeBody.position.z = this.tree.position.z;
-    this.world.addBody(this.treeBody);
+    // const treeBodyShape = new CANNON.Cylinder(0.2, 0.4, 3);
+    // this.treeBody = new CANNON.Body({ mass: 600 });
+    // this.treeBody.addShape(treeBodyShape);
+    // this.treeBody.fixedRotation = true;
+    // this.treeBody.linearDamping = 0;
+    // this.treeBody.position.x = this.tree.position.x;
+    // this.treeBody.position.y = this.tree.position.y;
+    // this.treeBody.position.z = this.tree.position.z;
+    // this.world.addBody(this.treeBody);
   }
 }
