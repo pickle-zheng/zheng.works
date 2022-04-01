@@ -131,11 +131,11 @@ export class Car {
     wheelLFGeometry.rotateZ(Math.PI / 2);
     this.wheelLFMesh = new THREE.Mesh(wheelLFGeometry, wheelMeshMaterial);
     if (type === "remote") {
-      this.wheelLFMesh.position.x = -0.7;
-      this.wheelLFMesh.position.y = -0.3;
+      this.wheelLFMesh.position.x = -0.5;
+      this.wheelLFMesh.position.y = -0.6;
       this.wheelLFMesh.position.z = -0.6;
     } else {
-      this.wheelLFMesh.position.x = this.car.position.x - 0.7;
+      this.wheelLFMesh.position.x = this.car.position.x - 0.5;
       this.wheelLFMesh.position.y = 0.6;
       this.wheelLFMesh.position.z = this.car.position.z - 0.6;
     }
@@ -151,7 +151,7 @@ export class Car {
     this.wheelRFMesh = new THREE.Mesh(wheelRFGeometry, wheelMeshMaterial);
     if (type === "remote") {
       this.wheelRFMesh.position.x = 0.5;
-      this.wheelRFMesh.position.y = -0.3;
+      this.wheelRFMesh.position.y = -0.6;
       this.wheelRFMesh.position.z = -0.6;
     } else {
       this.wheelRFMesh.position.x = this.car.position.x + 0.5;
@@ -168,11 +168,11 @@ export class Car {
     wheelLBGeometry.rotateZ(Math.PI / 2);
     this.wheelLBMesh = new THREE.Mesh(wheelLBGeometry, wheelMeshMaterial);
     if (type === "remote") {
-      this.wheelLBMesh.position.x = -0.7;
-      this.wheelLBMesh.position.y = -0.3;
+      this.wheelLBMesh.position.x = -0.5;
+      this.wheelLBMesh.position.y = -0.6;
       this.wheelLBMesh.position.z = 0.8;
     } else {
-      this.wheelLBMesh.position.x = this.car.position.x - 0.7;
+      this.wheelLBMesh.position.x = this.car.position.x - 0.5;
       this.wheelLBMesh.position.y = 0.6;
       this.wheelLBMesh.position.z = this.car.position.z + 0.8;
     }
@@ -187,7 +187,7 @@ export class Car {
     this.wheelRBMesh = new THREE.Mesh(wheelRBGeometry, wheelMeshMaterial);
     if (type === "remote") {
       this.wheelRBMesh.position.x = 0.5;
-      this.wheelRBMesh.position.y = -0.3;
+      this.wheelRBMesh.position.y = -0.6;
       this.wheelRBMesh.position.z = 0.6;
     } else {
       this.wheelRBMesh.position.x = this.car.position.x + 0.5;

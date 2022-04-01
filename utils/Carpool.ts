@@ -16,10 +16,12 @@ export class CarPool {
   socketId: string | undefined;
   world: CANNON.World;
   hostCar: Car;
+  hostCarPosition: { x: number; y: number; z: number };
   typingStatus: boolean = false;
   speedNetPosition: { x: number; z: number; width: number };
 
   constructor(canvasRef: RefObject<HTMLCanvasElement>, socket: any) {
+    this.hostCarPosition = { x: 0, y: 0, z: 0 };
     this.socketId = socket.id;
     if (!canvasRef.current) {
       throw Error("Canvas ref is not defined");
@@ -246,28 +248,32 @@ export class CarPool {
       // Copy coordinates from Cannon to Three.js
       hostCar.updateCarPosition();
 
-      const hostCarPosition = hostCar.carBody.position;
-
       ramp.updateRampPosition();
 
-      socket.emit("car-position-change", {
-        id: socket.id,
-        position: hostCar.carBody.position,
-        quaternion: hostCar.carBody.quaternion,
-        wheelPosition: {
-          LF: hostCar.wheelLFMesh.position,
-          RF: hostCar.wheelRFMesh.position,
-          LB: hostCar.wheelLBMesh.position,
-          RB: hostCar.wheelRBMesh.position
-        },
-        wheelRotation: {
-          LF: hostCar.wheelLFMesh.quaternion,
-          RF: hostCar.wheelRFMesh.quaternion,
-          LB: hostCar.wheelLBMesh.quaternion,
-          RB: hostCar.wheelRBMesh.quaternion
-        },
-        forwardVelocity: forwardVelocity
-      });
+      if (
+        Math.abs(this.hostCarPosition.x - hostCar.carBody.position.x) >= 0.1 ||
+        Math.abs(this.hostCarPosition.z - hostCar.carBody.position.z) >= 0.1
+      ) {
+        socket.emit("car-position-change", {
+          id: socket.id,
+          position: hostCar.carBody.position,
+          quaternion: hostCar.carBody.quaternion,
+          wheelPosition: {
+            LF: hostCar.wheelLFMesh.position,
+            RF: hostCar.wheelRFMesh.position,
+            LB: hostCar.wheelLBMesh.position,
+            RB: hostCar.wheelRBMesh.position
+          },
+          wheelRotation: {
+            LF: hostCar.wheelLFMesh.quaternion,
+            RF: hostCar.wheelRFMesh.quaternion,
+            LB: hostCar.wheelLBMesh.quaternion,
+            RB: hostCar.wheelRBMesh.quaternion
+          },
+          forwardVelocity: forwardVelocity
+        });
+        this.hostCarPosition = { ...hostCar.carBody.position };
+      }
 
       thrusting = false;
       turning = false;
