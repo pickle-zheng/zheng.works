@@ -32,14 +32,14 @@ export class CarPool {
     light.shadow.mapSize.width = 16384;
     light.shadow.mapSize.height = 16384;
     light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 500;
+    light.shadow.camera.far = 1000;
     let d = 120;
     light.shadow.camera.left = -d;
     light.shadow.camera.right = d;
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    this.scene.fog = new THREE.FogExp2(0xdaa520, 0.01);
+    this.scene.fog = new THREE.FogExp2(0xdaa520, 0.008);
 
     this.scene.add(light);
 
@@ -67,9 +67,11 @@ export class CarPool {
 
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
-      antialias: true
+      antialias: true,
+      alpha: true
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
+
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
@@ -84,12 +86,8 @@ export class CarPool {
     this.world.gravity.set(0, -50, 0);
 
     const groundMaterial = new CANNON.Material("groundMaterial");
-    groundMaterial.friction = 0.25;
-    groundMaterial.restitution = 0.25;
-
-    const wheelMaterial = new CANNON.Material("wheelMaterial");
-    wheelMaterial.friction = 0.5;
-    wheelMaterial.restitution = 0.5;
+    groundMaterial.friction = 0.6;
+    groundMaterial.restitution = 0.6;
 
     //ground
     const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(
@@ -281,16 +279,16 @@ export class CarPool {
       }
       if (keyMap["s"] || keyMap["ArrowDown"]) {
         if (forwardVelocity > 0) forwardVelocity = 0;
-        if (forwardVelocity > -30.0 && forwardVelocity <= 0)
+        if (forwardVelocity > -40.0 && forwardVelocity <= 0)
           forwardVelocity -= 0.5;
         thrusting = true;
       }
       if (keyMap["a"] || keyMap["ArrowLeft"]) {
-        if (rightVelocity > -0.3) rightVelocity -= 0.1;
+        if (rightVelocity > -0.2) rightVelocity -= 0.1;
         turning = true;
       }
       if (keyMap["d"] || keyMap["ArrowRight"]) {
-        if (rightVelocity < 0.3) rightVelocity += 0.1;
+        if (rightVelocity < 0.2) rightVelocity += 0.1;
         turning = true;
       }
       if (keyMap[" "]) {

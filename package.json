@@ -19,6 +19,7 @@
     "@fortawesome/react-fontawesome": "^0.1.18",
     "cannon-es": "^0.19.0",
     "dat.gui": "^0.7.9",
+    "gltf-webpack-loader": "^1.0.6",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
