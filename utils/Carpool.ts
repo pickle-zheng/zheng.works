@@ -60,7 +60,7 @@ export class CarPool {
       0.1,
       1000
     );
-    camera.position.set(0, 200, 0);
+    camera.position.set(1, 10, -10);
     // const chaseCam = new THREE.Object3D();
     // chaseCam.position.set(0, 100, 0);
     // chaseCam.name = "chaseCam";
@@ -339,7 +339,7 @@ export class CarPool {
           "host",
           this.carTypes[this.hostCarTypeIndex]
         );
-        camera.position.lerpVectors(new THREE.Vector3(0, 100, 0), v, 0.1);
+        camera.position.lerpVectors(new THREE.Vector3(0, 100, 0), v, 0.02);
         keyDownMap["Tab"] = false;
       }
 
@@ -379,7 +379,7 @@ export class CarPool {
 
       hostCar.car.getWorldPosition(v);
       v.y = 100;
-      camera.position.lerpVectors(camera.position, v, 0.1);
+      camera.position.lerpVectors(camera.position, v, 0.02);
 
       render();
 
