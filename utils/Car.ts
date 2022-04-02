@@ -119,8 +119,8 @@ export class Car {
       this.car.position.copy(carPosition);
     } else {
       this.car.position.y = 1.5;
-      this.car.position.x = Math.floor(Math.random() * 50) - 25;
-      this.car.position.z = Math.floor(Math.random() * 50) - 25;
+      this.car.position.x = Math.floor(Math.random() * 20) - 10;
+      this.car.position.z = Math.floor(Math.random() * 20) - 10;
     }
 
     // this.car.add(carCabinMesh);

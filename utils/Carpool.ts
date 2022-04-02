@@ -175,20 +175,28 @@ export class CarPool {
     // hostCar.addChaseCam(chaseCam);
     this.hostCar = hostCar;
 
-    const treePositions = [
-      { x: 2, z: 8 },
-      { x: 12, z: 6 },
-      { x: -6, z: 5.2 },
-      { x: -4, z: -2 },
-      { x: -6, z: 5.2 },
-      { x: -13, z: -4.78 },
-      { x: -24, z: 5.2 },
-      { x: 19, z: 15.2 },
-      { x: -24, z: -12 },
-      { x: 19, z: -15.2 }
-    ];
+    const treeArray: any[] = Array.apply(
+      { x: 0, y: 0 },
+      Array(
+        Math.floor(
+          (groundGeometry.parameters.height / 25) *
+            (groundGeometry.parameters.width / 25)
+        )
+      )
+    );
+    const treePositions = treeArray.map(() => {
+      const x: number =
+        (Math.random() * groundGeometry.parameters.height) / 2 -
+        groundGeometry.parameters.height / 4;
+      const z: number =
+        (Math.random() * groundGeometry.parameters.width) / 2 -
+        groundGeometry.parameters.width / 4;
+      return { x: x, z: z };
+    });
+    console.log(treePositions.length + " trees generated");
+
     const trees = treePositions.map(
-      (treePosition) =>
+      (treePosition: { x: number; z: number }) =>
         new Tree(this.scene, this.world, "normal", {
           x: treePosition.x,
           z: treePosition.z
