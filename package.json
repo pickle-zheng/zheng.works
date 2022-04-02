@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "deploy-heroku": "git push heroku main",
-    "deploy": "npm run build && cross-env NODE_ENV=production firebase deploy --only functions,hosting"
+    "submit-docker": "gcloud builds submit --tag gcr.io/zheng-works/nextjs .",
+    "deploy": "npm run submit-docker && gcloud beta run deploy zheng-works --image gcr.io/zheng-works/nextjs --region australia-southeast1 --platform managed --allow-unauthenticated --quiet"
   },
   "engines": {
     "node": "17.x"
@@ -18,18 +19,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "cannon-es": "^0.19.0",
-    "dat.gui": "^0.7.9",
-    "gltf-webpack-loader": "^1.0.6",
-    "next": "12.1.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "socket.io": "^4.4.1",
-    "socket.io-client": "^4.4.1",
-    "three": "^0.138.3",
-    "uniqid": "^5.4.0"
-  },
-  "devDependencies": {
     "@types/dat.gui": "^0.7.7",
     "@types/node": "17.0.22",
     "@types/react": "^17.0.41",
@@ -37,8 +26,18 @@
     "@types/react-fontawesome": "^1.6.5",
     "@types/three": "^0.138.0",
     "@types/uniqid": "^5.3.2",
+    "cannon-es": "^0.19.0",
+    "dat.gui": "^0.7.9",
     "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
-    "typescript": "^4.6.2"
+    "gltf-webpack-loader": "^1.0.6",
+    "next": "12.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
+    "three": "^0.138.3",
+    "typescript": "^4.6.2",
+    "uniqid": "^5.4.0"
   }
 }

@@ -1,14 +1,15 @@
 import type { NextPage } from "next";
 import Canvas from "../components/Canvas/Canvas";
 import Instruction from "../components/Instruction/Instruction";
-import styles from "./Home.module.css";
+import styles from "./game.module.css";
 
-const Home: NextPage = () => {
+const Game: NextPage = () => {
   return (
     <div className={styles.container}>
-      <h1>Hello World</h1>
+      <Canvas />
+      <Instruction />
     </div>
   );
 };
 
-export default Home;
+export default Game;

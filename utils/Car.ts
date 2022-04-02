@@ -73,7 +73,7 @@ export class Car {
     this.car = new THREE.Group();
     const loader = new OBJLoader(loaderManager);
 
-    loader.load(`./models/${this.carType}.obj`, (obj) => {
+    loader.load(`/models/${this.carType}.obj`, (obj) => {
       obj.children.forEach((mesh) => {
         mesh.receiveShadow = true;
         mesh.castShadow = true;
@@ -251,11 +251,11 @@ export class Car {
     if (type === "remote") {
       this.wheelLBMesh.position.x = -0.5;
       this.wheelLBMesh.position.y = -0.5;
-      this.wheelLBMesh.position.z = 0.8;
+      this.wheelLBMesh.position.z = 0.6;
     } else {
       this.wheelLBMesh.position.x = this.car.position.x - 0.5;
       this.wheelLBMesh.position.y = 0.5;
-      this.wheelLBMesh.position.z = this.car.position.z + 0.8;
+      this.wheelLBMesh.position.z = this.car.position.z + 0.6;
     }
     this.wheelLBMesh.castShadow = true;
     const wheelRBGeometry: THREE.CylinderGeometry = new THREE.CylinderGeometry(
