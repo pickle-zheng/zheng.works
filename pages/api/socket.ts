@@ -11,6 +11,8 @@ const SocketHandler = (req: any, res: any) => {
     wheelAngle: number;
     forwardVelocity: number;
   }[] = [];
+
+  let lastDataBroadcasted = process.hrtime.bigint();
   if (res.socket.server.io) {
     console.log("Socket is already running");
   } else {
@@ -28,14 +30,18 @@ const SocketHandler = (req: any, res: any) => {
         } else {
           cars[carIndex] = msg;
         }
-        socket.broadcast.emit("cars-position", cars);
+        const currentTime = process.hrtime.bigint();
+
+        if (currentTime - lastDataBroadcasted > 0.01666 * 1000 * 1000 * 1000) {
+          socket.broadcast.emit("cars-position", cars);
+          lastDataBroadcasted = currentTime;
+        }
       });
 
       socket.on("message", (msg) => {
         console.log("message", msg);
         io.emit("new-message", msg);
       });
-
       socket.on("disconnect", () => {
         console.log("car disconnect", socket.id);
         const carIndex = cars.findIndex((car) => car.id === socket.id);

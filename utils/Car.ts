@@ -339,7 +339,7 @@ export class Car {
     }
   ) {
     if (carPosition && carRotation && wheelPosition && wheelRotation) {
-      this.car.position.lerpVectors(this.car.position, carPosition, 0.1);
+      this.car.position.lerp(carPosition, 0.1);
       this.car.position.set(carPosition.x, carPosition.y, carPosition.z);
       this.car.quaternion.set(
         carRotation.x,
