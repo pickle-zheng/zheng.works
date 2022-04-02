@@ -34,7 +34,7 @@ export class Ramp {
     this.scene.add(rampSupportGeometryMesh);
     const supportShape = new CANNON.Box(new CANNON.Vec3(2.5, 0.5, 0.5));
 
-    const supportBody = new CANNON.Body({ mass: 600 });
+    const supportBody = new CANNON.Body({ mass: 10000 });
     supportBody.addShape(supportShape);
     supportBody.linearDamping = 0;
     supportBody.position.x = rampSupportGeometryMesh.position.x;
@@ -66,7 +66,7 @@ export class Ramp {
     this.scene.add(this.ramp);
 
     const rampBodyShape = new CANNON.Box(new CANNON.Vec3(2.5, 0.01, 5));
-    this.rampBody = new CANNON.Body({ mass: 600 });
+    this.rampBody = new CANNON.Body({ mass: 10000 });
     this.rampBody.addShape(rampBodyShape);
     this.rampBody.linearDamping = 0;
     this.rampBody.position.x = this.ramp.position.x;

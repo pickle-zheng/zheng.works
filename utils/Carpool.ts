@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
-
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // import { GUI } from "dat.gui";
 import * as CANNON from "cannon-es";
 import CannonDebugRenderer from "./cannonDebugRenderer";
@@ -31,7 +31,7 @@ export class CarPool {
     }
     this.scene = new THREE.Scene();
 
-    const light = new THREE.DirectionalLight();
+    const light = new THREE.DirectionalLight(0xffffff, 0.8);
     light.position.set(50, 100, 25);
     light.castShadow = true;
     light.shadow.mapSize.width = 16384 * 2;
@@ -49,8 +49,8 @@ export class CarPool {
     this.hostCarTypeIndex = 0;
     this.scene.add(light);
 
-    const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0xdaa520, 0.1);
-    this.scene.add(HemisphereLight);
+    // const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0xdaa520, 0.1);
+    // this.scene.add(HemisphereLight);
 
     // const helper = new THREE.CameraHelper(light.shadow.camera);
     // this.scene.add(helper);
@@ -62,6 +62,7 @@ export class CarPool {
       1000
     );
     camera.position.set(1, 10, -10);
+
     // const chaseCam = new THREE.Object3D();
     // chaseCam.position.set(0, 100, 0);
     // chaseCam.name = "chaseCam";
@@ -81,6 +82,9 @@ export class CarPool {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
 
     const labelRenderer = new CSS2DRenderer();
     labelRenderer.setSize(window.innerWidth, window.innerHeight);
@@ -113,7 +117,7 @@ export class CarPool {
       return material;
     };
     const imageMaterial = getImage();
-    const whiteMaterial = new THREE.MeshLambertMaterial({
+    const whiteMaterial = new THREE.MeshPhongMaterial({
       color: 0xffffff
     });
 
@@ -303,9 +307,26 @@ export class CarPool {
 
       thrusting = false;
       turning = false;
+
+      const getPerformance = (type: string) => {
+        switch (type) {
+          case "pickup":
+            return { maxVelocity: 60, turning: 0.25 };
+          case "sedan":
+            return { maxVelocity: 80, turning: 0.2 };
+          case "jeep":
+            return { maxVelocity: 50, turning: 0.35 };
+          default:
+            return { maxVelocity: 60, turning: 0.2 };
+        }
+      };
+
       if (keyMap["w"] || keyMap["ArrowUp"]) {
         if (forwardVelocity < 0) forwardVelocity = 0;
-        if (forwardVelocity < 70.0 && forwardVelocity >= 0)
+        if (
+          forwardVelocity < getPerformance(hostCar.carType).maxVelocity &&
+          forwardVelocity >= 0
+        )
           forwardVelocity += 0.5;
         thrusting = true;
       }
@@ -316,11 +337,13 @@ export class CarPool {
         thrusting = true;
       }
       if (keyMap["a"] || keyMap["ArrowLeft"]) {
-        if (rightVelocity > -0.2) rightVelocity -= 0.1;
+        if (rightVelocity > -getPerformance(hostCar.carType).turning)
+          rightVelocity -= 0.1;
         turning = true;
       }
       if (keyMap["d"] || keyMap["ArrowRight"]) {
-        if (rightVelocity < 0.2) rightVelocity += 0.1;
+        if (rightVelocity < getPerformance(hostCar.carType).turning)
+          rightVelocity += 0.1;
         turning = true;
       }
       if (keyMap[" "]) {
@@ -339,7 +362,7 @@ export class CarPool {
           "host",
           this.carTypes[this.hostCarTypeIndex]
         );
-        camera.position.set(0, 100, 0);
+        camera.position.set(0, 100, -1);
         keyDownMap["r"] = false;
       }
 
@@ -369,9 +392,9 @@ export class CarPool {
         }
       }
       if (!turning) {
-        if (rightVelocity > 0.2) {
+        if (rightVelocity > getPerformance(hostCar.carType).turning) {
           rightVelocity -= 0.05;
-        } else if (rightVelocity < -0.2) {
+        } else if (rightVelocity < -getPerformance(hostCar.carType).turning) {
           rightVelocity += 0.05;
         } else {
           rightVelocity = 0;
@@ -398,7 +421,7 @@ export class CarPool {
       camera.position.lerpVectors(camera.position, v, 0.02);
 
       render();
-
+      controls.update();
       // stats.update();
     };
 

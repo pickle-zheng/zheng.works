@@ -36,19 +36,38 @@ export class Car {
   ) {
     this.carType = carType;
     let carBodyColor: number;
-
+    let carMass: number;
+    let carBodyHeight: number;
+    let wheelConstraintHeight: number;
+    let bodyHeightOffset: number;
     switch (this.carType) {
       case "pickup":
         carBodyColor = 0x26abff;
+        carMass = 700;
+        carBodyHeight = 0.4;
+        wheelConstraintHeight = -0.5;
+        bodyHeightOffset = -0.2;
         break;
       case "sedan":
         carBodyColor = 0xff0000;
+        carMass = 500;
+        carBodyHeight = 0.3;
+        wheelConstraintHeight = -0.4;
+        bodyHeightOffset = -0.2;
         break;
       case "jeep":
         carBodyColor = 0x4b5320;
+        carMass = 800;
+        carBodyHeight = 0.5;
+        wheelConstraintHeight = -0.6;
+        bodyHeightOffset = -0.35;
         break;
       default:
         carBodyColor = 0xff0000;
+        carMass = 500;
+        carBodyHeight = 0.4;
+        wheelConstraintHeight = -0.5;
+        bodyHeightOffset = -0.2;
     }
 
     this.car = new THREE.Group();
@@ -79,7 +98,7 @@ export class Car {
           // @ts-ignore
           mesh.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
       });
-      obj.position.y = -0.4;
+      obj.position.y = bodyHeightOffset;
       this.car.add(obj);
     });
 
@@ -118,16 +137,57 @@ export class Car {
     if (carPosition) {
       this.car.position.copy(carPosition);
     } else {
-      this.car.position.y = 1.5;
+      this.car.position.y = 0.5;
       this.car.position.x = Math.floor(Math.random() * 20) - 10;
       this.car.position.z = Math.floor(Math.random() * 20) - 10;
     }
 
+    // heade lights
+    const headlightL = new THREE.SpotLight(0xffffff);
+    const headlightLChaseL = new THREE.Object3D();
+    headlightLChaseL.position.set(-0.5, -0.2, -100);
+    headlightL.position.set(-0.5, -0.2, -0.5);
+    headlightL.target = headlightLChaseL;
+    headlightL.shadow.mapSize.width = 1024;
+    headlightL.shadow.mapSize.height = 1024;
+    headlightL.shadow.camera.near = 1;
+    headlightL.shadow.camera.far = 100;
+    headlightL.shadow.camera.fov = 5;
+    headlightL.shadow.blurSamples = 20;
+    headlightL.angle = Math.PI / 6;
+    headlightL.decay = 0.5;
+    headlightL.penumbra = 0.5;
+    headlightL.intensity = 0.3;
+    this.car.add(headlightL);
+    this.car.add(headlightL.target);
+    // const spotLightHelperL = new THREE.SpotLightHelper(headlightL);
+    // this.scene.add(spotLightHelperL);
+
+    const headlightR = new THREE.SpotLight(0xffffff);
+    const headlightLChaseR = new THREE.Object3D();
+    headlightLChaseR.position.set(0.5, -0.2, -100);
+    headlightR.position.set(0.5, -0.2, -0.5);
+    headlightR.target = headlightLChaseR;
+    headlightR.shadow.mapSize.width = 1024;
+    headlightR.shadow.mapSize.height = 1024;
+    headlightR.shadow.camera.near = 1;
+    headlightR.shadow.camera.far = 40;
+    headlightR.shadow.camera.fov = 5;
+    headlightR.shadow.blurSamples = 20;
+    headlightR.angle = Math.PI / 6;
+    headlightR.decay = 0.5;
+    headlightR.penumbra = 0.5;
+    headlightR.intensity = 0.3;
+    this.car.add(headlightR);
+    this.car.add(headlightR.target);
+    // const spotLightHelper = new THREE.SpotLightHelper(headlightR);
+    // this.scene.add(spotLightHelper);
+
     // this.car.add(carCabinMesh);
     this.scene.add(this.car);
 
-    const carBodyShape = new CANNON.Box(new CANNON.Vec3(0.6, 0.5, 1.2));
-    this.carBody = new CANNON.Body({ mass: 500 });
+    const carBodyShape = new CANNON.Box(new CANNON.Vec3(0.6, carBodyHeight, 1));
+    this.carBody = new CANNON.Body({ mass: carMass });
     this.carBody.addShape(carBodyShape);
     this.carBody.linearDamping = 0;
     this.carBody.position.x = this.car.position.x;
@@ -152,11 +212,11 @@ export class Car {
     this.wheelLFMesh = new THREE.Mesh(wheelLFGeometry, wheelMeshMaterial);
     if (type === "remote") {
       this.wheelLFMesh.position.x = -0.5;
-      this.wheelLFMesh.position.y = -0.6;
+      this.wheelLFMesh.position.y = -0.5;
       this.wheelLFMesh.position.z = -0.6;
     } else {
       this.wheelLFMesh.position.x = this.car.position.x - 0.5;
-      this.wheelLFMesh.position.y = 0.6;
+      this.wheelLFMesh.position.y = 0.5;
       this.wheelLFMesh.position.z = this.car.position.z - 0.6;
     }
     this.wheelLFMesh.castShadow = true;
@@ -171,11 +231,11 @@ export class Car {
     this.wheelRFMesh = new THREE.Mesh(wheelRFGeometry, wheelMeshMaterial);
     if (type === "remote") {
       this.wheelRFMesh.position.x = 0.5;
-      this.wheelRFMesh.position.y = -0.6;
+      this.wheelRFMesh.position.y = -0.5;
       this.wheelRFMesh.position.z = -0.6;
     } else {
       this.wheelRFMesh.position.x = this.car.position.x + 0.5;
-      this.wheelRFMesh.position.y = 0.6;
+      this.wheelRFMesh.position.y = 0.5;
       this.wheelRFMesh.position.z = this.car.position.z - 0.6;
     }
     this.wheelRFMesh.castShadow = true;
@@ -189,11 +249,11 @@ export class Car {
     this.wheelLBMesh = new THREE.Mesh(wheelLBGeometry, wheelMeshMaterial);
     if (type === "remote") {
       this.wheelLBMesh.position.x = -0.5;
-      this.wheelLBMesh.position.y = -0.6;
+      this.wheelLBMesh.position.y = -0.5;
       this.wheelLBMesh.position.z = 0.8;
     } else {
       this.wheelLBMesh.position.x = this.car.position.x - 0.5;
-      this.wheelLBMesh.position.y = 0.6;
+      this.wheelLBMesh.position.y = 0.5;
       this.wheelLBMesh.position.z = this.car.position.z + 0.8;
     }
     this.wheelLBMesh.castShadow = true;
@@ -207,11 +267,11 @@ export class Car {
     this.wheelRBMesh = new THREE.Mesh(wheelRBGeometry, wheelMeshMaterial);
     if (type === "remote") {
       this.wheelRBMesh.position.x = 0.5;
-      this.wheelRBMesh.position.y = -0.6;
+      this.wheelRBMesh.position.y = -0.5;
       this.wheelRBMesh.position.z = 0.6;
     } else {
       this.wheelRBMesh.position.x = this.car.position.x + 0.5;
-      this.wheelRBMesh.position.y = 0.6;
+      this.wheelRBMesh.position.y = 0.5;
       this.wheelRBMesh.position.z = this.car.position.z + 0.6;
     }
     this.wheelRBMesh.castShadow = true;
@@ -232,7 +292,7 @@ export class Car {
     if (type === "host") {
       const wheelLFShape = new CANNON.Sphere(0.22);
       this.wheelLFBody = new CANNON.Body({
-        mass: 100,
+        mass: 500,
         material: wheelMaterial
       });
       this.wheelLFBody.addShape(wheelLFShape);
@@ -243,7 +303,7 @@ export class Car {
 
       const wheelRFShape = new CANNON.Sphere(0.22);
       this.wheelRFBody = new CANNON.Body({
-        mass: 100,
+        mass: 500,
         material: wheelMaterial
       });
       this.wheelRFBody.addShape(wheelRFShape);
@@ -254,7 +314,7 @@ export class Car {
 
       const wheelLBShape = new CANNON.Sphere(0.22);
       this.wheelLBBody = new CANNON.Body({
-        mass: 150,
+        mass: 600,
         material: wheelMaterial
       });
       this.wheelLBBody.addShape(wheelLBShape);
@@ -265,7 +325,7 @@ export class Car {
 
       const wheelRBShape = new CANNON.Sphere(0.22);
       this.wheelRBBody = new CANNON.Body({
-        mass: 150,
+        mass: 600,
         material: wheelMaterial
       });
       this.wheelRBBody.addShape(wheelRBShape);
@@ -283,7 +343,7 @@ export class Car {
         this.carBody,
         this.wheelLFBody,
         {
-          pivotA: new CANNON.Vec3(-0.5, -0.6, -0.6),
+          pivotA: new CANNON.Vec3(-0.5, wheelConstraintHeight, -0.6),
           axisA: leftFrontAxis,
           maxForce: 1e6
         }
@@ -293,7 +353,7 @@ export class Car {
         this.carBody,
         this.wheelRFBody,
         {
-          pivotA: new CANNON.Vec3(0.5, -0.6, -0.6),
+          pivotA: new CANNON.Vec3(0.5, wheelConstraintHeight, -0.6),
           axisA: rightFrontAxis,
           maxForce: 1e6
         }
@@ -303,7 +363,7 @@ export class Car {
         this.carBody,
         this.wheelLBBody,
         {
-          pivotA: new CANNON.Vec3(-0.5, -0.6, 0.6),
+          pivotA: new CANNON.Vec3(-0.5, wheelConstraintHeight, 0.6),
           axisA: leftBackAxis,
           maxForce: 1e6
         }
@@ -313,7 +373,7 @@ export class Car {
         this.carBody,
         this.wheelRBBody,
         {
-          pivotA: new CANNON.Vec3(0.5, -0.6, 0.6),
+          pivotA: new CANNON.Vec3(0.5, wheelConstraintHeight, 0.6),
           axisA: rightBackAxis,
           maxForce: 1e6
         }
