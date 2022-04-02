@@ -47,13 +47,16 @@ export class CarPool {
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    this.scene.fog = new THREE.FogExp2(0xf0dba6, 0.008);
+    this.scene.fog = new THREE.FogExp2(0xf0dba6, 0.004);
 
     this.hostCarTypeIndex = 0;
     this.scene.add(light);
 
-    // const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0xdaa520, 0.1);
-    // this.scene.add(HemisphereLight);
+    const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0xdaa520, 0.3);
+    this.scene.add(HemisphereLight);
+
+    // const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+    // this.scene.add(ambientLight);
 
     // const helper = new THREE.CameraHelper(light.shadow.camera);
     // this.scene.add(helper);
@@ -86,8 +89,8 @@ export class CarPool {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.update();
+    // const controls = new OrbitControls(camera, renderer.domElement);
+    // controls.update();
 
     const labelRenderer = new CSS2DRenderer();
     labelRenderer.setSize(window.innerWidth, window.innerHeight);
@@ -98,9 +101,9 @@ export class CarPool {
     this.world = new CANNON.World();
     this.world.gravity.set(0, -50, 0);
 
-    const groundMaterial = new CANNON.Material("groundMaterial");
-    groundMaterial.friction = 0.6;
-    groundMaterial.restitution = 0.6;
+    const groundBodyMaterial = new CANNON.Material("groundMaterial");
+    groundBodyMaterial.friction = 0.6;
+    groundBodyMaterial.restitution = 0.6;
 
     //ground
     this.groundSize = { x: 500, y: 500 };
@@ -139,7 +142,10 @@ export class CarPool {
     const groundShape = new CANNON.Box(
       new CANNON.Vec3(this.groundSize.x / 2, 1, this.groundSize.y / 2)
     );
-    const groundBody = new CANNON.Body({ mass: 0, material: groundMaterial });
+    const groundBody = new CANNON.Body({
+      mass: 0,
+      material: groundBodyMaterial
+    });
     groundBody.addShape(groundShape);
     groundBody.position.set(0, -1, 0);
     this.world.addBody(groundBody);
@@ -148,9 +154,22 @@ export class CarPool {
       500,
       500
     );
+
+    const groundMaterial = new THREE.MeshPhysicalMaterial({
+      metalness: 0,
+      roughness: 0.5,
+      reflectivity: 0.2,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0.5,
+      color: 0xff0054
+    });
+
+    // const groundMaterial = new THREE.MeshBasicMaterial({
+    //   color: 0xff0054
+    // });
     const groundMesh2: THREE.Mesh = new THREE.Mesh(
       groundGeometry2,
-      whiteMaterial
+      groundMaterial
     );
     groundMesh2.rotateX(-Math.PI / 2);
     groundMesh2.position.x = 0;
@@ -431,7 +450,8 @@ export class CarPool {
       camera.position.lerpVectors(camera.position, v, 0.02);
 
       render();
-      controls.update();
+      // controls.update();
+      // composer.render();
       // stats.update();
     };
 

@@ -6,10 +6,13 @@
   width: 100vw;
   height: 100vh;
   box-sizing: border-box;
-  background-color: #18181a;
-  color: #fff;
+  background-color: #ff0054;
+  color: #ffbd00;
 }
 
 .container h1 {
-  opacity: 0.1;
+  font-size: 60rem;
+  line-height: 50rem;
+  letter-spacing: -3rem;
+  font-weight: 900;
 }

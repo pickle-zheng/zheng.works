@@ -42,28 +42,28 @@ export class Car {
     let bodyHeightOffset: number;
     switch (this.carType) {
       case "pickup":
-        carBodyColor = 0x26abff;
+        carBodyColor = 0xffbd00;
         carMass = 700;
         carBodyHeight = 0.4;
         wheelConstraintHeight = -0.5;
         bodyHeightOffset = -0.2;
         break;
       case "sedan":
-        carBodyColor = 0xff0000;
+        carBodyColor = 0xffff5400;
         carMass = 500;
         carBodyHeight = 0.3;
         wheelConstraintHeight = -0.4;
         bodyHeightOffset = -0.2;
         break;
       case "jeep":
-        carBodyColor = 0x4b5320;
+        carBodyColor = 0x390099;
         carMass = 800;
         carBodyHeight = 0.5;
         wheelConstraintHeight = -0.6;
         bodyHeightOffset = -0.35;
         break;
       default:
-        carBodyColor = 0xff0000;
+        carBodyColor = 0x9e0059;
         carMass = 500;
         carBodyHeight = 0.4;
         wheelConstraintHeight = -0.5;
@@ -79,7 +79,11 @@ export class Car {
         mesh.castShadow = true;
         if (mesh.name.includes("body"))
           // @ts-ignore
-          mesh.material = new THREE.MeshLambertMaterial({
+          mesh.material = new THREE.MeshPhysicalMaterial({
+            metalness: 0,
+            roughness: 1,
+            reflectivity: 0.2,
+
             color: carBodyColor
           });
         if (mesh.name.includes("wheel"))
