@@ -16,9 +16,11 @@ export class CarPool {
   socketId: string | undefined;
   world: CANNON.World;
   hostCar: Car;
+  hostCarTypeIndex: number;
   hostCarPosition: { x: number; y: number; z: number };
   typingStatus: boolean = false;
   speedNetPosition: { x: number; z: number; width: number };
+  carTypes = ["pickup", "sedan", "jeep"];
 
   constructor(canvasRef: RefObject<HTMLCanvasElement>, socket: any) {
     this.hostCarPosition = { x: 0, y: 0, z: 0 };
@@ -43,6 +45,7 @@ export class CarPool {
 
     this.scene.fog = new THREE.FogExp2(0xdaa520, 0.008);
 
+    this.hostCarTypeIndex = 0;
     this.scene.add(light);
 
     const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.1);
@@ -160,7 +163,12 @@ export class CarPool {
     //   this.world.addBody(cylinderBody);
     // }
 
-    let hostCar = new Car(this.scene, this.world, "host");
+    let hostCar = new Car(
+      this.scene,
+      this.world,
+      "host",
+      this.carTypes[this.hostCarTypeIndex]
+    );
     // hostCar.addChaseCam(chaseCam);
     this.hostCar = hostCar;
 
@@ -197,8 +205,10 @@ export class CarPool {
     };
 
     const keyMap: { [id: string]: boolean } = {};
+    const keyDownMap: { [id: string]: boolean } = {};
     const onDocumentKey = (e: KeyboardEvent) => {
       if (this.typingStatus !== true) keyMap[e.key] = e.type === "keydown";
+      if (this.typingStatus !== true) keyDownMap[e.key] = e.type === "keyup";
     };
 
     let forwardVelocity = 0;
@@ -270,7 +280,7 @@ export class CarPool {
             LB: hostCar.wheelLBMesh.quaternion,
             RB: hostCar.wheelRBMesh.quaternion
           },
-          forwardVelocity: forwardVelocity
+          carType: this.carTypes[this.hostCarTypeIndex]
         });
         this.hostCarPosition = { ...hostCar.carBody.position };
       }
@@ -305,10 +315,32 @@ export class CarPool {
           forwardVelocity += 1;
         }
       }
-      if (keyMap["r"]) {
+      if (keyDownMap["r"]) {
         hostCar.removeCar();
-        hostCar = new Car(this.scene, this.world, "host");
+        hostCar = new Car(
+          this.scene,
+          this.world,
+          "host",
+          this.carTypes[this.hostCarTypeIndex]
+        );
+        camera.position.set(0, 100, 0);
+        keyDownMap["r"] = false;
+      }
+
+      if (keyDownMap["Tab"]) {
+        hostCar.removeCar();
+        this.hostCarTypeIndex =
+          this.hostCarTypeIndex >= this.carTypes.length - 1
+            ? 0
+            : this.hostCarTypeIndex + 1;
+        hostCar = new Car(
+          this.scene,
+          this.world,
+          "host",
+          this.carTypes[this.hostCarTypeIndex]
+        );
         camera.position.lerpVectors(new THREE.Vector3(0, 100, 0), v, 0.1);
+        keyDownMap["Tab"] = false;
       }
 
       if (!thrusting) {
@@ -367,8 +399,9 @@ export class CarPool {
     this.typingStatus = typingStatus;
   }
 
-  addCar(id: string) {
-    const newRemoteCar = new Car(this.scene, this.world, "remote");
+  addCar(id: string, carType: string) {
+    console.log("addCar");
+    const newRemoteCar = new Car(this.scene, this.world, "remote", carType);
     this.activeCars.push({
       id: id,
       carObj: newRemoteCar,
@@ -409,14 +442,40 @@ export class CarPool {
         (activeCar) => activeCar.id === car.id
       );
       if (activeCarIndex !== -1) {
-        this.activeCars[activeCarIndex].carObj.updateCarPosition(
-          car.position,
-          car.quaternion,
-          car.wheelPosition,
-          car.wheelRotation
-        );
+        if (this.activeCars[activeCarIndex].carObj.carType != car.carType) {
+          this.removeCar(car.id);
+          const newCar = this.addCar(car.id, car.carType);
+          newCar.remoteCarObj.updateCarPosition(
+            new THREE.Vector3(car.position.x, car.position.y, car.position.z),
+            new THREE.Quaternion(
+              car.quaternion.x,
+              car.quaternion.y,
+              car.quaternion.z,
+              car.quaternion.w
+            ),
+            {
+              LF: car.wheelPosition.LF,
+              RF: car.wheelPosition.RF,
+              LB: car.wheelPosition.LB,
+              RB: car.wheelPosition.RB
+            },
+            {
+              LF: car.wheelRotation.LF,
+              RF: car.wheelRotation.RF,
+              LB: car.wheelRotation.LB,
+              RB: car.wheelRotation.RB
+            }
+          );
+        } else {
+          this.activeCars[activeCarIndex].carObj.updateCarPosition(
+            car.position,
+            car.quaternion,
+            car.wheelPosition,
+            car.wheelRotation
+          );
+        }
       } else {
-        const newCar = this.addCar(car.id);
+        const newCar = this.addCar(car.id, car.carType);
         newCar.remoteCarObj.updateCarPosition(
           new THREE.Vector3(car.position.x, car.position.y, car.position.z),
           new THREE.Quaternion(

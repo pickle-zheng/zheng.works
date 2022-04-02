@@ -1,16 +1,7 @@
 import { Server } from "socket.io";
 
 const SocketHandler = (req: any, res: any) => {
-  const cars: {
-    id: string;
-    position: {
-      x: number;
-      y: number;
-      z: number;
-    };
-    wheelAngle: number;
-    forwardVelocity: number;
-  }[] = [];
+  const cars: Car[] = [];
 
   let lastDataBroadcasted = process.hrtime.bigint();
   if (res.socket.server.io) {

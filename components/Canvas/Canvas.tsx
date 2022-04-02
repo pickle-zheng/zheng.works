@@ -33,7 +33,7 @@ const Canvas = () => {
     if (socket) {
       socket.on("car-connected", (id: any) => {
         console.log("connected", id);
-        if (carpool) carpool.addCar(id);
+        // if (carpool) carpool.addCar(id, "pickup");
       });
 
       socket.on("car-disconnect", (id: any) => {
@@ -71,9 +71,18 @@ const Canvas = () => {
         }
       }
     };
+    const keydownHandler = (event: KeyboardEvent) => {
+      if (event.keyCode === 9 || event.key === "Tab") {
+        event.preventDefault();
+      }
+    };
 
     window.addEventListener("keyup", keyboardHandler);
-    return () => window.removeEventListener("keyup", keyboardHandler);
+    window.addEventListener("keydown", keydownHandler);
+    return () => {
+      window.removeEventListener("keyup", keyboardHandler);
+      window.removeEventListener("keydown", keydownHandler);
+    };
   }, [typingMessage, carpool]);
 
   return (

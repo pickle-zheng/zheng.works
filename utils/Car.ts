@@ -25,23 +25,43 @@ export class Car {
   labelBox: HTMLDivElement;
   label: HTMLDivElement;
   messageTimeout: NodeJS.Timeout | null | undefined;
+  carType: string;
 
   constructor(
     scene: THREE.Scene,
     world: CANNON.World,
     type: string,
+    carType: string,
     carPosition?: THREE.Vector3
   ) {
+    this.carType = carType;
+    let carBodyColor: number;
+
+    switch (this.carType) {
+      case "pickup":
+        carBodyColor = 0x26abff;
+        break;
+      case "sedan":
+        carBodyColor = 0xff0000;
+        break;
+      case "jeep":
+        carBodyColor = 0x4b5320;
+        break;
+      default:
+        carBodyColor = 0xff0000;
+    }
+
     this.car = new THREE.Group();
     const loader = new OBJLoader();
-    loader.load("./models/pickup.obj", (obj) => {
-      console.log(obj);
+    loader.load(`./models/${this.carType}.obj`, (obj) => {
       obj.children.forEach((mesh) => {
         mesh.receiveShadow = true;
         mesh.castShadow = true;
         if (mesh.name.includes("body"))
           // @ts-ignore
-          mesh.material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+          mesh.material = new THREE.MeshLambertMaterial({
+            color: carBodyColor
+          });
         if (mesh.name.includes("wheel"))
           // @ts-ignore
           mesh.material = new THREE.MeshLambertMaterial({

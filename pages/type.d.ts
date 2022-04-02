@@ -15,4 +15,16 @@ type remoteCarInfo = {
     RB: THREE.Quaternion;
   };
   forwardVelocity: number;
+  carType: string;
+};
+
+type Car = {
+  id: string;
+  position: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  wheelAngle: number;
+  carType: string;
 };

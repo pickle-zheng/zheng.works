@@ -63,6 +63,10 @@ const Instruction = () => {
           </div>
           <div>Send a message</div>
         </div>
+        <div className={styles.row}>
+          <div>TAB</div>
+          <div>Change Car</div>
+        </div>
       </div>
     </div>
   );
