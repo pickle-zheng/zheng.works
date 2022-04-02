@@ -10,7 +10,7 @@
   color: #fff;
 }
 .wrapper {
-  padding: 32px;
+  padding: 24px 32px;
   border-radius: 16px;
   transition: all 0.3s ease-in-out;
   background-color: #18181a;

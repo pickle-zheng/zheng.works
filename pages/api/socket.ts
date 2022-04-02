@@ -24,7 +24,7 @@ const SocketHandler = (req: any, res: any) => {
         const currentTime = process.hrtime.bigint();
 
         if (currentTime - lastDataBroadcasted > 0.01666 * 1000 * 1000 * 1000) {
-          socket.broadcast.emit("cars-position", cars);
+          io.emit("cars-position", cars);
           lastDataBroadcasted = currentTime;
         }
       });

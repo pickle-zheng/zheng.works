@@ -21,6 +21,7 @@ export class CarPool {
   typingStatus: boolean = false;
   speedNetPosition: { x: number; z: number; width: number };
   carTypes = ["pickup", "sedan", "jeep"];
+  groundSize: { x: number; y: number };
 
   constructor(canvasRef: RefObject<HTMLCanvasElement>, socket: any) {
     this.hostCarPosition = { x: 0, y: 0, z: 0 };
@@ -33,11 +34,11 @@ export class CarPool {
     const light = new THREE.DirectionalLight();
     light.position.set(50, 100, 25);
     light.castShadow = true;
-    light.shadow.mapSize.width = 16384;
-    light.shadow.mapSize.height = 16384;
+    light.shadow.mapSize.width = 16384 * 2;
+    light.shadow.mapSize.height = 16384 * 2;
     light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 1000;
-    let d = 120;
+    light.shadow.camera.far = 600;
+    let d = 250;
     light.shadow.camera.left = -d;
     light.shadow.camera.right = d;
     light.shadow.camera.top = d;
@@ -95,9 +96,11 @@ export class CarPool {
     groundMaterial.restitution = 0.6;
 
     //ground
+    this.groundSize = { x: 500, y: 500 };
+
     const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(
-      500,
-      500
+      this.groundSize.x,
+      this.groundSize.y
     );
     const getImage = (): THREE.MeshBasicMaterial => {
       var loader = new THREE.TextureLoader();
@@ -126,7 +129,9 @@ export class CarPool {
     groundMesh.position.z = 0;
     groundMesh.receiveShadow = true;
     this.scene.add(groundMesh);
-    const groundShape = new CANNON.Box(new CANNON.Vec3(500, 1, 500));
+    const groundShape = new CANNON.Box(
+      new CANNON.Vec3(this.groundSize.x / 2, 1, this.groundSize.y / 2)
+    );
     const groundBody = new CANNON.Body({ mass: 0, material: groundMaterial });
     groundBody.addShape(groundShape);
     groundBody.position.set(0, -1, 0);

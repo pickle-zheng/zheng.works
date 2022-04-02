@@ -3,6 +3,7 @@ import { CarPool } from "../../utils/Carpool";
 import io from "socket.io-client";
 
 import styles from "./Canvas.module.css";
+import MiniMap from "../MiniMap/MiniMap";
 
 let socket: any;
 
@@ -14,6 +15,8 @@ const Canvas = () => {
   const [typingMessage, setTyping] = useState(false);
 
   const [carpool, setCarpool] = useState<CarPool>();
+
+  const [carPositions, setCarPositions] = useState<any[]>();
 
   const socketInitializer = async (canvasRef: any): Promise<void> => {
     await fetch("/api/socket");
@@ -38,12 +41,14 @@ const Canvas = () => {
 
       socket.on("car-disconnect", (id: any) => {
         console.log("disconnect", id);
-        console.log(carpool);
+        const newCarPositions = carPositions?.filter((car) => car.id !== id);
         if (carpool) carpool.removeCar(id);
+        setCarPositions(newCarPositions);
       });
 
       socket.on("cars-position", (cars: remoteCarInfo[]) => {
         if (carpool) carpool.updateCarsPosition(cars);
+        setCarPositions(cars);
       });
 
       socket.on("new-message", (message: any) => {
@@ -57,7 +62,7 @@ const Canvas = () => {
       socket.off("cars-position");
       socket.off("new-message");
     };
-  }, [carpool, socket]);
+  }, [carpool, socket, carPositions]);
 
   useEffect(() => {
     if (carpool) carpool.updateTypingStatus(typingMessage);
@@ -88,6 +93,11 @@ const Canvas = () => {
   return (
     <div>
       <canvas ref={canvasRef} />
+      <MiniMap
+        carPositions={carPositions}
+        groundSize={carpool?.groundSize}
+        socketId={socket?.id}
+      />
       <form
         className={`${styles.form} ${typingMessage && styles.formTyping}`}
         onSubmit={(e: React.SyntheticEvent) => {
