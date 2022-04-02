@@ -43,12 +43,12 @@ export class CarPool {
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    this.scene.fog = new THREE.FogExp2(0xdaa520, 0.008);
+    this.scene.fog = new THREE.FogExp2(0xf0dba6, 0.008);
 
     this.hostCarTypeIndex = 0;
     this.scene.add(light);
 
-    const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.1);
+    const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0xdaa520, 0.1);
     this.scene.add(HemisphereLight);
 
     // const helper = new THREE.CameraHelper(light.shadow.camera);
@@ -110,6 +110,9 @@ export class CarPool {
       return material;
     };
     const imageMaterial = getImage();
+    const whiteMaterial = new THREE.MeshLambertMaterial({
+      color: 0xffffff
+    });
 
     const shadowMaterial = new THREE.ShadowMaterial();
     shadowMaterial.opacity = 0.5;
@@ -135,7 +138,7 @@ export class CarPool {
     );
     const groundMesh2: THREE.Mesh = new THREE.Mesh(
       groundGeometry2,
-      imageMaterial
+      whiteMaterial
     );
     groundMesh2.rotateX(-Math.PI / 2);
     groundMesh2.position.x = 0;
