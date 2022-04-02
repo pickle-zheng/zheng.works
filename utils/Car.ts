@@ -26,12 +26,12 @@ export class Car {
   label: HTMLDivElement;
   messageTimeout: NodeJS.Timeout | null | undefined;
   carType: string;
-
   constructor(
     scene: THREE.Scene,
     world: CANNON.World,
     type: string,
     carType: string,
+    loaderManager: THREE.LoadingManager,
     carPosition?: THREE.Vector3
   ) {
     this.carType = carType;
@@ -71,7 +71,8 @@ export class Car {
     }
 
     this.car = new THREE.Group();
-    const loader = new OBJLoader();
+    const loader = new OBJLoader(loaderManager);
+
     loader.load(`./models/${this.carType}.obj`, (obj) => {
       obj.children.forEach((mesh) => {
         mesh.receiveShadow = true;

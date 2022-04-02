@@ -33,6 +33,43 @@ const Canvas = () => {
   }, []);
 
   useEffect(() => {
+    const manager = carpool?.loaderManager;
+    if (manager) {
+      manager.onStart = function (url, itemsLoaded, itemsTotal) {
+        console.log(
+          "Started loading file: " +
+            url +
+            ".\nLoaded " +
+            itemsLoaded +
+            " of " +
+            itemsTotal +
+            " files."
+        );
+      };
+
+      manager.onLoad = function () {
+        console.log("Loading complete!");
+      };
+
+      manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+        console.log(
+          "Loading file: " +
+            url +
+            ".\nLoaded " +
+            itemsLoaded +
+            " of " +
+            itemsTotal +
+            " files."
+        );
+      };
+
+      manager.onError = function (url) {
+        console.log("There was an error loading " + url);
+      };
+    }
+  }, [carpool]);
+
+  useEffect(() => {
     if (socket) {
       socket.on("car-connected", (id: any) => {
         console.log("connected", id);

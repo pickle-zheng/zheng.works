@@ -22,13 +22,16 @@ export class CarPool {
   speedNetPosition: { x: number; z: number; width: number };
   carTypes = ["pickup", "sedan", "jeep"];
   groundSize: { x: number; y: number };
-
+  loaderManager: THREE.LoadingManager;
   constructor(canvasRef: RefObject<HTMLCanvasElement>, socket: any) {
     this.hostCarPosition = { x: 0, y: 0, z: 0 };
     this.socketId = socket.id;
     if (!canvasRef.current) {
       throw Error("Canvas ref is not defined");
     }
+    const manager = new THREE.LoadingManager();
+
+    this.loaderManager = manager;
     this.scene = new THREE.Scene();
 
     const light = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -179,7 +182,8 @@ export class CarPool {
       this.scene,
       this.world,
       "host",
-      this.carTypes[this.hostCarTypeIndex]
+      this.carTypes[this.hostCarTypeIndex],
+      this.loaderManager
     );
     // hostCar.addChaseCam(chaseCam);
     this.hostCar = hostCar;
@@ -360,9 +364,12 @@ export class CarPool {
           this.scene,
           this.world,
           "host",
-          this.carTypes[this.hostCarTypeIndex]
+          this.carTypes[this.hostCarTypeIndex],
+          this.loaderManager
         );
         camera.position.set(0, 100, -1);
+        forwardVelocity = 0;
+        rightVelocity = 0;
         keyDownMap["r"] = false;
       }
 
@@ -376,8 +383,11 @@ export class CarPool {
           this.scene,
           this.world,
           "host",
-          this.carTypes[this.hostCarTypeIndex]
+          this.carTypes[this.hostCarTypeIndex],
+          this.loaderManager
         );
+        forwardVelocity = 0;
+        rightVelocity = 0;
         camera.position.lerpVectors(new THREE.Vector3(0, 100, 0), v, 0.02);
         keyDownMap["Tab"] = false;
       }
@@ -440,7 +450,13 @@ export class CarPool {
 
   addCar(id: string, carType: string) {
     console.log("addCar");
-    const newRemoteCar = new Car(this.scene, this.world, "remote", carType);
+    const newRemoteCar = new Car(
+      this.scene,
+      this.world,
+      "remote",
+      carType,
+      this.loaderManager
+    );
     this.activeCars.push({
       id: id,
       carObj: newRemoteCar,
