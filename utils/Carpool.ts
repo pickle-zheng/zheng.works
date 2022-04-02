@@ -191,11 +191,11 @@ export class CarPool {
     );
     const treePositions = treeArray.map(() => {
       const x: number =
-        (Math.random() * groundGeometry.parameters.height) / 2 -
-        groundGeometry.parameters.height / 4;
+        Math.random() * groundGeometry.parameters.height -
+        groundGeometry.parameters.height / 2;
       const z: number =
-        (Math.random() * groundGeometry.parameters.width) / 2 -
-        groundGeometry.parameters.width / 4;
+        Math.random() * groundGeometry.parameters.width -
+        groundGeometry.parameters.width / 2;
       return { x: x, z: z };
     });
     console.log(treePositions.length + " trees generated");
