@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "deploy-heroku": "git push heroku main",
-    "submit-docker": "gcloud builds submit --tag gcr.io/zhengdotworks/nextjs .",
-    "deploy": "npm run submit-docker && gcloud beta run deploy zhengdotworks --image gcr.io/zhengdotworks/nextjs --region australia-southeast1 --platform managed --allow-unauthenticated --quiet"
+    "submit-docker": "gcloud builds submit --tag gcr.io/zheng-works-australia/nextjs .",
+    "deploy": "npm run submit-docker && gcloud beta run deploy zhengdotworks --image gcr.io/zheng-works-australia/nextjs --region australia-southeast1 --platform managed --allow-unauthenticated --quiet"
   },
   "engines": {
     "node": "17.x"
