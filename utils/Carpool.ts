@@ -34,26 +34,39 @@ export class CarPool {
     this.loaderManager = manager;
     this.scene = new THREE.Scene();
 
-    const light = new THREE.DirectionalLight(0xffffff, 0.8);
-    light.position.set(50, 100, 25);
+    const light = new THREE.DirectionalLight(0xff0054, 0.8);
+    light.position.set(30, 35, 15);
     light.castShadow = true;
-    light.shadow.mapSize.width = 16384 * 2;
-    light.shadow.mapSize.height = 16384 * 2;
+    light.shadow.mapSize.width = 16384 / 2;
+    light.shadow.mapSize.height = 16384 / 2;
     light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 600;
+    light.shadow.camera.far = 100;
     let d = 250;
     light.shadow.camera.left = -d;
     light.shadow.camera.right = d;
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    this.scene.fog = new THREE.FogExp2(0xf0dba6, 0.004);
+    const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    light2.position.set(-30, 50, -15);
+    light2.castShadow = true;
+    light2.shadow.mapSize.width = 16384 / 2;
+    light2.shadow.mapSize.height = 16384 / 2;
+    light2.shadow.camera.near = 0.5;
+    light2.shadow.camera.far = 100;
+    light2.shadow.camera.left = -d;
+    light2.shadow.camera.right = d;
+    light2.shadow.camera.top = d;
+    light2.shadow.camera.bottom = -d;
+
+    // this.scene.fog = new THREE.FogExp2(0xf0dba6, 0.005);
 
     this.hostCarTypeIndex = 0;
     this.scene.add(light);
+    this.scene.add(light2);
 
-    const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0xdaa520, 0.3);
-    this.scene.add(HemisphereLight);
+    // const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0xdaa520, 0.3);
+    // this.scene.add(HemisphereLight);
 
     // const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
     // this.scene.add(ambientLight);
@@ -124,21 +137,21 @@ export class CarPool {
     };
     const imageMaterial = getImage();
     const whiteMaterial = new THREE.MeshPhongMaterial({
-      color: 0xffffff
+      color: 0x18181a
     });
 
-    const shadowMaterial = new THREE.ShadowMaterial();
-    shadowMaterial.opacity = 0.5;
-    const groundMesh: THREE.Mesh = new THREE.Mesh(
-      groundGeometry,
-      shadowMaterial
-    );
-    groundMesh.rotateX(-Math.PI / 2);
-    groundMesh.position.x = 0;
-    groundMesh.position.y = 0.1;
-    groundMesh.position.z = 0;
-    groundMesh.receiveShadow = true;
-    this.scene.add(groundMesh);
+    // const shadowMaterial = new THREE.ShadowMaterial();
+    // shadowMaterial.opacity = 0.5;
+    // const groundMesh: THREE.Mesh = new THREE.Mesh(
+    //   groundGeometry,
+    //   shadowMaterial
+    // );
+    // groundMesh.rotateX(-Math.PI / 2);
+    // groundMesh.position.x = 0;
+    // groundMesh.position.y = 0.1;
+    // groundMesh.position.z = 0;
+    // groundMesh.receiveShadow = true;
+    // this.scene.add(groundMesh);
     const groundShape = new CANNON.Box(
       new CANNON.Vec3(this.groundSize.x / 2, 1, this.groundSize.y / 2)
     );
@@ -169,12 +182,13 @@ export class CarPool {
     // });
     const groundMesh2: THREE.Mesh = new THREE.Mesh(
       groundGeometry2,
-      groundMaterial
+      whiteMaterial
     );
     groundMesh2.rotateX(-Math.PI / 2);
     groundMesh2.position.x = 0;
     groundMesh2.position.y = 0;
     groundMesh2.position.z = 0;
+    groundMesh2.receiveShadow = true;
     this.scene.add(groundMesh2);
 
     //jumps
@@ -218,11 +232,11 @@ export class CarPool {
     );
     const treePositions = treeArray.map(() => {
       const x: number =
-        (Math.random() * groundGeometry.parameters.height) / 2 -
-        groundGeometry.parameters.height / 4;
+        (Math.random() * groundGeometry.parameters.height) / 4 -
+        groundGeometry.parameters.height / 8;
       const z: number =
-        (Math.random() * groundGeometry.parameters.width) / 2 -
-        groundGeometry.parameters.width / 4;
+        (Math.random() * groundGeometry.parameters.width) / 4 -
+        groundGeometry.parameters.width / 8;
       return { x: x, z: z };
     });
     console.log(treePositions.length + " trees generated");
