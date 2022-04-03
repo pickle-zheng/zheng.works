@@ -211,18 +211,18 @@ export class CarPool {
       { x: 0, y: 0 },
       Array(
         Math.floor(
-          (groundGeometry.parameters.height / 25) *
-            (groundGeometry.parameters.width / 25)
+          (groundGeometry.parameters.height / 60) *
+            (groundGeometry.parameters.width / 60)
         )
       )
     );
     const treePositions = treeArray.map(() => {
       const x: number =
-        Math.random() * groundGeometry.parameters.height -
-        groundGeometry.parameters.height / 2;
+        (Math.random() * groundGeometry.parameters.height) / 2 -
+        groundGeometry.parameters.height / 4;
       const z: number =
-        Math.random() * groundGeometry.parameters.width -
-        groundGeometry.parameters.width / 2;
+        (Math.random() * groundGeometry.parameters.width) / 2 -
+        groundGeometry.parameters.width / 4;
       return { x: x, z: z };
     });
     console.log(treePositions.length + " trees generated");

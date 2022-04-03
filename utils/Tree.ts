@@ -22,43 +22,49 @@ export class Tree {
     });
 
     const treeTopGeometry: THREE.SphereGeometry = new THREE.SphereGeometry(
-      0.5,
-      8,
-      8
+      0.8,
+      6,
+      6
     );
     const treeTopGeometryMesh: THREE.Mesh = new THREE.Mesh(
       treeTopGeometry,
       treeMaterial
     );
-    treeTopGeometryMesh.position.y = 3.7;
+    treeTopGeometryMesh.position.y = Math.random() + 1.5;
+    treeTopGeometryMesh.position.x = Math.random() * 2 - 1;
+    treeTopGeometryMesh.position.z = Math.random() * 2 - 1;
     treeTopGeometryMesh.rotateY(Math.PI / Math.random());
     treeTopGeometryMesh.castShadow = true;
     this.tree.add(treeTopGeometryMesh);
 
     const treeMidGeometry: THREE.SphereGeometry = new THREE.SphereGeometry(
-      0.8,
-      8,
-      8
+      1,
+      6,
+      68
     );
     const treeMidGeometryMesh: THREE.Mesh = new THREE.Mesh(
       treeMidGeometry,
       treeMaterial
     );
-    treeMidGeometryMesh.position.y = 2.7;
+    treeMidGeometryMesh.position.y = Math.random() + 1.2;
+    treeMidGeometryMesh.position.x = Math.random() * 2 - 1;
+    treeMidGeometryMesh.position.z = Math.random() * 2 - 1;
     treeMidGeometryMesh.rotateY(Math.PI / Math.random());
     treeMidGeometryMesh.castShadow = true;
     this.tree.add(treeMidGeometryMesh);
 
     const treeLowerGeometry: THREE.SphereGeometry = new THREE.SphereGeometry(
       1.2,
-      8,
-      8
+      6,
+      6
     );
     const treeLowerGeometryMesh: THREE.Mesh = new THREE.Mesh(
       treeLowerGeometry,
       treeMaterial
     );
-    treeLowerGeometryMesh.position.y = 1.2;
+    treeLowerGeometryMesh.position.y = Math.random() + 1;
+    treeLowerGeometryMesh.position.x = Math.random() * 2 - 1;
+    treeLowerGeometryMesh.position.z = Math.random() * 2 - 1;
     treeLowerGeometryMesh.rotateY(Math.PI / Math.random());
     treeLowerGeometryMesh.castShadow = true;
     this.tree.add(treeLowerGeometryMesh);
