@@ -49,14 +49,14 @@ export class Car {
         bodyHeightOffset = -0.2;
         break;
       case "sedan":
-        carBodyColor = 0xffff5400;
+        carBodyColor = 0xfefefe;
         carMass = 500;
         carBodyHeight = 0.3;
         wheelConstraintHeight = -0.4;
         bodyHeightOffset = -0.2;
         break;
       case "jeep":
-        carBodyColor = 0x390099;
+        carBodyColor = 0x68cbf8;
         carMass = 800;
         carBodyHeight = 0.5;
         wheelConstraintHeight = -0.6;
