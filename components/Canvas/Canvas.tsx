@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CarPool } from "../../utils/Carpool";
+import { PortFolioPool } from "../../utils/PortfolioPool";
 import io from "socket.io-client";
 
 import styles from "./Canvas.module.css";
@@ -7,14 +8,14 @@ import MiniMap from "../MiniMap/MiniMap";
 
 let socket: any;
 
-const Canvas = () => {
+const Canvas = ({ mode }: { mode: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [typingMessage, setTyping] = useState(false);
 
-  const [carpool, setCarpool] = useState<CarPool>();
+  const [carpool, setCarpool] = useState<CarPool | PortFolioPool>();
 
   const [carPositions, setCarPositions] = useState<any[]>();
 
@@ -24,7 +25,11 @@ const Canvas = () => {
 
     socket.on("connect", () => {
       console.log("connected", socket.id);
-      setCarpool(new CarPool(canvasRef, socket));
+      if (mode === "portfolio") {
+        setCarpool(new PortFolioPool(canvasRef, socket));
+      } else {
+        setCarpool(new CarPool(canvasRef, socket));
+      }
     });
   };
 

@@ -7,10 +7,9 @@ import CannonDebugRenderer from "./cannonDebugRenderer";
 import { RefObject } from "react";
 import { Car } from "./Car";
 import { Tree } from "./Tree";
-import { Ramp } from "./Ramp";
-import { SpeedNet } from "./SpeedNet";
+import { FloorPlan } from "./FloorPlan";
 
-export class CarPool {
+export class PortFolioPool {
   scene: THREE.Scene;
   activeCars: { id: any; carObj: Car; body: CANNON.Body }[] = [];
   socketId: string | undefined;
@@ -19,7 +18,6 @@ export class CarPool {
   hostCarTypeIndex: number;
   hostCarPosition: { x: number; y: number; z: number };
   typingStatus: boolean = false;
-  speedNetPosition: { x: number; z: number; width: number };
   carTypes = ["pickup", "sedan", "jeep"];
   groundSize: { x: number; y: number };
   loaderManager: THREE.LoadingManager;
@@ -35,12 +33,12 @@ export class CarPool {
     this.scene = new THREE.Scene();
 
     const light = new THREE.DirectionalLight(0xff0054, 0.8);
-    light.position.set(30, 35, 15);
+    light.position.set(45, 75, 24);
     light.castShadow = true;
     light.shadow.mapSize.width = 16384 / 2;
     light.shadow.mapSize.height = 16384 / 2;
     light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 100;
+    light.shadow.camera.far = 200;
     let d = 250;
     light.shadow.camera.left = -d;
     light.shadow.camera.right = d;
@@ -48,12 +46,12 @@ export class CarPool {
     light.shadow.camera.bottom = -d;
 
     const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-    light2.position.set(-30, 50, -15);
+    light2.position.set(-45, 50, -23);
     light2.castShadow = true;
     light2.shadow.mapSize.width = 16384 / 2;
     light2.shadow.mapSize.height = 16384 / 2;
     light2.shadow.camera.near = 0.5;
-    light2.shadow.camera.far = 100;
+    light2.shadow.camera.far = 200;
     light2.shadow.camera.left = -d;
     light2.shadow.camera.right = d;
     light2.shadow.camera.top = d;
@@ -191,6 +189,8 @@ export class CarPool {
     groundMesh2.receiveShadow = true;
     this.scene.add(groundMesh2);
 
+    const floor = new FloorPlan(this.scene, this.world);
+
     //jumps
     // for (let i = 0; i < 100; i++) {
     //   const jump = new THREE.Mesh(
@@ -216,7 +216,8 @@ export class CarPool {
       this.world,
       "host",
       this.carTypes[this.hostCarTypeIndex],
-      this.loaderManager
+      this.loaderManager,
+      new THREE.Vector3(0, 0.5, 0)
     );
     // hostCar.addChaseCam(chaseCam);
     this.hostCar = hostCar;
@@ -248,18 +249,6 @@ export class CarPool {
           z: treePosition.z
         })
     );
-
-    // const ramp = new Ramp(this.scene, this.world, "normal", {
-    //   x: 15,
-    //   z: 15
-    // });
-
-    const speedNet = new SpeedNet(this.scene);
-    this.speedNetPosition = {
-      x: speedNet.netGroup.position.x,
-      z: speedNet.netGroup.position.z,
-      width: 5
-    };
 
     const keyMap: { [id: string]: boolean } = {};
     const keyDownMap: { [id: string]: boolean } = {};
@@ -398,7 +387,8 @@ export class CarPool {
           this.world,
           "host",
           this.carTypes[this.hostCarTypeIndex],
-          this.loaderManager
+          this.loaderManager,
+          new THREE.Vector3(0, 0.5, 0)
         );
         camera.position.set(0, 100, -1);
         forwardVelocity = 0;
@@ -417,7 +407,8 @@ export class CarPool {
           this.world,
           "host",
           this.carTypes[this.hostCarTypeIndex],
-          this.loaderManager
+          this.loaderManager,
+          new THREE.Vector3(0, 0.5, 0)
         );
         forwardVelocity = 0;
         rightVelocity = 0;
