@@ -16,10 +16,8 @@ export class FloorPlan {
 
     const curbGeometries = curbs.features.map((curb) => {
       const shape = new THREE.Shape();
-      console.log(curb);
 
       curb.geometry.coordinates.forEach((coordinate, i) => {
-        console.log(coordinate);
         if (i === 0) {
           shape.moveTo(
             (coordinate[0] - 121.43937) * 90000,
@@ -56,7 +54,7 @@ export class FloorPlan {
       scene.add(mesh);
       return mesh;
     });
-    console.log(curbGeometries);
+    // console.log(curbGeometries);
   }
 }
 // RAMP Support

@@ -83,7 +83,6 @@ export class Car {
             metalness: 0,
             roughness: 1,
             reflectivity: 0.2,
-
             color: carBodyColor
           });
         if (mesh.name.includes("wheel"))
@@ -102,6 +101,19 @@ export class Car {
         if (mesh.name.includes("bumper"))
           // @ts-ignore
           mesh.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+
+        if (mesh.name.includes("window"))
+          // @ts-ignore
+          mesh.material = new THREE.MeshPhysicalMaterial({
+            metalness: 0,
+            roughness: 0.1,
+            transmission: 1,
+            reflectivity: 0.5,
+            envMapIntensity: 1,
+            clearcoat: 0.2,
+            clearcoatRoughness: 0.1,
+            color: 0xffffff
+          });
       });
       obj.position.y = bodyHeightOffset;
       this.car.add(obj);

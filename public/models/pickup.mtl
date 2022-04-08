@@ -1,4 +1,4 @@
-# Blender MTL File: 'Blue Car.blend'
+# Blender MTL File: 'pickup.blend'
 # Material Count: 5
 
 newmtl Aluminium
@@ -34,7 +34,7 @@ illum 1
 newmtl Glass
 Ns 323.999994
 Ka 1.000000 1.000000 1.000000
-Kd 0.017142 0.056988 0.080011
+Kd 0.016807 0.057805 0.080220
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
