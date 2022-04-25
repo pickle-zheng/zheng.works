@@ -3,8 +3,14 @@ import Head from "next/head";
 import Canvas from "../components/Canvas/Canvas";
 import Instruction from "../components/Instruction/Instruction";
 import styles from "./portfolio.module.css";
+import ReactGA from "react-ga";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    ReactGA.initialize("G-9XFNTQ9CV0");
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  });
   return (
     <div className={styles.container}>
       <Head>
