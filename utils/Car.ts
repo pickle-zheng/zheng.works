@@ -451,50 +451,6 @@ export class Car {
         carRotation.z,
         carRotation.w
       );
-      // this.wheelLFMesh.position.set(
-      //   wheelPosition.LF.x,
-      //   wheelPosition.LF.y,
-      //   wheelPosition.LF.z
-      // );
-      // this.wheelLFMesh.quaternion.set(
-      //   wheelRotation.LF.x,
-      //   wheelRotation.LF.y,
-      //   wheelRotation.LF.z,
-      //   wheelRotation.LF.w
-      // );
-      // this.wheelRFMesh.position.set(
-      //   wheelPosition.RF.x,
-      //   wheelPosition.RF.y,
-      //   wheelPosition.RF.z
-      // );
-      // this.wheelRFMesh.quaternion.set(
-      //   wheelRotation.RF.x,
-      //   wheelRotation.RF.y,
-      //   wheelRotation.RF.z,
-      //   wheelRotation.RF.w
-      // );
-      // this.wheelLBMesh.position.set(
-      //   wheelPosition.LB.x,
-      //   wheelPosition.LB.y,
-      //   wheelPosition.LB.z
-      // );
-      // this.wheelLBMesh.quaternion.set(
-      //   wheelRotation.LB.x,
-      //   wheelRotation.LB.y,
-      //   wheelRotation.LB.z,
-      //   wheelRotation.LB.w
-      // );
-      // this.wheelRBMesh.position.set(
-      //   wheelPosition.RB.x,
-      //   wheelPosition.RB.y,
-      //   wheelPosition.RB.z
-      // );
-      // this.wheelRBMesh.quaternion.set(
-      //   wheelRotation.RB.x,
-      //   wheelRotation.RB.y,
-      //   wheelRotation.RB.z,
-      //   wheelRotation.RB.w
-      // );
     } else if (
       this.wheelLFBody &&
       this.wheelRFBody &&

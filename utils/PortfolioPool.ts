@@ -7,7 +7,7 @@ import CannonDebugRenderer from "./cannonDebugRenderer";
 import { RefObject } from "react";
 import { Car } from "./Car";
 import { Tree } from "./Tree";
-import { FloorPlan } from "./FloorPlan";
+import { ExperienceBlock } from "./ExperienceBlock";
 
 export class PortFolioPool {
   scene: THREE.Scene;
@@ -57,20 +57,9 @@ export class PortFolioPool {
     light2.shadow.camera.top = d;
     light2.shadow.camera.bottom = -d;
 
-    // this.scene.fog = new THREE.FogExp2(0xf0dba6, 0.005);
-
     this.hostCarTypeIndex = 0;
     this.scene.add(light);
     this.scene.add(light2);
-
-    // const HemisphereLight = new THREE.HemisphereLight(0xffffbb, 0xdaa520, 0.3);
-    // this.scene.add(HemisphereLight);
-
-    // const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
-    // this.scene.add(ambientLight);
-
-    // const helper = new THREE.CameraHelper(light.shadow.camera);
-    // this.scene.add(helper);
 
     const camera = new THREE.PerspectiveCamera(
       30,
@@ -79,15 +68,6 @@ export class PortFolioPool {
       1000
     );
     camera.position.set(1, 10, -10);
-
-    // const chaseCam = new THREE.Object3D();
-    // chaseCam.position.set(0, 100, 0);
-    // chaseCam.name = "chaseCam";
-    // const chaseCamPivot = new THREE.Object3D();
-    // chaseCamPivot.position.set(0, 0, 0);
-    // chaseCamPivot.name = "chaseCamPivot";
-    // chaseCam.add(chaseCamPivot);
-    // this.scene.add(chaseCam);
 
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
@@ -99,9 +79,6 @@ export class PortFolioPool {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
-
-    // const controls = new OrbitControls(camera, renderer.domElement);
-    // controls.update();
 
     const labelRenderer = new CSS2DRenderer();
     labelRenderer.setSize(window.innerWidth, window.innerHeight);
@@ -117,7 +94,7 @@ export class PortFolioPool {
     groundBodyMaterial.restitution = 0.6;
 
     //ground
-    this.groundSize = { x: 500, y: 500 };
+    this.groundSize = { x: 200, y: 200 };
 
     const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(
       this.groundSize.x,
@@ -125,10 +102,11 @@ export class PortFolioPool {
     );
     const getImage = (): THREE.MeshBasicMaterial => {
       var loader = new THREE.TextureLoader();
-      var texture = loader.load("info.jpeg");
+      var texture = loader.load("/images/Back.png");
       var material = new THREE.MeshBasicMaterial({
         map: texture,
         side: THREE.DoubleSide,
+        transparent: true,
         opacity: 1
       });
       return material;
@@ -137,19 +115,16 @@ export class PortFolioPool {
     const whiteMaterial = new THREE.MeshPhongMaterial({
       color: 0x18181a
     });
-
-    // const shadowMaterial = new THREE.ShadowMaterial();
-    // shadowMaterial.opacity = 0.5;
-    // const groundMesh: THREE.Mesh = new THREE.Mesh(
-    //   groundGeometry,
-    //   shadowMaterial
-    // );
-    // groundMesh.rotateX(-Math.PI / 2);
-    // groundMesh.position.x = 0;
-    // groundMesh.position.y = 0.1;
-    // groundMesh.position.z = 0;
-    // groundMesh.receiveShadow = true;
-    // this.scene.add(groundMesh);
+    const groundMesh: THREE.Mesh = new THREE.Mesh(
+      groundGeometry,
+      whiteMaterial
+    );
+    groundMesh.rotateX(-Math.PI / 2);
+    groundMesh.position.x = 0;
+    groundMesh.position.y = 0;
+    groundMesh.position.z = 0;
+    groundMesh.receiveShadow = true;
+    this.scene.add(groundMesh);
     const groundShape = new CANNON.Box(
       new CANNON.Vec3(this.groundSize.x / 2, 1, this.groundSize.y / 2)
     );
@@ -162,8 +137,8 @@ export class PortFolioPool {
     this.world.addBody(groundBody);
 
     const groundGeometry2: THREE.PlaneGeometry = new THREE.PlaneGeometry(
-      500,
-      500
+      200,
+      200
     );
 
     const groundMaterial = new THREE.MeshPhysicalMaterial({
@@ -175,41 +150,17 @@ export class PortFolioPool {
       color: 0xff0054
     });
 
-    // const groundMaterial = new THREE.MeshBasicMaterial({
-    //   color: 0xff0054
-    // });
     const groundMesh2: THREE.Mesh = new THREE.Mesh(
       groundGeometry2,
-      whiteMaterial
+      imageMaterial
     );
     groundMesh2.rotateX(-Math.PI / 2);
+    groundMesh2.rotateZ(Math.PI);
     groundMesh2.position.x = 0;
     groundMesh2.position.y = 0;
     groundMesh2.position.z = 0;
     groundMesh2.receiveShadow = true;
     this.scene.add(groundMesh2);
-
-    const floor = new FloorPlan(this.scene, this.world);
-
-    //jumps
-    // for (let i = 0; i < 100; i++) {
-    //   const jump = new THREE.Mesh(
-    //     new THREE.CylinderGeometry(0, 1, 0.5, 5),
-    //     phongMaterial
-    //   );
-    //   jump.position.x = Math.random() * 100 - 50;
-    //   jump.position.y = 0.5;
-    //   jump.position.z = Math.random() * 100 - 50;
-    //   this.scene.add(jump);
-
-    //   const cylinderShape = new CANNON.Cylinder(0.01, 1, 0.5, 5);
-    //   const cylinderBody = new CANNON.Body({ mass: 0 });
-    //   cylinderBody.addShape(cylinderShape, new CANNON.Vec3());
-    //   cylinderBody.position.x = jump.position.x;
-    //   cylinderBody.position.y = jump.position.y;
-    //   cylinderBody.position.z = jump.position.z;
-    //   this.world.addBody(cylinderBody);
-    // }
 
     let hostCar = new Car(
       this.scene,
@@ -226,18 +177,18 @@ export class PortFolioPool {
       { x: 0, y: 0 },
       Array(
         Math.floor(
-          (groundGeometry.parameters.height / 60) *
-            (groundGeometry.parameters.width / 60)
+          (groundGeometry.parameters.height / 20) *
+            (groundGeometry.parameters.width / 20)
         )
       )
     );
     const treePositions = treeArray.map(() => {
       const x: number =
-        (Math.random() * groundGeometry.parameters.height) / 4 -
-        groundGeometry.parameters.height / 8;
+        Math.random() * groundGeometry.parameters.height -
+        groundGeometry.parameters.height / 2;
       const z: number =
-        (Math.random() * groundGeometry.parameters.width) / 4 -
-        groundGeometry.parameters.width / 8;
+        Math.random() * groundGeometry.parameters.width -
+        groundGeometry.parameters.width / 2;
       return { x: x, z: z };
     });
     console.log(treePositions.length + " trees generated");
@@ -249,6 +200,44 @@ export class PortFolioPool {
           z: treePosition.z
         })
     );
+
+    const experienceBlocks = [
+      new ExperienceBlock(
+        this.scene,
+        this.world,
+        { x: 15, z: 35 },
+        { x: 24, y: 5, z: 16.2 },
+        "/images/experience/ProppsExperience.png"
+      ),
+      new ExperienceBlock(
+        this.scene,
+        this.world,
+        { x: -15, z: 45 },
+        { x: 24, y: 5, z: 20 },
+        "/images/experience/PlaygroundExperience.png"
+      ),
+      new ExperienceBlock(
+        this.scene,
+        this.world,
+        { x: 15, z: 57.7 },
+        { x: 24, y: 5, z: 19.2 },
+        "/images/experience/CoatesExperience.png"
+      ),
+      new ExperienceBlock(
+        this.scene,
+        this.world,
+        { x: -15, z: 70 },
+        { x: 24, y: 5, z: 20 },
+        "/images/experience/SplitWorksExperience.png"
+      ),
+      new ExperienceBlock(
+        this.scene,
+        this.world,
+        { x: 15, z: 80.8 },
+        { x: 24, y: 5, z: 17 },
+        "/images/experience/MooMooHereExperience.png"
+      )
+    ];
 
     const keyMap: { [id: string]: boolean } = {};
     const keyDownMap: { [id: string]: boolean } = {};
@@ -305,6 +294,9 @@ export class PortFolioPool {
       hostCar.updateCarPosition();
 
       // ramp.updateRampPosition();
+      experienceBlocks.forEach((block: ExperienceBlock) =>
+        block.updatePosition()
+      );
 
       if (
         Math.abs(this.hostCarPosition.x - hostCar.carBody.position.x) >= 0.1 ||

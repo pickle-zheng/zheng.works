@@ -8,7 +8,7 @@ const Game: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Zheng Works</title>
+        <title>zz works</title>
         <meta property='og:title' content='Game - Zheng Works' key='title' />
       </Head>
       <Canvas mode='portfolio' />

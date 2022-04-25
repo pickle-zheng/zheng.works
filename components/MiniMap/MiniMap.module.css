@@ -44,6 +44,8 @@
   border-radius: 16px;
   transition: all 0.3s ease-in-out;
   background-color: rgba(24, 24, 26, 1);
+  background-image: url("/images/Back.png");
+  background-size: cover;
   transform-origin: calc(100% - 20px) 20px;
   height: 250px;
   width: 250px;
