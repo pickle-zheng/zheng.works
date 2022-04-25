@@ -12,7 +12,8 @@ export class ExperienceBlock {
     world: CANNON.World,
     position: { x: number; z: number },
     dimension: { x: number; y: number; z: number },
-    experience: string
+    experience: string,
+    loaderManager: THREE.LoadingManager
   ) {
     this.scene = scene;
     this.world = world;
@@ -59,7 +60,7 @@ export class ExperienceBlock {
       this.dimension.z
     );
     const experiencePlaneMaterial = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load(experience),
+      map: new THREE.TextureLoader(loaderManager).load(experience),
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 1

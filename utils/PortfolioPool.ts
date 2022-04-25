@@ -158,7 +158,7 @@ export class PortFolioPool {
     groundMesh2.rotateX(-Math.PI / 2);
     groundMesh2.rotateZ(Math.PI);
     groundMesh2.position.x = 0;
-    groundMesh2.position.y = 0;
+    groundMesh2.position.y = 0.1;
     groundMesh2.position.z = 0;
     groundMesh2.receiveShadow = true;
     this.scene.add(groundMesh2);
@@ -208,35 +208,40 @@ export class PortFolioPool {
         this.world,
         { x: 15, z: 35 },
         { x: 24, y: 5, z: 16.2 },
-        "/images/experience/ProppsExperience.png"
+        "/images/experience/ProppsExperience.png",
+        this.loaderManager
       ),
       new ExperienceBlock(
         this.scene,
         this.world,
         { x: -15, z: 45 },
         { x: 24, y: 5, z: 20 },
-        "/images/experience/PlaygroundExperience.png"
+        "/images/experience/PlaygroundExperience.png",
+        this.loaderManager
       ),
       new ExperienceBlock(
         this.scene,
         this.world,
         { x: 15, z: 57.7 },
         { x: 24, y: 5, z: 19.2 },
-        "/images/experience/CoatesExperience.png"
+        "/images/experience/CoatesExperience.png",
+        this.loaderManager
       ),
       new ExperienceBlock(
         this.scene,
         this.world,
         { x: -15, z: 70 },
         { x: 24, y: 5, z: 20 },
-        "/images/experience/SplitWorksExperience.png"
+        "/images/experience/SplitWorksExperience.png",
+        this.loaderManager
       ),
       new ExperienceBlock(
         this.scene,
         this.world,
         { x: 15, z: 80.8 },
         { x: 24, y: 5, z: 17 },
-        "/images/experience/MooMooHereExperience.png"
+        "/images/experience/MooMooHereExperience.png",
+        this.loaderManager
       )
     ];
 

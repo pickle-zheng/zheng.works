@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 export class Phone {
   scene: THREE.Scene;
