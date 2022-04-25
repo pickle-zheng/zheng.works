@@ -20,6 +20,8 @@ const Canvas = ({ mode }: { mode: string }) => {
 
   const [carPositions, setCarPositions] = useState<any[]>();
 
+  const [loading, setLoading] = useState<boolean>(true);
+
   const socketInitializer = async (canvasRef: any): Promise<void> => {
     await fetch("/api/socket");
     socket = io();
@@ -55,6 +57,7 @@ const Canvas = ({ mode }: { mode: string }) => {
 
       manager.onLoad = function () {
         console.log("Loading complete!");
+        setLoading(false);
       };
 
       manager.onProgress = function (url, itemsLoaded, itemsTotal) {
@@ -135,6 +138,11 @@ const Canvas = ({ mode }: { mode: string }) => {
 
   return (
     <div>
+      {loading && (
+        <div className={styles.loading}>
+          <img src='/images/logo.png' alt='logo' />
+        </div>
+      )}
       <canvas ref={canvasRef} />
       <MiniMap
         carPositions={carPositions}
