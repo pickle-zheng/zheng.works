@@ -5,6 +5,7 @@ import io from "socket.io-client";
 
 import styles from "./Canvas.module.css";
 import MiniMap from "../MiniMap/MiniMap";
+import Logo from "../Logo/Logo";
 
 let socket: any;
 
@@ -140,6 +141,7 @@ const Canvas = ({ mode }: { mode: string }) => {
         groundSize={carpool?.groundSize}
         socketId={socket?.id}
       />
+      <Logo />
       <form
         className={`${styles.form} ${typingMessage && styles.formTyping}`}
         onSubmit={(e: React.SyntheticEvent) => {

@@ -8,6 +8,7 @@ import { RefObject } from "react";
 import { Car } from "./Car";
 import { Tree } from "./Tree";
 import { ExperienceBlock } from "./ExperienceBlock";
+import { CATSection } from "./CATSection";
 
 export class PortFolioPool {
   scene: THREE.Scene;
@@ -239,6 +240,8 @@ export class PortFolioPool {
       )
     ];
 
+    const catSection = new CATSection(this.scene, this.world);
+
     const keyMap: { [id: string]: boolean } = {};
     const keyDownMap: { [id: string]: boolean } = {};
     const onDocumentKey = (e: KeyboardEvent) => {
@@ -338,8 +341,11 @@ export class PortFolioPool {
             return { maxVelocity: 60, turning: 0.2 };
         }
       };
-
+      const playVideos = () => {
+        if (catSection.textureVid[0].paused) catSection.play();
+      };
       if (keyMap["w"] || keyMap["ArrowUp"]) {
+        playVideos();
         if (forwardVelocity < 0) forwardVelocity = 0;
         if (
           forwardVelocity < getPerformance(hostCar.carType).maxVelocity &&
@@ -349,17 +355,20 @@ export class PortFolioPool {
         thrusting = true;
       }
       if (keyMap["s"] || keyMap["ArrowDown"]) {
+        playVideos();
         if (forwardVelocity > 0) forwardVelocity = 0;
         if (forwardVelocity > -40.0 && forwardVelocity <= 0)
           forwardVelocity -= 0.5;
         thrusting = true;
       }
       if (keyMap["a"] || keyMap["ArrowLeft"]) {
+        playVideos();
         if (rightVelocity > -getPerformance(hostCar.carType).turning)
           rightVelocity -= 0.1;
         turning = true;
       }
       if (keyMap["d"] || keyMap["ArrowRight"]) {
+        playVideos();
         if (rightVelocity < getPerformance(hostCar.carType).turning)
           rightVelocity += 0.1;
         turning = true;

@@ -7,14 +7,18 @@
   z-index: 9;
   font-size: 12px;
   line-height: 16px;
-  color: #fff;
+  color: #000;
 }
 
 .orientations {
   position: absolute;
   height: 100%;
   width: 100%;
-  opacity: 0.3;
+  opacity: 0.6;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .orientations > div {
   position: absolute;
@@ -23,22 +27,26 @@
   font-size: 12px;
   line-height: 12px;
   text-align: center;
+  background-color: #fff;
+  padding: 4px;
+  border-radius: 100%;
+  box-sizing: content-box;
 }
 .orientations .north {
   top: 12px;
-  left: calc(50% - 6px);
+  left: calc(50% - 8px);
 }
 .orientations .east {
   right: 12px;
-  top: calc(50% - 6px);
+  top: calc(50% - 8px);
 }
 .orientations .south {
   bottom: 12px;
-  left: calc(50% - 6px);
+  left: calc(50% - 8px);
 }
 .orientations .west {
   left: 12px;
-  top: calc(50% - 6px);
+  top: calc(50% - 8px);
 }
 .wrapper {
   border-radius: 16px;
