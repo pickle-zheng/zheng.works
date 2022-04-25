@@ -11,7 +11,7 @@ const Game: NextPage = () => {
         <title>Game - Zheng Works</title>
         <meta property='og:title' content='Game - Zheng Works' key='title' />
       </Head>
-      <Canvas />
+      <Canvas mode='game' />
       <Instruction />
     </div>
   );
