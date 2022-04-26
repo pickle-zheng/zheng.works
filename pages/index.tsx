@@ -5,10 +5,9 @@ import Canvas from "../components/Canvas/Canvas";
 import Instruction from "../components/Instruction/Instruction";
 import { pageview } from "../utils/ga";
 import styles from "./portfolio.module.css";
-import { isMobile } from "react-device-detect";
 import DesktopOnly from "../components/DesktopOnly/DesktopOnly";
 
-const Home: NextPage = () => {
+const Home: NextPage = (props: any) => {
   const resizeHandler = () => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -18,6 +17,7 @@ const Home: NextPage = () => {
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
   }, []);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -39,7 +39,7 @@ const Home: NextPage = () => {
           }}
         />
       </Head>
-      {isMobile ? (
+      {props.deviceType === "mobile" ? (
         <DesktopOnly />
       ) : (
         <>
@@ -51,3 +51,20 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export async function getServerSideProps(context: {
+  req: { headers: { [x: string]: any } };
+}) {
+  const UA = context.req.headers["user-agent"];
+  const isMobile = Boolean(
+    UA.match(
+      /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
+    )
+  );
+
+  return {
+    props: {
+      deviceType: isMobile ? "mobile" : "desktop"
+    }
+  };
+}
