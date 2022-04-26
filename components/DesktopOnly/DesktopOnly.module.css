@@ -3,14 +3,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
   background-color: #18181a;
+  color: #fff;
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
-  color: #fff;
 }
 
 .desktopOnly h1 {
