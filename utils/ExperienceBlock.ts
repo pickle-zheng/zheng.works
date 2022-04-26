@@ -76,17 +76,6 @@ export class ExperienceBlock {
     experiencePlaneMesh.rotateY(Math.PI);
     this.blockGroup.add(experiencePlaneMesh);
 
-    const light = new THREE.SpotLight(0xffffff, 0.3);
-    light.position.set(0, 10 + this.dimension.y, 0);
-    light.castShadow = true;
-    light.shadow.mapSize.width = 2046;
-    light.shadow.mapSize.height = 2046;
-    light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 30;
-    light.shadow.camera.fov = 30;
-    light.penumbra = 0.3;
-    light.target = experiencePlaneMesh;
-    this.blockGroup.add(light);
     this.scene.add(this.blockGroup);
   }
   updatePosition() {

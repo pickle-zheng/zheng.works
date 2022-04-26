@@ -37,8 +37,8 @@ export class PortFolioPool {
     const light = new THREE.DirectionalLight(0xff0054, 0.3);
     light.position.set(45, 75, 24);
     light.castShadow = true;
-    light.shadow.mapSize.width = 16384 / 2;
-    light.shadow.mapSize.height = 16384 / 2;
+    light.shadow.mapSize.width = 2048;
+    light.shadow.mapSize.height = 2048;
     light.shadow.camera.near = 0.5;
     light.shadow.camera.far = 200;
     let d = 250;
@@ -47,11 +47,11 @@ export class PortFolioPool {
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    const light2 = new THREE.DirectionalLight(0xffffff, 0.8);
-    light2.position.set(-45, 50, -23);
+    const light2 = new THREE.DirectionalLight(0xffffff, 1);
+    light2.position.set(-35, 50, -23);
     light2.castShadow = true;
-    light2.shadow.mapSize.width = 16384 / 2;
-    light2.shadow.mapSize.height = 16384 / 2;
+    light2.shadow.mapSize.width = 2048;
+    light2.shadow.mapSize.height = 2048;
     light2.shadow.camera.near = 0.5;
     light2.shadow.camera.far = 200;
     light2.shadow.camera.left = -d;

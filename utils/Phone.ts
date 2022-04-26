@@ -44,27 +44,15 @@ export class Phone {
     // Create mesh
     var geometry = new THREE.BoxGeometry(
       size?.x ? size.x : 11,
-      size?.y ? size.y : 0.1,
+      0.1,
       size?.z ? size.z : 24
     );
     var material = new THREE.MeshStandardMaterial({ map: videoTexture });
     const mesh = new THREE.Mesh(geometry, material);
     this.PhoneGroup.add(mesh);
-    mesh.position.set(0, 0.97, 0);
+    mesh.position.set(0, size ? size.y / 2 : 0.97, 0);
 
     this.PhoneGroup.rotateY(Math.PI);
-
-    const light = new THREE.SpotLight(0xffffff, 0.15);
-    light.position.set(0, 50, 0);
-    light.castShadow = true;
-    light.shadow.mapSize.width = 2046;
-    light.shadow.mapSize.height = 2046;
-    light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 50;
-    light.shadow.camera.fov = 30;
-    light.penumbra = 0.3;
-    light.target = mesh;
-    this.PhoneGroup.add(light);
 
     this.PhoneGroup.position.set(position.x, 0, position.z);
 

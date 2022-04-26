@@ -165,8 +165,8 @@ export class Car {
     headlightLChaseL.position.set(-0.5, -0.3, -100);
     headlightL.position.set(-0.5, -0.2, -0.5);
     headlightL.target = headlightLChaseL;
-    headlightL.shadow.mapSize.width = 1024;
-    headlightL.shadow.mapSize.height = 1024;
+    headlightL.shadow.mapSize.width = 512;
+    headlightL.shadow.mapSize.height = 512;
     headlightL.shadow.camera.near = 0.5;
     headlightL.shadow.camera.far = 20;
     headlightL.shadow.camera.fov = 5;
@@ -185,8 +185,8 @@ export class Car {
     headlightLChaseR.position.set(0.5, -0.3, -100);
     headlightR.position.set(0.5, -0.2, -0.5);
     headlightR.target = headlightLChaseR;
-    headlightR.shadow.mapSize.width = 1024;
-    headlightR.shadow.mapSize.height = 1024;
+    headlightR.shadow.mapSize.width = 512;
+    headlightR.shadow.mapSize.height = 512;
     headlightR.shadow.camera.near = 0.5;
     headlightR.shadow.camera.far = 20;
     headlightR.shadow.camera.fov = 5;

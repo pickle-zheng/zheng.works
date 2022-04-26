@@ -38,8 +38,8 @@ export class Playground {
     this.light = new THREE.SpotLight(0xffffff, 0.2);
     this.light.position.set(this.ball.position.x, 20, this.ball.position.z);
     this.light.castShadow = true;
-    this.light.shadow.mapSize.width = 2046;
-    this.light.shadow.mapSize.height = 2046;
+    this.light.shadow.mapSize.width = 512;
+    this.light.shadow.mapSize.height = 512;
     this.light.shadow.camera.near = 0.5;
     this.light.shadow.camera.far = 21;
     this.light.shadow.camera.fov = 20;
