@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>zz works</title>
+        <title>zz</title>
         <meta property='og:title' content='Game - Zheng Works' key='title' />
       </Head>
       <Canvas mode='portfolio' />
