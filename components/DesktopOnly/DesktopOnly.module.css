@@ -13,6 +13,7 @@
   font-size: 3rem;
   margin: 0;
   width: 60%;
+  line-height: 1;
 }
 
 .desktopOnly p {
@@ -24,4 +25,9 @@
   width: 60%;
   margin-top: 1rem;
   font-weight: lighter;
+}
+
+.desktopOnly img {
+  width: 60%;
+  margin-bottom: 1rem;
 }

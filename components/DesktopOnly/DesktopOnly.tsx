@@ -14,8 +14,8 @@ const DesktopOnly = () => {
         Only
       </h1>
       <small>
-        None of the threeJS components are loaded here for mobile as memory leak
-        had been detected in iOS Safari.
+        None of the threeJS components are loaded here for mobile as a memory
+        leak had been detected in iOS Safari.
       </small>
     </div>
   );
