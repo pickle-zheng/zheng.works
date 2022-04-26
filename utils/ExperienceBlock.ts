@@ -59,7 +59,7 @@ export class ExperienceBlock {
       this.dimension.x,
       this.dimension.z
     );
-    const experiencePlaneMaterial = new THREE.MeshBasicMaterial({
+    const experiencePlaneMaterial = new THREE.MeshStandardMaterial({
       map: new THREE.TextureLoader(loaderManager).load(experience),
       side: THREE.DoubleSide,
       transparent: true,

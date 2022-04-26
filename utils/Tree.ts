@@ -22,7 +22,7 @@ export class Tree {
     });
 
     const treeTopGeometry: THREE.SphereGeometry = new THREE.SphereGeometry(
-      0.8,
+      0.4,
       6,
       6
     );
@@ -38,7 +38,7 @@ export class Tree {
     this.tree.add(treeTopGeometryMesh);
 
     const treeMidGeometry: THREE.SphereGeometry = new THREE.SphereGeometry(
-      1,
+      0.6,
       6,
       68
     );
@@ -54,7 +54,7 @@ export class Tree {
     this.tree.add(treeMidGeometryMesh);
 
     const treeLowerGeometry: THREE.SphereGeometry = new THREE.SphereGeometry(
-      1.2,
+      0.87,
       6,
       6
     );
@@ -62,9 +62,9 @@ export class Tree {
       treeLowerGeometry,
       treeMaterial
     );
-    treeLowerGeometryMesh.position.y = Math.random() + 1;
-    treeLowerGeometryMesh.position.x = Math.random() * 2 - 1;
-    treeLowerGeometryMesh.position.z = Math.random() * 2 - 1;
+    treeLowerGeometryMesh.position.y = Math.random() + 0.5;
+    treeLowerGeometryMesh.position.x = Math.random() * 1 - 0.5;
+    treeLowerGeometryMesh.position.z = Math.random() * 1 - 0.5;
     treeLowerGeometryMesh.rotateY(Math.PI / Math.random());
     treeLowerGeometryMesh.castShadow = true;
     this.tree.add(treeLowerGeometryMesh);

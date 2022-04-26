@@ -160,15 +160,15 @@ export class Car {
     }
 
     // heade lights
-    const headlightL = new THREE.SpotLight(0xffffff);
+    const headlightL = new THREE.SpotLight(0xffffff, 0.5);
     const headlightLChaseL = new THREE.Object3D();
-    headlightLChaseL.position.set(-0.5, -0.2, -100);
+    headlightLChaseL.position.set(-0.5, -0.3, -100);
     headlightL.position.set(-0.5, -0.2, -0.5);
     headlightL.target = headlightLChaseL;
     headlightL.shadow.mapSize.width = 1024;
     headlightL.shadow.mapSize.height = 1024;
     headlightL.shadow.camera.near = 0.5;
-    headlightL.shadow.camera.far = 200;
+    headlightL.shadow.camera.far = 20;
     headlightL.shadow.camera.fov = 5;
     headlightL.shadow.blurSamples = 10;
     headlightL.angle = Math.PI / 5;
@@ -180,15 +180,15 @@ export class Car {
     // const spotLightHelperL = new THREE.SpotLightHelper(headlightL);
     // this.scene.add(spotLightHelperL);
 
-    const headlightR = new THREE.SpotLight(0xffffff);
+    const headlightR = new THREE.SpotLight(0xffffff, 0.5);
     const headlightLChaseR = new THREE.Object3D();
-    headlightLChaseR.position.set(0.5, -0.2, -100);
+    headlightLChaseR.position.set(0.5, -0.3, -100);
     headlightR.position.set(0.5, -0.2, -0.5);
     headlightR.target = headlightLChaseR;
     headlightR.shadow.mapSize.width = 1024;
     headlightR.shadow.mapSize.height = 1024;
     headlightR.shadow.camera.near = 0.5;
-    headlightR.shadow.camera.far = 200;
+    headlightR.shadow.camera.far = 20;
     headlightR.shadow.camera.fov = 5;
     headlightR.shadow.blurSamples = 10;
     headlightR.angle = Math.PI / 6;

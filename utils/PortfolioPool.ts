@@ -9,6 +9,7 @@ import { Car } from "./Car";
 import { Tree } from "./Tree";
 import { ExperienceBlock } from "./ExperienceBlock";
 import { CATSection } from "./CATSection";
+import { Playground } from "./Playground";
 
 export class PortFolioPool {
   scene: THREE.Scene;
@@ -33,7 +34,7 @@ export class PortFolioPool {
     this.loaderManager = manager;
     this.scene = new THREE.Scene();
 
-    const light = new THREE.DirectionalLight(0xff0054, 0.8);
+    const light = new THREE.DirectionalLight(0xff0054, 0.3);
     light.position.set(45, 75, 24);
     light.castShadow = true;
     light.shadow.mapSize.width = 16384 / 2;
@@ -46,7 +47,7 @@ export class PortFolioPool {
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    const light2 = new THREE.DirectionalLight(0xffffff, 0.8);
     light2.position.set(-45, 50, -23);
     light2.castShadow = true;
     light2.shadow.mapSize.width = 16384 / 2;
@@ -91,7 +92,7 @@ export class PortFolioPool {
     this.world.gravity.set(0, -50, 0);
 
     const groundBodyMaterial = new CANNON.Material("groundMaterial");
-    groundBodyMaterial.friction = 0.6;
+    groundBodyMaterial.friction = 1;
     groundBodyMaterial.restitution = 0.6;
 
     //ground
@@ -101,10 +102,10 @@ export class PortFolioPool {
       this.groundSize.x,
       this.groundSize.y
     );
-    const getImage = (): THREE.MeshBasicMaterial => {
+    const getImage = (): THREE.MeshStandardMaterial => {
       var loader = new THREE.TextureLoader();
       var texture = loader.load("/images/Back.png");
-      var material = new THREE.MeshBasicMaterial({
+      var material = new THREE.MeshStandardMaterial({
         map: texture,
         side: THREE.DoubleSide,
         transparent: true,
@@ -247,6 +248,8 @@ export class PortFolioPool {
 
     const catSection = new CATSection(this.scene, this.world);
 
+    const playground = new Playground(this.scene, this.world);
+
     const keyMap: { [id: string]: boolean } = {};
     const keyDownMap: { [id: string]: boolean } = {};
     const onDocumentKey = (e: KeyboardEvent) => {
@@ -302,6 +305,7 @@ export class PortFolioPool {
       hostCar.updateCarPosition();
 
       // ramp.updateRampPosition();
+      playground.updateBallPosition();
       experienceBlocks.forEach((block: ExperienceBlock) =>
         block.updatePosition()
       );

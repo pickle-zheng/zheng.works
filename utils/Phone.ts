@@ -47,14 +47,14 @@ export class Phone {
       size?.y ? size.y : 0.1,
       size?.z ? size.z : 24
     );
-    var material = new THREE.MeshBasicMaterial({ map: videoTexture });
+    var material = new THREE.MeshStandardMaterial({ map: videoTexture });
     const mesh = new THREE.Mesh(geometry, material);
     this.PhoneGroup.add(mesh);
     mesh.position.set(0, 0.97, 0);
 
     this.PhoneGroup.rotateY(Math.PI);
 
-    const light = new THREE.SpotLight(0xffffff, 0.2);
+    const light = new THREE.SpotLight(0xffffff, 0.15);
     light.position.set(0, 50, 0);
     light.castShadow = true;
     light.shadow.mapSize.width = 2046;
