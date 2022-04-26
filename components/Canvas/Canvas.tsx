@@ -137,12 +137,10 @@ const Canvas = ({ mode }: { mode: string }) => {
   }, [typingMessage, carpool]);
 
   return (
-    <div>
-      {loading && (
-        <div className={styles.loading}>
-          <img src='/images/logo.png' alt='logo' />
-        </div>
-      )}
+    <div className={styles.canvasWrapper}>
+      <div
+        className={`${styles.loading} ${!loading && styles.loadingClose}`}
+      ></div>
       <canvas ref={canvasRef} />
       <MiniMap
         carPositions={carPositions}

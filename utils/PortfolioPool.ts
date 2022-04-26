@@ -92,7 +92,7 @@ export class PortFolioPool {
     this.world.gravity.set(0, -50, 0);
 
     const groundBodyMaterial = new CANNON.Material("groundMaterial");
-    groundBodyMaterial.friction = 1;
+    groundBodyMaterial.friction = 0.6;
     groundBodyMaterial.restitution = 0.6;
 
     //ground
@@ -179,8 +179,8 @@ export class PortFolioPool {
       { x: 0, y: 0 },
       Array(
         Math.floor(
-          (groundGeometry.parameters.height / 20) *
-            (groundGeometry.parameters.width / 20)
+          (groundGeometry.parameters.height / 40) *
+            (groundGeometry.parameters.width / 40)
         )
       )
     );
