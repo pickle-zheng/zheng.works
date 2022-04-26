@@ -16,8 +16,16 @@
 .desktopOnly h1 {
   font-size: 3rem;
   margin: 0;
+  width: 60%;
 }
 
 .desktopOnly p {
   margin: 0;
+  width: 60%;
+}
+
+.desktopOnly small {
+  width: 60%;
+  margin-top: 1rem;
+  font-weight: lighter;
 }

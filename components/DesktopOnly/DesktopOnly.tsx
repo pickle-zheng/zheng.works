@@ -5,7 +5,6 @@ const DesktopOnly = () => {
     <div className={styles.desktopOnly}>
       <img src='/images/logo.png' />
       <p> I've only built it so far to</p>
-
       <h1>
         Support
         <br />
@@ -13,6 +12,10 @@ const DesktopOnly = () => {
         <br />
         Only
       </h1>
+      <small>
+        None of the threeJS components are loaded here for mobile as memory leak
+        has been detected
+      </small>
     </div>
   );
 };
