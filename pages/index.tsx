@@ -5,10 +5,18 @@ import Canvas from "../components/Canvas/Canvas";
 import Instruction from "../components/Instruction/Instruction";
 import { pageview } from "../utils/ga";
 import styles from "./portfolio.module.css";
+import { isMobile } from "react-device-detect";
+import DesktopOnly from "../components/DesktopOnly/DesktopOnly";
 
 const Home: NextPage = () => {
+  const resizeHandler = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  };
   useEffect(() => {
     pageview("/portfolio-index");
+    resizeHandler();
+    window.addEventListener("resize", resizeHandler);
   }, []);
   return (
     <div className={styles.container}>
@@ -31,8 +39,13 @@ const Home: NextPage = () => {
           }}
         />
       </Head>
-      <Canvas mode='portfolio' />
-      <Instruction />
+      {isMobile ? (
+        <DesktopOnly />
+      ) : (
+        <>
+          <Canvas mode='portfolio' /> <Instruction />
+        </>
+      )}
     </div>
   );
 };
