@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 const Home: NextPage = () => {
   useEffect(() => {
-    ReactGA.initialize("G-9XFNTQ9CV0");
+    ReactGA.initialize("G-D3MKH4NHZ0");
     ReactGA.pageview(window.location.pathname + window.location.search);
   });
   return (
