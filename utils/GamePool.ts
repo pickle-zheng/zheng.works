@@ -100,7 +100,7 @@ export class GamePool {
     groundBodyMaterial.restitution = 0.6;
 
     //ground
-    this.groundSize = { x: 60, y: 120 };
+    this.groundSize = { x: 120, y: 60 };
 
     const groundGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(
       this.groundSize.x,
@@ -143,8 +143,8 @@ export class GamePool {
     this.world.addBody(groundBody);
 
     const groundGeometry2: THREE.PlaneGeometry = new THREE.PlaneGeometry(
-      60,
-      120
+      this.groundSize.x,
+      this.groundSize.y
     );
 
     const groundMaterial = new THREE.MeshPhysicalMaterial({
@@ -179,33 +179,33 @@ export class GamePool {
     // hostCar.addChaseCam(chaseCam);
     this.hostCar = hostCar;
 
-    const treeArray: any[] = Array.apply(
-      { x: 0, y: 0 },
-      Array(
-        Math.floor(
-          (groundGeometry.parameters.height / 40) *
-            (groundGeometry.parameters.width / 40)
-        )
-      )
-    );
-    const treePositions = treeArray.map(() => {
-      const x: number =
-        Math.random() * groundGeometry.parameters.height -
-        groundGeometry.parameters.height / 2;
-      const z: number =
-        Math.random() * groundGeometry.parameters.width -
-        groundGeometry.parameters.width / 2;
-      return { x: x, z: z };
-    });
-    console.log(treePositions.length + " trees generated");
+    // const treeArray: any[] = Array.apply(
+    //   { x: 0, y: 0 },
+    //   Array(
+    //     Math.floor(
+    //       (groundGeometry.parameters.height / 40) *
+    //         (groundGeometry.parameters.width / 40)
+    //     )
+    //   )
+    // );
+    // const treePositions = treeArray.map(() => {
+    //   const x: number =
+    //     Math.random() * groundGeometry.parameters.height -
+    //     groundGeometry.parameters.height / 2;
+    //   const z: number =
+    //     Math.random() * groundGeometry.parameters.width -
+    //     groundGeometry.parameters.width / 2;
+    //   return { x: x, z: z };
+    // });
+    // console.log(treePositions.length + " trees generated");
 
-    const trees = treePositions.map(
-      (treePosition: { x: number; z: number }) =>
-        new Tree(this.scene, this.world, "normal", {
-          x: treePosition.x,
-          z: treePosition.z
-        })
-    );
+    // const trees = treePositions.map(
+    //   (treePosition: { x: number; z: number }) =>
+    //     new Tree(this.scene, this.world, "normal", {
+    //       x: treePosition.x,
+    //       z: treePosition.z
+    //     })
+    // );
 
     const playground = new GamePlayground(this.scene, this.world, setScore);
 
