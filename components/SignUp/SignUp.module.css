@@ -1,0 +1,97 @@
+.signUp {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.wrapper {
+  padding: 30px;
+  border-radius: 16px;
+  transition: all 0.3s ease-in-out;
+  background-color: #18181a;
+  color: white;
+  min-width: 500px;
+}
+
+.wrapper input {
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: "Outfit", sans-serif;
+  padding: 15px 30px;
+  border-radius: 16px;
+  outline: none;
+  border: none;
+}
+
+.wrapper button {
+  background: none;
+  border: 2px solid #fff;
+  font-family: "Outfit", sans-serif;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 15px 30px;
+  border-radius: 16px;
+  outline: none;
+  float: right;
+  cursor: pointer;
+}
+
+.wrapper button:hover {
+  background: #fff;
+  color: #18181a;
+}
+
+.wrapper button:disabled {
+  background: #adadad;
+  color: #7b7b7b;
+  cursor: not-allowed;
+  border-color: #adadad;
+}
+
+.carType {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.carType input {
+  display: none;
+}
+
+.carType label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 15px 30px;
+  border-radius: 16px;
+  font-family: "Outfit", sans-serif;
+  border: 2px solid transparent;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.carType label:last-of-type {
+  margin-right: 0;
+}
+.carType label:hover {
+  border-color: #373737;
+}
+.carType .selected {
+  border: 2px solid #fff;
+  background-color: #000;
+}
+
+.wrapper .host {
+  float: left;
+  border-color: #000;
+  background-color: #000;
+}
