@@ -53,3 +53,26 @@
 .loadingClose {
   transform: scale(0);
 }
+
+.scoreboard {
+  z-index: 99;
+  position: absolute;
+  display: flex;
+  bottom: 10vh;
+  width: 200px;
+  padding: 20px;
+  justify-content: space-around;
+  align-items: center;
+  color: #fff;
+  background-color: #18181a;
+  font-size: 20px;
+  border-radius: 50px;
+}
+.scoreboard > div {
+  margin: 0 20px;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 10px;
+  width: 50px;
+  text-align: center;
+}

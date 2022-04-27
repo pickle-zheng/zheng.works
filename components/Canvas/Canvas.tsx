@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CarPool } from "../../utils/Carpool";
 import { PortFolioPool } from "../../utils/PortfolioPool";
+import { GamePool } from "../../utils/GamePool";
 import io from "socket.io-client";
 
 import styles from "./Canvas.module.css";
@@ -22,6 +23,8 @@ const Canvas = ({ mode }: { mode: string }) => {
 
   const [loading, setLoading] = useState<boolean>(true);
 
+  const [score, setScore] = useState<number[]>([0, 0]);
+
   const socketInitializer = async (canvasRef: any): Promise<void> => {
     await fetch("/api/socket");
     socket = io();
@@ -31,7 +34,7 @@ const Canvas = ({ mode }: { mode: string }) => {
       if (mode === "portfolio") {
         setCarpool(new PortFolioPool(canvasRef, socket));
       } else {
-        setCarpool(new CarPool(canvasRef, socket));
+        setCarpool(new GamePool(canvasRef, socket, setScore));
       }
     });
   };
@@ -142,12 +145,19 @@ const Canvas = ({ mode }: { mode: string }) => {
         className={`${styles.loading} ${!loading && styles.loadingClose}`}
       ></div>
       <canvas ref={canvasRef} />
-      <MiniMap
-        carPositions={carPositions}
-        groundSize={carpool?.groundSize}
-        socketId={socket?.id}
-      />
+      {mode === "portfolio" && (
+        <MiniMap
+          carPositions={carPositions}
+          groundSize={carpool?.groundSize}
+          socketId={socket?.id}
+        />
+      )}
       <Logo />
+      {mode !== "portfolio" && (
+        <div className={styles.scoreboard}>
+          <div>{score[0]}</div>:<div>{score[1]}</div>
+        </div>
+      )}
       <form
         className={`${styles.form} ${typingMessage && styles.formTyping}`}
         onSubmit={(e: React.SyntheticEvent) => {
