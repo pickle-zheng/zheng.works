@@ -2,15 +2,18 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { userInfo } from "../../pages/game";
 import styles from "./SignUp.module.css";
+import randomstring from "randomstring";
 
 const SignUp = ({
   setUserInfo,
   setSessionId
 }: {
   setUserInfo: Dispatch<SetStateAction<userInfo | null>>;
-  setSessionId: Dispatch<SetStateAction<string | null>>;
+  setSessionId: Dispatch<
+    SetStateAction<{ type: string; sessionId: string } | null>
+  >;
 }) => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   return (
     <div className={styles.signUp}>
       <div className={styles.wrapper}>
@@ -50,7 +53,6 @@ const UserInfoForm = ({
         setUserInfo(values);
         setStep(1);
         setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
           setSubmitting(false);
         }, 400);
       }}
@@ -107,8 +109,11 @@ const UserInfoForm = ({
 const SessionForm = ({
   setSessionId
 }: {
-  setSessionId: Dispatch<SetStateAction<string | null>>;
+  setSessionId: Dispatch<
+    SetStateAction<{ type: string; sessionId: string } | null>
+  >;
 }) => {
+  const [type, setType] = useState("remote");
   return (
     <Formik
       initialValues={{ id: "" }}
@@ -120,14 +125,13 @@ const SessionForm = ({
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
-        setSessionId(values.id);
+        setSessionId({ type: type, sessionId: values.id });
         setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
           setSubmitting(false);
         }, 400);
       }}
     >
-      {({ isSubmitting, values }) => (
+      {({ isSubmitting, values, setFieldValue }) => (
         <Form>
           <p>Enter your Session ID</p>
           <Field type='text' name='id' placeholder='xxxx-xxxx-xxx' />
@@ -136,7 +140,15 @@ const SessionForm = ({
           <button type='submit' disabled={isSubmitting || values.id === ""}>
             Start 🔥
           </button>
-          <button type='submit' disabled={isSubmitting} className={styles.host}>
+          <button
+            type='submit'
+            onClick={() => {
+              const sessionID = randomstring.generate();
+              setFieldValue("id", sessionID);
+              setSessionId({ type: "host", sessionId: sessionID });
+            }}
+            className={styles.host}
+          >
             Host one
           </button>
         </Form>

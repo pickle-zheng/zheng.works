@@ -6,10 +6,8 @@ import * as CANNON from "cannon-es";
 import CannonDebugRenderer from "./cannonDebugRenderer";
 import { Dispatch, RefObject, SetStateAction } from "react";
 import { Car } from "./Car";
-import { Tree } from "./Tree";
-import { ExperienceBlock } from "./ExperienceBlock";
-import { CATSection } from "./CATSection";
 import { GamePlayground } from "./GamePlayground";
+import { userInfo } from "../pages/game";
 
 export class GamePool {
   scene: THREE.Scene;
@@ -23,12 +21,20 @@ export class GamePool {
   carTypes = ["pickup", "sedan", "jeep"];
   groundSize: { x: number; y: number };
   loaderManager: THREE.LoadingManager;
+  connectionType: string;
+  sessionId: string;
+  userName: string;
   constructor(
     canvasRef: RefObject<HTMLCanvasElement>,
     socket: any,
-    setScore: Dispatch<SetStateAction<number[]>>
+    setScore: Dispatch<SetStateAction<number[]>>,
+    sessionInfo: { type: string; sessionId: string },
+    userInfo: userInfo
   ) {
     this.hostCarPosition = { x: 0, y: 0, z: 0 };
+    this.connectionType = sessionInfo.type;
+    this.sessionId = sessionInfo.sessionId;
+    this.userName = userInfo.name;
     this.socketId = socket.id;
     if (!canvasRef.current) {
       throw Error("Canvas ref is not defined");
@@ -63,7 +69,9 @@ export class GamePool {
     light2.shadow.camera.top = d;
     light2.shadow.camera.bottom = -d;
 
-    this.hostCarTypeIndex = 0;
+    this.hostCarTypeIndex = this.carTypes.findIndex(
+      (e) => e === userInfo.carType
+    );
     this.scene.add(light);
     this.scene.add(light2);
 
@@ -174,6 +182,7 @@ export class GamePool {
       "host",
       this.carTypes[this.hostCarTypeIndex],
       this.loaderManager,
+      this.userName,
       new THREE.Vector3(Math.random() * 20 - 10, 0.5, Math.random() * 20)
     );
     // hostCar.addChaseCam(chaseCam);
@@ -348,6 +357,7 @@ export class GamePool {
           "host",
           this.carTypes[this.hostCarTypeIndex],
           this.loaderManager,
+          this.userName,
           new THREE.Vector3(Math.random() * 20 - 10, 0.5, Math.random() * 20)
         );
         camera.position.set(0, 100, -1);
@@ -368,6 +378,7 @@ export class GamePool {
           "host",
           this.carTypes[this.hostCarTypeIndex],
           this.loaderManager,
+          this.userName,
           new THREE.Vector3(Math.random() * 20 - 10, 0.5, Math.random() * 20)
         );
         forwardVelocity = 0;
@@ -440,7 +451,8 @@ export class GamePool {
       this.world,
       "remote",
       carType,
-      this.loaderManager
+      this.loaderManager,
+      "unknown"
     );
     this.activeCars.push({
       id: id,

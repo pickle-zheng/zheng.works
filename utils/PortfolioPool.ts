@@ -170,6 +170,7 @@ export class PortFolioPool {
       "host",
       this.carTypes[this.hostCarTypeIndex],
       this.loaderManager,
+      "unknown",
       new THREE.Vector3(0, 0.5, 0)
     );
     // hostCar.addChaseCam(chaseCam);
@@ -398,6 +399,7 @@ export class PortFolioPool {
           "host",
           this.carTypes[this.hostCarTypeIndex],
           this.loaderManager,
+          "unknown",
           new THREE.Vector3(0, 0.5, 0)
         );
         camera.position.set(0, 100, -1);
@@ -418,6 +420,7 @@ export class PortFolioPool {
           "host",
           this.carTypes[this.hostCarTypeIndex],
           this.loaderManager,
+          "unknown",
           new THREE.Vector3(0, 0.5, 0)
         );
         forwardVelocity = 0;
@@ -490,7 +493,8 @@ export class PortFolioPool {
       this.world,
       "remote",
       carType,
-      this.loaderManager
+      this.loaderManager,
+      "unknown"
     );
     this.activeCars.push({
       id: id,

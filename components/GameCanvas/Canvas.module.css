@@ -1,0 +1,78 @@
+.canvasWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: calc(var(--vh, 1vh) * 100);
+  width: 100vw;
+}
+.form {
+  z-index: 99;
+  position: absolute;
+  display: flex;
+  bottom: 10vh;
+  width: 100%;
+  transform: translateY(100vh);
+  transition: transform 0.3s cubic-bezier(0.31, -0.34, 0.48, 1.37);
+  justify-content: center;
+}
+
+.formTyping {
+  transform: translateY(0);
+}
+
+.form input {
+  appearance: none;
+  outline: none;
+  padding: 16px;
+  border-radius: 48px;
+  background-color: #18181a;
+  border: none;
+  width: 50%;
+  color: #fff;
+}
+
+.loading {
+  position: absolute;
+  z-index: 999999;
+  height: 200vw;
+  width: 200vw;
+  background-image: url("/images/logo.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #18181a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transform: scale(1);
+  border-radius: 100%;
+  transition: transform 0.5s cubic-bezier(1, -1.24, 0.58, 1.6);
+}
+
+.loadingClose {
+  transform: scale(0);
+}
+
+.scoreboard {
+  z-index: 99;
+  position: absolute;
+  display: flex;
+  bottom: 10vh;
+  width: 200px;
+  padding: 20px;
+  justify-content: space-around;
+  align-items: center;
+  color: #fff;
+  background-color: #18181a;
+  font-size: 20px;
+  border-radius: 50px;
+}
+.scoreboard > div {
+  margin: 0 20px;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 10px;
+  width: 50px;
+  text-align: center;
+}

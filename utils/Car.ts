@@ -3,6 +3,8 @@ import * as CANNON from "cannon-es";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 
 export class Car {
   car: THREE.Group;
@@ -26,12 +28,14 @@ export class Car {
   label: HTMLDivElement;
   messageTimeout: NodeJS.Timeout | null | undefined;
   carType: string;
+  userName: string | null;
   constructor(
     scene: THREE.Scene,
     world: CANNON.World,
     type: string,
     carType: string,
     loaderManager: THREE.LoadingManager,
+    userName: string | null,
     carPosition?: THREE.Vector3
   ) {
     this.carType = carType;
@@ -40,6 +44,7 @@ export class Car {
     let carBodyHeight: number;
     let wheelConstraintHeight: number;
     let bodyHeightOffset: number;
+    this.userName = userName !== "unknown" ? userName : null;
     switch (this.carType) {
       case "pickup":
         carBodyColor = 0xffbd00;
@@ -201,6 +206,41 @@ export class Car {
     // this.scene.add(spotLightHelper);
 
     // this.car.add(carCabinMesh);
+
+    if (this.userName !== null) {
+      const loader = new FontLoader();
+      const font = loader.load(
+        "fonts/outfit.json",
+
+        (font) => {
+          // @ts-ignore
+          const geometry = new TextGeometry(this.userName, {
+            font: font,
+            size: 0.3,
+            height: 0.1,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 0.05,
+            bevelSize: 0.0,
+            bevelOffset: 0,
+            bevelSegments: 1
+          });
+          1;
+          const userNameMesh = new THREE.Mesh(
+            geometry,
+            new THREE.MeshLambertMaterial({ color: 0x000000 })
+          );
+          userNameMesh.rotateX(-Math.PI / 2);
+          userNameMesh.position.x = -0.2;
+          userNameMesh.position.y = 0.02;
+          userNameMesh.position.z = -0.6;
+          this.car.add(userNameMesh);
+        },
+        (err) => {
+          console.log("An error happened");
+        }
+      );
+    }
     this.scene.add(this.car);
 
     const carBodyShape = new CANNON.Box(new CANNON.Vec3(0.6, carBodyHeight, 1));
