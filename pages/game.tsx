@@ -6,6 +6,7 @@ import GameCanvas from "../components/GameCanvas/GameCanvas";
 import Instruction from "../components/Instruction/Instruction";
 import SignUp from "../components/SignUp/SignUp";
 import styles from "./game.module.css";
+import userStore from "../stores/userStore";
 
 export type userInfo = {
   name: string;
@@ -14,22 +15,15 @@ export type userInfo = {
 };
 
 const Game: NextPage = () => {
-  const [userInfo, setUserInfo] = useState<userInfo | null>(null);
-  const [sessionId, setSessionId] = useState<{
-    type: string;
-    sessionId: string;
-  } | null>(null);
+  const userInfo = userStore((state) => state.userInfo);
   return (
     <div className={styles.container}>
       <Head>
         <title>zz - 🔥</title>
         <meta property='og:title' content='Game - Zheng Works' key='title' />
       </Head>
-      {userInfo && sessionId ? (
-        <GameCanvas sessionInfo={sessionId} userInfo={userInfo} />
-      ) : (
-        <SignUp setUserInfo={setUserInfo} setSessionId={setSessionId} />
-      )}
+      <SignUp hide={userInfo !== null} />
+      {userInfo && <GameCanvas userInfo={userInfo} />}
       <Instruction />
     </div>
   );

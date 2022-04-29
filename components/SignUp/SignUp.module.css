@@ -7,6 +7,10 @@
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.hide {
+  display: none;
+}
+
 .wrapper {
   padding: 30px;
   border-radius: 16px;

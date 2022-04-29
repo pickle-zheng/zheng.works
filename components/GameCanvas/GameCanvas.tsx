@@ -11,13 +11,7 @@ import Logo from "../Logo/Logo";
 
 let socket: any;
 
-const GameCanvas = ({
-  sessionInfo,
-  userInfo
-}: {
-  sessionInfo: { type: string; sessionId: string };
-  userInfo: userInfo;
-}) => {
+const GameCanvas = ({ userInfo }: { userInfo: userInfo }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -38,9 +32,7 @@ const GameCanvas = ({
 
     socket.on("connect", () => {
       console.log("connected", socket.id);
-      setCarpool(
-        new GamePool(canvasRef, socket, setScore, sessionInfo, userInfo)
-      );
+      setCarpool(new GamePool(canvasRef, socket, setScore, userInfo));
     });
   };
 

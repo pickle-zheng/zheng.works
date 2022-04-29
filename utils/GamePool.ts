@@ -21,19 +21,15 @@ export class GamePool {
   carTypes = ["pickup", "sedan", "jeep"];
   groundSize: { x: number; y: number };
   loaderManager: THREE.LoadingManager;
-  connectionType: string;
-  sessionId: string;
   userName: string;
   constructor(
     canvasRef: RefObject<HTMLCanvasElement>,
     socket: any,
     setScore: Dispatch<SetStateAction<number[]>>,
-    sessionInfo: { type: string; sessionId: string },
     userInfo: userInfo
   ) {
     this.hostCarPosition = { x: 0, y: 0, z: 0 };
-    this.connectionType = sessionInfo.type;
-    this.sessionId = sessionInfo.sessionId;
+
     this.userName = userInfo.name;
     this.socketId = socket.id;
     if (!canvasRef.current) {

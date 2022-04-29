@@ -207,40 +207,6 @@ export class Car {
 
     // this.car.add(carCabinMesh);
 
-    if (this.userName !== null) {
-      const loader = new FontLoader();
-      const font = loader.load(
-        "fonts/outfit.json",
-
-        (font) => {
-          // @ts-ignore
-          const geometry = new TextGeometry(this.userName, {
-            font: font,
-            size: 0.3,
-            height: 0.1,
-            curveSegments: 12,
-            bevelEnabled: true,
-            bevelThickness: 0.05,
-            bevelSize: 0.0,
-            bevelOffset: 0,
-            bevelSegments: 1
-          });
-          1;
-          const userNameMesh = new THREE.Mesh(
-            geometry,
-            new THREE.MeshLambertMaterial({ color: 0x000000 })
-          );
-          userNameMesh.rotateX(-Math.PI / 2);
-          userNameMesh.position.x = -0.2;
-          userNameMesh.position.y = 0.02;
-          userNameMesh.position.z = -0.6;
-          this.car.add(userNameMesh);
-        },
-        (err) => {
-          console.log("An error happened");
-        }
-      );
-    }
     this.scene.add(this.car);
 
     const carBodyShape = new CANNON.Box(new CANNON.Vec3(0.6, carBodyHeight, 1));
