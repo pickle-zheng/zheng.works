@@ -9,7 +9,7 @@ const SignUp = ({ hide }: { hide: boolean }) => {
   return (
     <div className={`${styles.signUp}  ${hide && styles.hide}`}>
       <div className={styles.wrapper}>
-        <h1>G'day, Socceroo 🦘</h1>
+        <h1>Gday, Socceroo 🦘</h1>
         <UserInfoForm />
       </div>
     </div>

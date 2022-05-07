@@ -216,7 +216,8 @@ export class CarPool {
       this.world,
       "host",
       this.carTypes[this.hostCarTypeIndex],
-      this.loaderManager
+      this.loaderManager,
+      null
     );
     // hostCar.addChaseCam(chaseCam);
     this.hostCar = hostCar;
@@ -398,7 +399,8 @@ export class CarPool {
           this.world,
           "host",
           this.carTypes[this.hostCarTypeIndex],
-          this.loaderManager
+          this.loaderManager,
+          null
         );
         camera.position.set(0, 100, -1);
         forwardVelocity = 0;
@@ -417,7 +419,8 @@ export class CarPool {
           this.world,
           "host",
           this.carTypes[this.hostCarTypeIndex],
-          this.loaderManager
+          this.loaderManager,
+          null
         );
         forwardVelocity = 0;
         rightVelocity = 0;
@@ -489,7 +492,8 @@ export class CarPool {
       this.world,
       "remote",
       carType,
-      this.loaderManager
+      this.loaderManager,
+      null
     );
     this.activeCars.push({
       id: id,
