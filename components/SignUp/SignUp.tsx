@@ -1,8 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { userInfo } from "../../pages/game";
 import styles from "./SignUp.module.css";
-import randomstring from "randomstring";
 import userStore from "../../stores/userStore";
 
 const SignUp = ({ hide }: { hide: boolean }) => {

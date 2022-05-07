@@ -19,13 +19,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "@types/dat.gui": "^0.7.7",
-    "@types/node": "17.0.22",
-    "@types/react": "^17.0.41",
-    "@types/react-dom": "^17.0.10",
-    "@types/react-fontawesome": "^1.6.5",
-    "@types/three": "^0.138.0",
-    "@types/uniqid": "^5.3.2",
     "cannon-es": "^0.19.0",
     "dat.gui": "^0.7.9",
     "eslint": "8.11.0",
@@ -44,6 +37,12 @@
     "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
-    "@types/randomstring": "^1.1.8"
+    "@types/dat.gui": "^0.7.7",
+    "@types/node": "17.0.22",
+    "@types/react": "^17.0.41",
+    "@types/react-dom": "^17.0.10",
+    "@types/react-fontawesome": "^1.6.5",
+    "@types/three": "^0.138.0",
+    "@types/uniqid": "^5.3.2"
   }
 }
