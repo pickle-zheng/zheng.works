@@ -33,8 +33,6 @@ const Canvas = ({ mode }: { mode: string }) => {
       console.log("connected", socket.id);
       if (mode === "portfolio") {
         setCarpool(new PortFolioPool(canvasRef, socket));
-      } else {
-        setCarpool(new GamePool(canvasRef, socket, setScore));
       }
     });
   };
