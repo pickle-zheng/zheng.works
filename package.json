@@ -12,7 +12,7 @@
     "deploy": "npm run submit-docker && gcloud beta run deploy zhengdotworks --image gcr.io/zheng-works-australia/nextjs --region australia-southeast1 --platform managed --allow-unauthenticated --quiet"
   },
   "engines": {
-    "node": "17.x"
+    "node": "18.x"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
@@ -43,7 +43,5 @@
     "@types/three": "^0.138.0",
     "@types/uniqid": "^5.3.2"
   },
-  "devDependencies": {
-
-  }
+  "devDependencies": {}
 }
