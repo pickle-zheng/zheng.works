@@ -3,7 +3,6 @@ import Head from "next/head";
 import { useEffect } from "react";
 import Canvas from "../components/Canvas/Canvas";
 import Instruction from "../components/Instruction/Instruction";
-import { pageview } from "../utils/ga";
 import styles from "./portfolio.module.css";
 import DesktopOnly from "../components/DesktopOnly/DesktopOnly";
 
@@ -13,7 +12,6 @@ const Home: NextPage = (props: any) => {
     document.documentElement.style.setProperty("--vh", `${vh}px`);
   };
   useEffect(() => {
-    pageview("/portfolio-index");
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
   }, []);

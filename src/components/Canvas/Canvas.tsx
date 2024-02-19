@@ -103,12 +103,6 @@ const Canvas = ({ mode }: { mode: string }) => {
         if (carpool) carpool.addMessage(message);
       });
     }
-    return () => {
-      socket.off("car-connected");
-      socket.off("car-disconnect");
-      socket.off("cars-position");
-      socket.off("new-message");
-    };
   }, [carpool, socket, carPositions]);
 
   useEffect(() => {
