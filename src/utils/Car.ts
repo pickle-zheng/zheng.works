@@ -1,10 +1,7 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
-import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 
 export class Car {
   car: THREE.Group;

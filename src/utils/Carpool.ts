@@ -1,6 +1,4 @@
 import * as THREE from "three";
-import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // import { GUI } from "dat.gui";
 import * as CANNON from "cannon-es";
 import CannonDebugRenderer from "./cannonDebugRenderer";
@@ -9,6 +7,7 @@ import { Car } from "./Car";
 import { Tree } from "./Tree";
 import { Ramp } from "./Ramp";
 import { SpeedNet } from "./SpeedNet";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 
 export class CarPool {
   scene: THREE.Scene;

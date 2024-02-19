@@ -1,6 +1,5 @@
 import * as THREE from "three";
-import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
 // import { GUI } from "dat.gui";
 import * as CANNON from "cannon-es";
 import CannonDebugRenderer from "./cannonDebugRenderer";
@@ -8,6 +7,7 @@ import { Dispatch, RefObject, SetStateAction } from "react";
 import { Car } from "./Car";
 import { GamePlayground } from "./GamePlayground";
 import { userInfo } from "../pages/game";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 
 export class GamePool {
   scene: THREE.Scene;

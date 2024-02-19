@@ -1,6 +1,5 @@
 import * as THREE from "three";
-import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
 // import { GUI } from "dat.gui";
 import * as CANNON from "cannon-es";
 import CannonDebugRenderer from "./cannonDebugRenderer";
@@ -10,6 +9,7 @@ import { Tree } from "./Tree";
 import { ExperienceBlock } from "./ExperienceBlock";
 import { CATSection } from "./CATSection";
 import { Playground } from "./Playground";
+import { CSS2DRenderer } from "three/examples/jsm/Addons.js";
 
 export class PortFolioPool {
   scene: THREE.Scene;
