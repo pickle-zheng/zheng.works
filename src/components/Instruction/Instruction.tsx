@@ -54,7 +54,7 @@ const Instruction = () => {
           </div>
           <div>Reset car</div>
         </div>
-        <div className={styles.row}>
+        {/* <div className={styles.row}>
           <div>
             <FontAwesomeIcon
               icon={faArrowTurnDown}
@@ -62,7 +62,7 @@ const Instruction = () => {
             />
           </div>
           <div>Send a message</div>
-        </div>
+        </div> */}
         <div className={styles.row}>
           <div>TAB</div>
           <div>Change Car</div>

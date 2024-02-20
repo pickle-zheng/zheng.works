@@ -23,9 +23,9 @@ export class PortFolioPool {
   carTypes = ["pickup", "sedan", "jeep"];
   groundSize: { x: number; y: number };
   loaderManager: THREE.LoadingManager;
-  constructor(canvasRef: RefObject<HTMLCanvasElement>, socket: any) {
+  constructor(canvasRef: RefObject<HTMLCanvasElement>, socket?: any) {
     this.hostCarPosition = { x: 0, y: 0, z: 0 };
-    this.socketId = socket.id;
+    this.socketId = socket?.id;
     if (!canvasRef.current) {
       throw Error("Canvas ref is not defined");
     }
@@ -34,7 +34,7 @@ export class PortFolioPool {
     this.loaderManager = manager;
     this.scene = new THREE.Scene();
 
-    const light = new THREE.DirectionalLight(0xff0054, 0.3);
+    const light = new THREE.DirectionalLight(0xffffff, 0.9);
     light.position.set(45, 75, 24);
     light.castShadow = true;
     light.shadow.mapSize.width = 2048;
@@ -143,14 +143,14 @@ export class PortFolioPool {
       200
     );
 
-    const groundMaterial = new THREE.MeshPhysicalMaterial({
-      metalness: 0,
-      roughness: 0.5,
-      reflectivity: 0.2,
-      clearcoat: 0.5,
-      clearcoatRoughness: 0.5,
-      color: 0xff0054
-    });
+    // const groundMaterial = new THREE.MeshPhysicalMaterial({
+    //   metalness: 0,
+    //   roughness: 0.5,
+    //   reflectivity: 0.2,
+    //   clearcoat: 0.5,
+    //   clearcoatRoughness: 0.5,
+    //   color: 0xff0054
+    // });
 
     const groundMesh2: THREE.Mesh = new THREE.Mesh(
       groundGeometry2,
@@ -196,13 +196,13 @@ export class PortFolioPool {
     });
     console.log(treePositions.length + " trees generated");
 
-    const trees = treePositions.map(
-      (treePosition: { x: number; z: number }) =>
-        new Tree(this.scene, this.world, "normal", {
-          x: treePosition.x,
-          z: treePosition.z
-        })
-    );
+    // const trees = treePositions.map(
+    //   (treePosition: { x: number; z: number }) =>
+    //     new Tree(this.scene, this.world, "normal", {
+    //       x: treePosition.x,
+    //       z: treePosition.z
+    //     })
+    // );
 
     const experienceBlocks = [
       new ExperienceBlock(
@@ -315,8 +315,8 @@ export class PortFolioPool {
         Math.abs(this.hostCarPosition.x - hostCar.carBody.position.x) >= 0.1 ||
         Math.abs(this.hostCarPosition.z - hostCar.carBody.position.z) >= 0.1
       ) {
-        socket.emit("car-position-change", {
-          id: socket.id,
+        socket?.emit("car-position-change", {
+          id: socket?.id,
           position: hostCar.carBody.position,
           quaternion: hostCar.carBody.quaternion,
           wheelPosition: {

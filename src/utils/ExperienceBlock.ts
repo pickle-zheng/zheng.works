@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
-import { Light } from "three";
 export class ExperienceBlock {
   scene: THREE.Scene;
   world: CANNON.World;

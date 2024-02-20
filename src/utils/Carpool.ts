@@ -33,7 +33,7 @@ export class CarPool {
     this.loaderManager = manager;
     this.scene = new THREE.Scene();
 
-    const light = new THREE.DirectionalLight(0xff0054, 0.8);
+    const light = new THREE.DirectionalLight(0xff0054, 1);
     light.position.set(30, 35, 15);
     light.castShadow = true;
     light.shadow.mapSize.width = 16384 / 2;

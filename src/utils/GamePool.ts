@@ -40,7 +40,7 @@ export class GamePool {
     this.loaderManager = manager;
     this.scene = new THREE.Scene();
 
-    const light = new THREE.DirectionalLight(0xff0054, 0.3);
+    const light = new THREE.DirectionalLight(0xff0054, 0.5);
     light.position.set(45, 75, 24);
     light.castShadow = true;
     light.shadow.mapSize.width = 2048;

@@ -13,7 +13,7 @@
   padding: 24px 32px;
   border-radius: 16px;
   transition: all 0.3s ease-in-out;
-  background-color: #18181a;
+  background-color: #0e0b0c;
   transform-origin: calc(100% - 20px) 20px;
 }
 .hide {

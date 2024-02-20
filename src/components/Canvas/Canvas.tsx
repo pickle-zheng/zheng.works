@@ -37,9 +37,12 @@ const Canvas = ({ mode }: { mode: string }) => {
   //   });
   // };
 
-  // useEffect(() => {
-  //   socketInitializer(canvasRef);
-  // }, []);
+  useEffect(() => {
+    if (mode === "portfolio") {
+      setCarpool(new PortFolioPool(canvasRef));
+    }
+    // socketInitializer(canvasRef);
+  }, [mode]);
 
   useEffect(() => {
     const manager = carpool?.loaderManager;
@@ -137,13 +140,13 @@ const Canvas = ({ mode }: { mode: string }) => {
         className={`${styles.loading} ${!loading && styles.loadingClose}`}
       ></div>
       <canvas ref={canvasRef} />
-      {mode === "portfolio" && (
+      {/* {mode === "portfolio" && (
         <MiniMap
           carPositions={carPositions}
           groundSize={carpool?.groundSize}
           // socketId={socket?.id}
         />
-      )}
+      )} */}
       <Logo />
       {mode !== "portfolio" && (
         <div className={styles.scoreboard}>
