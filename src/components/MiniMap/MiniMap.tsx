@@ -4,12 +4,12 @@ import styles from "./MiniMap.module.css";
 
 const MiniMap = ({
   carPositions,
-  groundSize,
-  socketId
-}: {
+  groundSize
+}: // socketId
+{
   carPositions: any[] | undefined;
   groundSize: { x: number; y: number } | undefined;
-  socketId: string | undefined;
+  // socketId: string | undefined;
 }) => {
   const calculatePosition = ({ x, z }: { x: number; z: number }) => {
     if (groundSize && wrapperRef) {
@@ -31,7 +31,8 @@ const MiniMap = ({
         {carPositions?.length
           ? carPositions.map((carPosition, i) => (
               <span
-                className={socketId === carPosition.id ? styles.hostCar : ""}
+                className={styles.hostCar}
+                // className={socketId === carPosition.id ? styles.hostCar : ""}
                 style={{
                   transform: calculatePosition({
                     x: carPosition.position.x,

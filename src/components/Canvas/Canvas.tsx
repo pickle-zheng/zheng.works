@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { CarPool } from "../../utils/Carpool";
 import { PortFolioPool } from "../../utils/PortfolioPool";
 import { GamePool } from "../../utils/GamePool";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 
 import styles from "./Canvas.module.css";
 import MiniMap from "../MiniMap/MiniMap";
 import Logo from "../Logo/Logo";
 
-let socket: any;
+// let socket: any;
 
 const Canvas = ({ mode }: { mode: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -25,21 +25,21 @@ const Canvas = ({ mode }: { mode: string }) => {
 
   const [score, setScore] = useState<number[]>([0, 0]);
 
-  const socketInitializer = async (canvasRef: any): Promise<void> => {
-    await fetch("/api/socket");
-    socket = io();
+  // const socketInitializer = async (canvasRef: any): Promise<void> => {
+  //   await fetch("/api/socket");
+  //   socket = io();
 
-    socket.on("connect", () => {
-      console.log("connected", socket.id);
-      if (mode === "portfolio") {
-        setCarpool(new PortFolioPool(canvasRef, socket));
-      }
-    });
-  };
+  //   socket.on("connect", () => {
+  //     console.log("connected", socket.id);
+  //     if (mode === "portfolio") {
+  //       setCarpool(new PortFolioPool(canvasRef, socket));
+  //     }
+  //   });
+  // };
 
-  useEffect(() => {
-    socketInitializer(canvasRef);
-  }, []);
+  // useEffect(() => {
+  //   socketInitializer(canvasRef);
+  // }, []);
 
   useEffect(() => {
     const manager = carpool?.loaderManager;
@@ -79,31 +79,31 @@ const Canvas = ({ mode }: { mode: string }) => {
     }
   }, [carpool]);
 
-  useEffect(() => {
-    if (socket) {
-      socket.on("car-connected", (id: any) => {
-        console.log("connected", id);
-        // if (carpool) carpool.addCar(id, "pickup");
-      });
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.on("car-connected", (id: any) => {
+  //       console.log("connected", id);
+  //       // if (carpool) carpool.addCar(id, "pickup");
+  //     });
 
-      socket.on("car-disconnect", (id: any) => {
-        console.log("disconnect", id);
-        const newCarPositions = carPositions?.filter((car) => car.id !== id);
-        if (carpool) carpool.removeCar(id);
-        setCarPositions(newCarPositions);
-      });
+  //     socket.on("car-disconnect", (id: any) => {
+  //       console.log("disconnect", id);
+  //       const newCarPositions = carPositions?.filter((car) => car.id !== id);
+  //       if (carpool) carpool.removeCar(id);
+  //       setCarPositions(newCarPositions);
+  //     });
 
-      socket.on("cars-position", (cars: remoteCarInfo[]) => {
-        if (carpool) carpool.updateCarsPosition(cars);
-        setCarPositions(cars);
-      });
+  //     socket.on("cars-position", (cars: remoteCarInfo[]) => {
+  //       if (carpool) carpool.updateCarsPosition(cars);
+  //       setCarPositions(cars);
+  //     });
 
-      socket.on("new-message", (message: any) => {
-        console.log("new-message", message);
-        if (carpool) carpool.addMessage(message);
-      });
-    }
-  }, [carpool, socket, carPositions]);
+  //     socket.on("new-message", (message: any) => {
+  //       console.log("new-message", message);
+  //       if (carpool) carpool.addMessage(message);
+  //     });
+  //   }
+  // }, [carpool, socket, carPositions]);
 
   useEffect(() => {
     if (carpool) carpool.updateTypingStatus(typingMessage);
@@ -141,7 +141,7 @@ const Canvas = ({ mode }: { mode: string }) => {
         <MiniMap
           carPositions={carPositions}
           groundSize={carpool?.groundSize}
-          socketId={socket?.id}
+          // socketId={socket?.id}
         />
       )}
       <Logo />
@@ -158,8 +158,8 @@ const Canvas = ({ mode }: { mode: string }) => {
             message: { value: string };
           };
           const message = target.message.value;
-          if (message.length > 0)
-            socket.emit("message", { message: message, id: socket.id });
+          // if (message.length > 0)
+          //   socket.emit("message", { message: message, id: socket.id });
           target.message.value = "";
           inputRef.current?.blur();
         }}

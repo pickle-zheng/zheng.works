@@ -9,7 +9,7 @@ import styles from "./Canvas.module.css";
 import MiniMap from "../MiniMap/MiniMap";
 import Logo from "../Logo/Logo";
 
-let socket: any;
+// let socket: any;
 
 const GameCanvas = ({ userInfo }: { userInfo: userInfo }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -26,19 +26,19 @@ const GameCanvas = ({ userInfo }: { userInfo: userInfo }) => {
 
   const [score, setScore] = useState<number[]>([0, 0]);
 
-  const socketInitializer = async (canvasRef: any): Promise<void> => {
-    await fetch("/api/socket");
-    socket = io();
+  // const socketInitializer = async (canvasRef: any): Promise<void> => {
+  //   await fetch("/api/socket");
+  //   socket = io();
 
-    socket.on("connect", () => {
-      console.log("connected", socket.id);
-      setCarpool(new GamePool(canvasRef, socket, setScore, userInfo));
-    });
-  };
+  //   socket.on("connect", () => {
+  //     console.log("connected", socket.id);
+  //     setCarpool(new GamePool(canvasRef, socket, setScore, userInfo));
+  //   });
+  // };
 
-  useEffect(() => {
-    socketInitializer(canvasRef);
-  }, []);
+  // useEffect(() => {
+  //   socketInitializer(canvasRef);
+  // }, []);
 
   useEffect(() => {
     const manager = carpool?.loaderManager;
@@ -78,37 +78,37 @@ const GameCanvas = ({ userInfo }: { userInfo: userInfo }) => {
     }
   }, [carpool]);
 
-  useEffect(() => {
-    if (socket) {
-      socket.on("car-connected", (id: any) => {
-        console.log("connected", id);
-        // if (carpool) carpool.addCar(id, "pickup");
-      });
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.on("car-connected", (id: any) => {
+  //       console.log("connected", id);
+  //       // if (carpool) carpool.addCar(id, "pickup");
+  //     });
 
-      socket.on("car-disconnect", (id: any) => {
-        console.log("disconnect", id);
-        const newCarPositions = carPositions?.filter((car) => car.id !== id);
-        if (carpool) carpool.removeCar(id);
-        setCarPositions(newCarPositions);
-      });
+  //     socket.on("car-disconnect", (id: any) => {
+  //       console.log("disconnect", id);
+  //       const newCarPositions = carPositions?.filter((car) => car.id !== id);
+  //       if (carpool) carpool.removeCar(id);
+  //       setCarPositions(newCarPositions);
+  //     });
 
-      socket.on("cars-position", (cars: remoteCarInfo[]) => {
-        if (carpool) carpool.updateCarsPosition(cars);
-        setCarPositions(cars);
-      });
+  //     socket.on("cars-position", (cars: remoteCarInfo[]) => {
+  //       if (carpool) carpool.updateCarsPosition(cars);
+  //       setCarPositions(cars);
+  //     });
 
-      socket.on("new-message", (message: any) => {
-        console.log("new-message", message);
-        if (carpool) carpool.addMessage(message);
-      });
-    }
-    return () => {
-      socket.off("car-connected");
-      socket.off("car-disconnect");
-      socket.off("cars-position");
-      socket.off("new-message");
-    };
-  }, [carpool, socket, carPositions]);
+  //     socket.on("new-message", (message: any) => {
+  //       console.log("new-message", message);
+  //       if (carpool) carpool.addMessage(message);
+  //     });
+  //   }
+  //   return () => {
+  //     socket.off("car-connected");
+  //     socket.off("car-disconnect");
+  //     socket.off("cars-position");
+  //     socket.off("new-message");
+  //   };
+  // }, [carpool, socket, carPositions]);
 
   useEffect(() => {
     if (carpool) carpool.updateTypingStatus(typingMessage);
@@ -155,8 +155,8 @@ const GameCanvas = ({ userInfo }: { userInfo: userInfo }) => {
             message: { value: string };
           };
           const message = target.message.value;
-          if (message.length > 0)
-            socket.emit("message", { message: message, id: socket.id });
+          // if (message.length > 0)
+          // socket.emit("message", { message: message, id: socket.id });
           target.message.value = "";
           inputRef.current?.blur();
         }}
