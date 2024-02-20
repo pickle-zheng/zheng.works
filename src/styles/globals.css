@@ -9,7 +9,6 @@ body {
   width: 100vw;
   overflow: hidden;
   background-color: #18181a;
-  background-image: url("/images/logo.png");
   position: relative;
 }
 
