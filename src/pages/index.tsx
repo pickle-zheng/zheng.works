@@ -5,6 +5,7 @@ import Canvas from "../components/Canvas/Canvas";
 import Instruction from "../components/Instruction/Instruction";
 import styles from "./portfolio.module.css";
 import DesktopOnly from "../components/DesktopOnly/DesktopOnly";
+import { Analytics } from "@vercel/analytics/react";
 
 const Home: NextPage = (props: any) => {
   const resizeHandler = () => {
@@ -44,6 +45,7 @@ const Home: NextPage = (props: any) => {
           <Canvas mode='portfolio' /> <Instruction />
         </>
       )}
+      <Analytics />
     </div>
   );
 };
