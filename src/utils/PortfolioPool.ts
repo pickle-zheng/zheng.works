@@ -196,13 +196,13 @@ export class PortFolioPool {
     });
     console.log(treePositions.length + " trees generated");
 
-    // const trees = treePositions.map(
-    //   (treePosition: { x: number; z: number }) =>
-    //     new Tree(this.scene, this.world, "normal", {
-    //       x: treePosition.x,
-    //       z: treePosition.z
-    //     })
-    // );
+    const trees = treePositions.map(
+      (treePosition: { x: number; z: number }) =>
+        new Tree(this.scene, this.world, "normal", {
+          x: treePosition.x,
+          z: treePosition.z
+        })
+    );
 
     const experienceBlocks = [
       new ExperienceBlock(
@@ -210,15 +210,15 @@ export class PortFolioPool {
         this.world,
         { x: 15, z: 35 },
         { x: 24, y: 5, z: 16.2 },
-        "/images/experience/ProppsExperience.png",
+        "/images/experience/DovetailExperience.png",
         this.loaderManager
       ),
       new ExperienceBlock(
         this.scene,
         this.world,
-        { x: -15, z: 45 },
-        { x: 24, y: 5, z: 20 },
-        "/images/experience/PlaygroundExperience.png",
+        { x: -15, z: 40 },
+        { x: 24, y: 5, z: 16.2 },
+        "/images/experience/ProppsExperience.png",
         this.loaderManager
       ),
       new ExperienceBlock(
@@ -226,13 +226,21 @@ export class PortFolioPool {
         this.world,
         { x: 15, z: 57.7 },
         { x: 24, y: 5, z: 19.2 },
+        "/images/experience/PlaygroundExperience.png",
+        this.loaderManager
+      ),
+      new ExperienceBlock(
+        this.scene,
+        this.world,
+        { x: -15, z: 65 },
+        { x: 24, y: 5, z: 20 },
         "/images/experience/CoatesExperience.png",
         this.loaderManager
       ),
       new ExperienceBlock(
         this.scene,
         this.world,
-        { x: -15, z: 70 },
+        { x: 15, z: 80.8 },
         { x: 24, y: 5, z: 20 },
         "/images/experience/SplitWorksExperience.png",
         this.loaderManager
@@ -240,7 +248,7 @@ export class PortFolioPool {
       new ExperienceBlock(
         this.scene,
         this.world,
-        { x: 15, z: 80.8 },
+        { x: -15, z: 87 },
         { x: 24, y: 5, z: 17 },
         "/images/experience/MooMooHereExperience.png",
         this.loaderManager
